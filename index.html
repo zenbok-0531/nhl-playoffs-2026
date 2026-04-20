@@ -31,6 +31,8 @@
     --lak: #A2AAAD;
     --mtl: #AF1E2D;
     --tbl: #002868;
+    --buf: #002654;
+    --bos: #FCB514;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -180,15 +182,18 @@
   /* SCORE STRIP */
   .scores {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 0;
     border-bottom: 1px solid var(--hairline);
   }
   .score {
-    padding: 30px 22px;
+    padding: 34px 30px;
     border-right: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
     transition: background 0.3s;
   }
+  .score:nth-child(3n) { border-right: none; }
+  .score:nth-last-child(-n+3) { border-bottom: none; }
   .score:last-child { border-right: none; }
   .score:hover { background: var(--ink-2); }
   .score .tag {
@@ -201,10 +206,11 @@
   }
   .score .tag.upset { color: var(--goal); }
   .score .tag.grind { color: var(--gold); }
+  .score .tag.comeback { color: var(--ice); }
   .score .matchup {
     font-family: "Playfair Display", Georgia, serif;
     font-weight: 500;
-    font-size: 21px;
+    font-size: 25px;
     letter-spacing: -0.01em;
     line-height: 1.2;
     margin-bottom: 8px;
@@ -596,15 +602,6 @@
   /* Anchor offset so section heads don't hug the top */
   .section-head { scroll-margin-top: 24px; }
 
-  /* TABLET */
-  @media (max-width: 1100px) and (min-width: 821px) {
-    .scores { grid-template-columns: repeat(3, 1fr); }
-    .score { border-right: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); }
-    .score:nth-child(3n) { border-right: none; }
-    .score:last-child { border-right: none; }
-    .score:nth-last-child(-n+2) { border-bottom: none; }
-  }
-
   /* MOBILE */
   @media (max-width: 820px) {
     .wrap { padding: 0 20px; }
@@ -644,9 +641,8 @@
     <div class="overline">Stanley Cup Playoffs &nbsp;·&nbsp; Game 1 Recap</div>
     <h1 class="headline">Signal <em>vs.</em> Noise.</h1>
     <p class="dek">
-      Five games. Three upsets. One favourite grinding for survival. Across every scoreline,
-      the 2026 playoffs are shaping up as a structure-and-goaltending tournament — with special
-      teams as the sharpest edge.
+      Six games. Three upsets. Three favourites winning on margins thinner than the seeding suggested.
+      Structure, goaltending, and special teams — not rosters — are running this tournament.
     </p>
     <div class="byline">
       <div><strong>Round 1</strong> · Day 1 Analysis</div>
@@ -692,6 +688,13 @@
       </div>
       <div class="final">Canadiens lead series 1–0</div>
     </div>
+    <div class="score">
+      <div class="tag comeback">Game 1 · Comeback</div>
+      <div class="matchup">
+        <span class="winner">Buffalo</span> def. <span class="loser">Boston</span>, 4–3
+      </div>
+      <div class="final">Sabres lead series 1–0</div>
+    </div>
   </section>
 
   <!-- TABLE OF CONTENTS -->
@@ -721,9 +724,10 @@
   <section class="lede">
     <p>
       Opening night is always a test of composure. On Saturday, the answer was loud — three
-      road teams stole Game 1, a division favourite got run off its own ice, and a Western
-      heavyweight had to grind out a 2–1 survival win at home. Across all five games, the
-      winners won on structure, goaltending, and special teams — not rosters. That's the thread.
+      road upsets, a division favourite run off its own ice, a Western heavyweight grinding
+      out a 2–1 survival, and a third-period avalanche that erased a two-goal deficit in seven
+      minutes. Across all six games, the winners won on structure, goaltending, and special
+      teams — not rosters. That's the thread.
     </p>
   </section>
 
