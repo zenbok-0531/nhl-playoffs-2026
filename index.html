@@ -27,6 +27,8 @@
     --dal: #006847;
     --phi: #f74902;
     --pit: #ffb81c;
+    --col: #6F263D;
+    --lak: #A2AAAD;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -178,12 +180,12 @@
   /* SCORE STRIP */
   .scores {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 0;
     border-bottom: 1px solid var(--hairline);
   }
   .score {
-    padding: 36px 32px;
+    padding: 32px 26px;
     border-right: 1px solid var(--hairline);
     transition: background 0.3s;
   }
@@ -198,12 +200,13 @@
     margin-bottom: 14px;
   }
   .score .tag.upset { color: var(--goal); }
+  .score .tag.grind { color: var(--gold); }
   .score .matchup {
     font-family: "Fraunces", serif;
     font-weight: 400;
-    font-size: 28px;
+    font-size: 24px;
     letter-spacing: -0.02em;
-    line-height: 1.1;
+    line-height: 1.15;
     margin-bottom: 8px;
   }
   .score .winner { color: var(--paper); font-weight: 600; }
@@ -585,6 +588,13 @@
   /* Anchor offset so section heads don't hug the top */
   .section-head { scroll-margin-top: 24px; }
 
+  /* TABLET */
+  @media (max-width: 1100px) and (min-width: 821px) {
+    .scores { grid-template-columns: repeat(2, 1fr); }
+    .score:nth-child(2) { border-right: none; }
+    .score:nth-child(1), .score:nth-child(2) { border-bottom: 1px solid var(--hairline); }
+  }
+
   /* MOBILE */
   @media (max-width: 820px) {
     .wrap { padding: 0 20px; }
@@ -624,8 +634,8 @@
     <div class="overline">Stanley Cup Playoffs &nbsp;·&nbsp; Game 1 Recap</div>
     <h1 class="headline">Signal <em>vs.</em> Noise.</h1>
     <p class="dek">
-      Two upsets, one statement, and three games hinting at something larger than any scoreline.
-      The 2026 playoffs are shaping up as a structure-and-goaltending tournament.
+      Four games. Two upsets. One fragile favourite. The thread running through all of them points
+      to the same thing — the 2026 playoffs are shaping up as a structure-and-goaltending tournament.
     </p>
     <div class="byline">
       <div><strong>Round 1</strong> · Day 1 Analysis</div>
@@ -657,6 +667,13 @@
       </div>
       <div class="final">Flyers lead series 1–0</div>
     </div>
+    <div class="score">
+      <div class="tag grind">Game 1 · Grind</div>
+      <div class="matchup">
+        <span class="winner">Colorado</span> def. <span class="loser">Los Angeles</span>, 2–1
+      </div>
+      <div class="final">Avalanche lead series 1–0</div>
+    </div>
   </section>
 
   <!-- TABLE OF CONTENTS -->
@@ -686,8 +703,9 @@
   <section class="lede">
     <p>
       Opening night is always a test of composure. On Saturday, the answer was loud — two
-      road teams stole Game 1, a division favourite got run off its own ice, and in all three
-      games the winners won on structure and goaltending, not rosters. That's the thread.
+      road teams stole Game 1, a division favourite got run off its own ice, and a Western
+      heavyweight had to grind out a 2–1 survival win at home. Across all four games, the
+      winners won on structure and goaltending, not rosters. That's the thread.
     </p>
   </section>
 
@@ -840,6 +858,43 @@
       <div class="outlook-box">
         <div class="olabel">Series Outlook</div>
         <div class="otext">Coin flip. If Pittsburgh doesn't seize tempo early in Game 2, Philadelphia takes genuine series control.</div>
+      </div>
+    </div>
+  </article>
+
+  <!-- LAK vs COL -->
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Series 04 · West &nbsp;·&nbsp; <span style="color: var(--gold)">Grind</span></div>
+      <h3>Los Angeles <span class="vs">at</span> Colorado</h3>
+      <div class="colorbar">
+        <span style="background: var(--lak)"></span>
+        <span style="background: var(--col)"></span>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>2–1 final. Colorado won a game played entirely on <strong>LA's terms</strong></li>
+        <li>Low scoring, tight checking, limited high-danger looks — the Kings' blueprint, executed</li>
+        <li>Colorado had to earn every inch. Lehkonen in tight, net-front battles, zero rush offense.</li>
+        <li>The twist: <strong>LA had the better chances</strong> (~57% xG at 5v5) and missed them — Doughty left a wide-open net, point-blank looks went begging</li>
+        <li>Wedgewood calm for 24 saves. Forsberg steady for 28. Not goalie theft — two good goalies in a tight system game.</li>
+        <li>Colorado's power play went 0-for-4 — a season-long problem that won't get quieter against teams like LA</li>
+      </ul>
+      <div class="pullquote">
+        This wasn't Colorado dominating. This was Colorado surviving a game they easily could have lost.
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Colorado's Path</div>
+        <div class="content">Faster puck movement in the O-zone. <strong>Cleaner PP entries</strong>. Stop settling for the outside — more middle-lane attacks.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">LA's Path</div>
+        <div class="content">Finish what they create — the chances were already there. More bodies to the net. Keep it slow, keep it physical.</div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook</div>
+        <div class="otext">Still Colorado's series — but more fragile than expected. If LA starts burying its chances, this stretches to 6 or 7 games.</div>
       </div>
     </div>
   </article>
