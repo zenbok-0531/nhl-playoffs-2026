@@ -33,6 +33,9 @@
     --tbl: #002868;
     --buf: #002654;
     --bos: #FCB514;
+    --vgk: #B4975A;
+    --uta: #6CACE4;
+    --close: #E88B3D;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -193,7 +196,23 @@
     transition: background 0.3s;
   }
   .score:nth-child(3n) { border-right: none; }
-  .score:nth-last-child(-n+3) { border-bottom: none; }
+  .score.featured {
+    grid-column: 1 / -1;
+    border-right: none;
+    border-bottom: none;
+    padding: 40px 36px;
+    background: linear-gradient(180deg, var(--ink) 0%, var(--ink-2) 100%);
+  }
+  .score.featured .tag {
+    margin-bottom: 18px;
+  }
+  .score.featured .matchup {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+  .score.featured .final {
+    font-size: 14px;
+  }
   .score:last-child { border-right: none; }
   .score:hover { background: var(--ink-2); }
   .score .tag {
@@ -207,6 +226,7 @@
   .score .tag.upset { color: var(--goal); }
   .score .tag.grind { color: var(--gold); }
   .score .tag.comeback { color: var(--ice); }
+  .score .tag.close { color: var(--close); }
   .score .matchup {
     font-family: "Playfair Display", Georgia, serif;
     font-weight: 500;
@@ -608,6 +628,8 @@
     .scores { grid-template-columns: 1fr; }
     .score { border-right: none; border-bottom: 1px solid var(--hairline); }
     .score:last-child { border-bottom: none; }
+    .score.featured { padding: 32px 24px; }
+    .score.featured .matchup { font-size: 26px; }
     .themes { grid-template-columns: 1fr; }
     .section-head { grid-template-columns: 1fr; gap: 12px; padding: 44px 0 28px; }
     .game { grid-template-columns: 1fr; gap: 28px; padding: 48px 0; }
@@ -641,8 +663,9 @@
     <div class="overline">Stanley Cup Playoffs &nbsp;·&nbsp; Game 1 Recap</div>
     <h1 class="headline">Signal <em>vs.</em> Noise.</h1>
     <p class="dek">
-      Six games. Three upsets. Three favourites winning on margins thinner than the seeding suggested.
-      Structure, goaltending, and special teams — not rosters — are running this tournament.
+      Seven games. Three upsets. One comeback. One favourite surviving, one closing — and
+      a thread running through all of them. Structure, goaltending, and special teams are
+      running this tournament, not rosters.
     </p>
     <div class="byline">
       <div><strong>Round 1</strong> · Day 1 Analysis</div>
@@ -695,6 +718,13 @@
       </div>
       <div class="final">Sabres lead series 1–0</div>
     </div>
+    <div class="score featured">
+      <div class="tag close">Game 1 · The Closer</div>
+      <div class="matchup">
+        <span class="winner">Vegas</span> def. <span class="loser">Utah</span>, 4–2
+      </div>
+      <div class="final">Golden Knights lead series 1–0 &nbsp;·&nbsp; Three goals in the third</div>
+    </div>
   </section>
 
   <!-- TABLE OF CONTENTS -->
@@ -725,9 +755,10 @@
     <p>
       Opening night is always a test of composure. On Saturday, the answer was loud — three
       road upsets, a division favourite run off its own ice, a Western heavyweight grinding
-      out a 2–1 survival, and a third-period avalanche that erased a two-goal deficit in seven
-      minutes. Across all six games, the winners won on structure, goaltending, and special
-      teams — not rosters. That's the thread.
+      out a 2–1 survival, a third-period avalanche that erased a two-goal deficit in seven
+      minutes, and a veteran team quietly closing a young opponent in the third. Across all
+      seven games, the winners won on structure, goaltending, and special teams — not rosters.
+      That's the thread.
     </p>
   </section>
 
@@ -777,7 +808,7 @@
     <div class="num">§ 02</div>
     <div class="section-head-text">
       <h2>Series by series, <em>a deeper read.</em></h2>
-      <p class="section-lead">Five games. Five stories. One through-line — execution beat talent wherever it showed up.</p>
+      <p class="section-lead">Seven games. Seven stories. One through-line — execution beat talent wherever it showed up.</p>
     </div>
   </div>
 
@@ -963,6 +994,80 @@
     </div>
   </article>
 
+  <!-- BOS vs BUF -->
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Series 06 · East &nbsp;·&nbsp; <span style="color: var(--ice)">Comeback</span></div>
+      <h3>Boston <span class="vs">at</span> Buffalo</h3>
+      <div class="colorbar">
+        <span style="background: var(--bos)"></span>
+        <span style="background: var(--buf)"></span>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Buffalo 4, Boston 3. The scoreboard says comeback. <strong>The tape says reckoning.</strong></li>
+        <li>Boston led 2–0 entering the third. Buffalo scored <strong>four goals in seven minutes</strong>.</li>
+        <li>Buffalo controlled every period — outshot, outchanced, owned the O-zone from puck drop</li>
+        <li>Boston's lead was <strong>goalie-driven, not play-driven</strong>. Swayman held the dam with 34 saves until Tage Thompson broke him.</li>
+        <li>Thompson's two quick strikes did more than tie it — they broke Swayman's rhythm and ignited the building</li>
+        <li>No Boston timeout. No structural reset. No answer. Momentum went one way and stayed.</li>
+      </ul>
+      <div class="pullquote">
+        Boston didn't lose this game in the third. They were losing it all night and finally ran out of margin.
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Buffalo's Path</div>
+        <div class="content">Keep the pressure style — <strong>it's working</strong>. Net-front traffic earlier, not as an answer to trailing. Make Boston spend energy staying ahead from minute one.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Boston's Path</div>
+        <div class="content">Fix breakouts immediately. Create sustained O-zone time — you can't outlast Buffalo on scraps and breakaways. Support Swayman before he's run ragged.</div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook</div>
+        <div class="otext">Buffalo was a slight favourite going in. Now they're firmly in control. If Boston can't play anything but goalie-dependent hockey, this ends in 5 or 6.</div>
+      </div>
+    </div>
+  </article>
+
+  <!-- UTA vs VGK -->
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Series 07 · West &nbsp;·&nbsp; <span style="color: var(--close)">The Close</span></div>
+      <h3>Utah <span class="vs">at</span> Vegas</h3>
+      <div class="colorbar">
+        <span style="background: var(--uta)"></span>
+        <span style="background: var(--vgk)"></span>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Utah played a near-perfect road game — for 40 minutes. Led twice. Executed the plan.</li>
+        <li>Then Vegas scored <strong>three goals in the third</strong> and the game was gone</li>
+        <li>The tell wasn't the score — it was the hits. <strong>Vegas 52, Utah 29.</strong> That's attrition strategy, not coincidence.</li>
+        <li>Utah didn't lose to a better team — they lost to a team that <strong>absorbs and closes</strong></li>
+        <li>Dowd's winner came off a D-zone turnover. Stone added a leadership goal. No single line carried it — depth did.</li>
+        <li>Keller held pointless. In the playoffs, your best players have to show up, and Vegas's did.</li>
+      </ul>
+      <div class="pullquote">
+        Utah showed they can compete. Vegas showed they can close. That's the difference in playoff series.
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Utah's Path</div>
+        <div class="content"><strong>Puck management.</strong> D-zone turnovers were the decisive mistake. Simplify breakouts, cut the emotional reactions, get Keller and the top six involved early.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Vegas's Path</div>
+        <div class="content">Push the physicality earlier. Take the lead instead of chasing it. <strong>Keep wearing Utah down</strong> — the cumulative fatigue is the whole plan.</div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook</div>
+        <div class="otext">Vegas was a moderate favourite. Now they're clearly in control. Utah can compete for 40 minutes — the question is whether they can survive a full 60.</div>
+      </div>
+    </div>
+  </article>
+
   <!-- § 03 TRENDS -->
   <div class="section-head" id="section-03">
     <div class="num">§ 03</div>
@@ -984,19 +1089,19 @@
     </div>
     <div class="trend">
       <div class="ticker">TREND / 02</div>
-      <h4>Defense is ahead of offense.</h4>
+      <h4>The third period decides everything.</h4>
       <ul class="bullets compact">
-        <li>All three winners looked structurally tight before offensively sharp</li>
-        <li>Expect lower-scoring, tighter Game 2s</li>
-        <li>Offensive timing catches up late in Round 1, not early</li>
+        <li>Buffalo scored 4 in 7 minutes to erase a 2–0 deficit</li>
+        <li>Vegas scored 3 in the third to close Utah</li>
+        <li>Playoff games aren't won in the first 40 — they're <strong>closed in the third</strong></li>
       </ul>
     </div>
     <div class="trend">
       <div class="ticker">TREND / 03</div>
       <h4>Experience vs. energy.</h4>
       <ul class="bullets compact">
-        <li>Carolina plays calm. Minnesota, Philly, and Montreal play fast and fearless.</li>
-        <li>Young legs are winning shifts they're not supposed to</li>
+        <li>Carolina and Vegas play calm. Minnesota, Philly, Montreal play fast and fearless.</li>
+        <li>Both approaches are winning — it's the teams caught in between who are losing</li>
         <li>The winner imposes style — roster quality is secondary</li>
       </ul>
     </div>
