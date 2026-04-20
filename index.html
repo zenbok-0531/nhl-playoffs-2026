@@ -29,6 +29,8 @@
     --pit: #ffb81c;
     --col: #6F263D;
     --lak: #A2AAAD;
+    --mtl: #AF1E2D;
+    --tbl: #002868;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -180,12 +182,12 @@
   /* SCORE STRIP */
   .scores {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 0;
     border-bottom: 1px solid var(--hairline);
   }
   .score {
-    padding: 32px 26px;
+    padding: 30px 22px;
     border-right: 1px solid var(--hairline);
     transition: background 0.3s;
   }
@@ -204,9 +206,9 @@
   .score .matchup {
     font-family: "Fraunces", serif;
     font-weight: 400;
-    font-size: 24px;
+    font-size: 21px;
     letter-spacing: -0.02em;
-    line-height: 1.15;
+    line-height: 1.18;
     margin-bottom: 8px;
   }
   .score .winner { color: var(--paper); font-weight: 600; }
@@ -590,9 +592,11 @@
 
   /* TABLET */
   @media (max-width: 1100px) and (min-width: 821px) {
-    .scores { grid-template-columns: repeat(2, 1fr); }
-    .score:nth-child(2) { border-right: none; }
-    .score:nth-child(1), .score:nth-child(2) { border-bottom: 1px solid var(--hairline); }
+    .scores { grid-template-columns: repeat(3, 1fr); }
+    .score { border-right: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); }
+    .score:nth-child(3n) { border-right: none; }
+    .score:last-child { border-right: none; }
+    .score:nth-last-child(-n+2) { border-bottom: none; }
   }
 
   /* MOBILE */
@@ -634,8 +638,9 @@
     <div class="overline">Stanley Cup Playoffs &nbsp;·&nbsp; Game 1 Recap</div>
     <h1 class="headline">Signal <em>vs.</em> Noise.</h1>
     <p class="dek">
-      Four games. Two upsets. One fragile favourite. The thread running through all of them points
-      to the same thing — the 2026 playoffs are shaping up as a structure-and-goaltending tournament.
+      Five games. Three upsets. One favourite grinding for survival. Across every scoreline,
+      the 2026 playoffs are shaping up as a structure-and-goaltending tournament — with special
+      teams as the sharpest edge.
     </p>
     <div class="byline">
       <div><strong>Round 1</strong> · Day 1 Analysis</div>
@@ -674,6 +679,13 @@
       </div>
       <div class="final">Avalanche lead series 1–0</div>
     </div>
+    <div class="score">
+      <div class="tag upset">Game 1 · Upset</div>
+      <div class="matchup">
+        <span class="winner">Montreal</span> def. <span class="loser">Tampa Bay</span>, 4–3 OT
+      </div>
+      <div class="final">Canadiens lead series 1–0</div>
+    </div>
   </section>
 
   <!-- TABLE OF CONTENTS -->
@@ -702,10 +714,10 @@
   <!-- LEDE (kept as prose — it's the hook) -->
   <section class="lede">
     <p>
-      Opening night is always a test of composure. On Saturday, the answer was loud — two
+      Opening night is always a test of composure. On Saturday, the answer was loud — three
       road teams stole Game 1, a division favourite got run off its own ice, and a Western
-      heavyweight had to grind out a 2–1 survival win at home. Across all four games, the
-      winners won on structure and goaltending, not rosters. That's the thread.
+      heavyweight had to grind out a 2–1 survival win at home. Across all five games, the
+      winners won on structure, goaltending, and special teams — not rosters. That's the thread.
     </p>
   </section>
 
@@ -740,10 +752,9 @@
       <div class="idx">03</div>
       <h3>Road Game 1s hit different.</h3>
       <ul class="bullets compact">
-        <li>Minnesota 6–1 on the road</li>
-        <li>Philadelphia 3–2 on the road</li>
+        <li>Minnesota 6–1, Philadelphia 3–2, Montreal 4–3 (OT) — all on the road</li>
         <li>Stolen Game 1s flip matchup pressure and force coaching adjustments</li>
-        <li>Two home teams now must win on the road just to get even</li>
+        <li>Three home teams now must win on the road just to get even</li>
       </ul>
     </div>
   </section>
@@ -899,6 +910,43 @@
     </div>
   </article>
 
+  <!-- MTL vs TBL -->
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Series 05 · East &nbsp;·&nbsp; <span style="color: var(--goal)">Upset</span></div>
+      <h3>Montreal <span class="vs">at</span> Tampa Bay</h3>
+      <div class="colorbar">
+        <span style="background: var(--mtl)"></span>
+        <span style="background: var(--tbl)"></span>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>4–3 in OT. Slafkovsky <strong>hat trick</strong> — all three on the power play, OT winner on a clean release</li>
+        <li>Not a good night. A <strong>star-emergence</strong> playoff game.</li>
+        <li>Special teams decided it: Montreal's PP clinical, Tampa's PK collapsed (3 goals against)</li>
+        <li>5v5 was roughly even — <strong>Montreal didn't outplay Tampa, they out-executed them</strong></li>
+        <li>Vasilevskiy wasn't elite — and against underdogs, Tampa usually needs him to be</li>
+        <li>Demidov threading high-skill passes, Anderson chipping in — young Canadiens playing without fear</li>
+      </ul>
+      <div class="pullquote">
+        Montreal didn't outlast Tampa. They out-executed them in the moments that mattered most. That's how upsets begin.
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Montreal's Path</div>
+        <div class="content">Keep attacking off the rush. Keep the <strong>PP dialled in</strong>. Don't get hemmed in defensively — that's the trap that ends the run.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Tampa's Path</div>
+        <div class="content"><strong>Fix the PK immediately.</strong> Simplify defensive structure. Get more from top players at 5v5 — losing the Slafkovsky matchup is not survivable.</div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook</div>
+        <div class="otext">Tampa was a clear favourite. Now the series is open. Real upset potential — if Montreal can keep scoring without living on the power play.</div>
+      </div>
+    </div>
+  </article>
+
   <!-- § 03 TRENDS -->
   <div class="section-head" id="section-03">
     <div class="num">§ 03</div>
@@ -928,9 +976,9 @@
       <div class="ticker">TREND / 03</div>
       <h4>Experience vs. energy.</h4>
       <ul class="bullets compact">
-        <li>Carolina plays calm</li>
-        <li>Minnesota and Philly play fast</li>
-        <li>The winner imposes their style — roster quality is secondary</li>
+        <li>Carolina plays calm. Minnesota, Philly, and Montreal play fast and fearless.</li>
+        <li>Young legs are winning shifts they're not supposed to</li>
+        <li>The winner imposes style — roster quality is secondary</li>
       </ul>
     </div>
   </section>
