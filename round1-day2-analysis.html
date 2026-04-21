@@ -191,7 +191,7 @@
   /* SCORE STRIP */
   .scores {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 0;
     border-bottom: 1px solid var(--hairline);
   }
@@ -219,7 +219,7 @@
   .score .matchup {
     font-family: "Playfair Display", Georgia, serif;
     font-weight: 500;
-    font-size: 32px;
+    font-size: 24px;
     letter-spacing: -0.01em;
     line-height: 1.2;
     margin-bottom: 8px;
@@ -254,9 +254,9 @@
     font-family: "Playfair Display", Georgia, serif;
     font-weight: 400;
     font-style: italic;
-    font-size: 28px;
+    font-size: 22px;
     letter-spacing: -0.01em;
-    line-height: 1.2;
+    line-height: 1.25;
     color: var(--muted);
     margin-bottom: 8px;
   }
@@ -715,13 +715,14 @@
     <div class="overline">Stanley Cup Playoffs &nbsp;·&nbsp; Game 2 &amp; Game 1</div>
     <h1 class="headline">The Second <em>Look.</em></h1>
     <p class="dek">
-      Day 2 is where Day 1 gets tested. One Game 2 on the card — and Philadelphia didn't just
-      confirm Saturday's thesis. They drew a line under it.
+      Day 2 is where Day 1 gets tested. Two Game 2s on the card — and both of them confirmed
+      Saturday's reading. Philadelphia drew a line under Pittsburgh. Carolina drew a line
+      under Ottawa. The favourites that looked in control still are.
     </p>
     <div class="byline">
       <div><strong>Round 1</strong> · Day 2 Analysis</div>
       <div><strong>Filed</strong> · April 20, 2026</div>
-      <div><strong>Read</strong> · 4 minutes</div>
+      <div><strong>Read</strong> · 5 minutes</div>
     </div>
   </header>
 
@@ -733,6 +734,13 @@
         <span class="winner">Philadelphia</span> def. <span class="loser">Pittsburgh</span>, 3–0
       </div>
       <div class="final">Flyers lead series 2–0 &nbsp;·&nbsp; Vladar shutout, Penguins PP now 0-for-7</div>
+    </div>
+    <div class="score">
+      <div class="tag confirmed">Game 2 · Series 01 · Confirmed</div>
+      <div class="matchup">
+        <span class="winner">Carolina</span> def. <span class="loser">Ottawa</span>, 3–2 (2OT)
+      </div>
+      <div class="final">Hurricanes lead series 2–0 &nbsp;·&nbsp; Andersen saves held the line</div>
     </div>
     <div class="pending">
       <div class="tag">Tonight · Series 08 · Game 1</div>
@@ -753,7 +761,7 @@
       </a></li>
       <li><a href="#section-02">
         <span class="toc-num">§ 02</span>
-        <span class="toc-title">Philly–Pittsburgh, Game 2</span>
+        <span class="toc-title">The Game 2s</span>
       </a></li>
       <li><a href="#section-03">
         <span class="toc-num">§ 03</span>
@@ -769,11 +777,10 @@
   <!-- LEDE -->
   <section class="lede">
     <p>
-      Day 1 gave us theses. Day 2 gives us verdicts. A 3–0 Philadelphia shutout over Pittsburgh
-      didn't just extend a series lead — it confirmed that Saturday's reading of the game was
-      correct. The Flyers are comfortable in low-event hockey. The Penguins are not. And across
-      the opening weekend, one pattern is now undeniable — the teams that look in control
-      are playing smarter, not harder.
+      Day 1 gave us theses. Day 2 gives us verdicts. Philadelphia shut out Pittsburgh 3–0.
+      Carolina outlasted Ottawa 3–2 in double overtime. Two different games, two different
+      rhythms — but both confirmed the same Saturday reading: the favourites that looked in
+      control still are, and for the same reasons. Structure wins. Goaltending closes.
     </p>
   </section>
 
@@ -792,28 +799,30 @@
       <div class="callback-block proven">
         <div class="cb-head">✓ Confirmed</div>
         <p>
-          We called the Flyers–Penguins series a <em>coin flip</em> after Game 1 and warned
-          that if Pittsburgh didn't seize tempo early in Game 2, Philadelphia would take
-          series control. They didn't. Philly has.
+          Two outlooks already validated. Philly–Pittsburgh: we called it a <em>coin flip</em>
+          and warned the series would tilt if Pittsburgh didn't seize tempo. They didn't.
+          Ottawa–Carolina: we said Carolina remained the strong favourite but an early
+          Ottawa goal could change the dynamic. It didn't come.
         </p>
       </div>
       <div class="callback-block open">
         <div class="cb-head">Still Open</div>
         <p>
-          Six other Game 1 outlooks remain unproven until the second games play —
-          Minnesota–Dallas (upset watch), the Carolina favourite's grip, and whether Tampa
-          can solve Montreal's power play are the three to watch hardest.
+          Five Game 1 outlooks remain unproven until their second games play —
+          Minnesota–Dallas (upset watch), Tampa–Montreal's special teams story,
+          Buffalo–Boston's structural gap, Vegas–Utah's closing formula, and LA's
+          ability to start finishing chances.
         </p>
       </div>
     </div>
   </div>
 
-  <!-- § 02 GAME -->
+  <!-- § 02 GAMES -->
   <div class="section-head" id="section-02">
     <div class="num">§ 02</div>
     <div class="section-head-text">
-      <h2>Philly–Pittsburgh, <em>Game 2.</em></h2>
-      <p class="section-lead">One team controlled the puck. The other controlled the game.</p>
+      <h2>The Game 2s, <em>a deeper read.</em></h2>
+      <p class="section-lead">Two games. Two favourites. One shared lesson — you close playoff games by taking them away, not by winning them.</p>
     </div>
   </div>
 
@@ -857,6 +866,47 @@
     </div>
   </article>
 
+  <!-- OTT vs CAR -->
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Series 01 · East &nbsp;·&nbsp; <span style="color: var(--ice)">Confirmed</span></div>
+      <h3>Ottawa <span class="vs">at</span> Carolina</h3>
+      <div class="colorbar">
+        <span style="background: var(--ott)"></span>
+        <span style="background: var(--car)"></span>
+      </div>
+      <div class="series-stand">
+        <div class="ss-label">Series Standing</div>
+        <div class="ss-score">Hurricanes 2 — Senators 0</div>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Carolina 3, Ottawa 2 — in <strong>double overtime</strong>. A trench battle from the opening faceoff, when the captains fought three seconds in.</li>
+        <li>Low-event, high-pressure, low-margin. Few Grade A chances either way. The kind of game where <strong>inches decide</strong> everything.</li>
+        <li>The turning moment: Ottawa's goal overturned on review — Andersen gloved the puck <strong>before it crossed the line</strong>. Stays 1–0 Carolina instead of 1–1.</li>
+        <li>Ottawa's late push was real — sustained pressure, PP looks, a 6-on-4 advantage. Andersen didn't let any of it through.</li>
+        <li>Carolina's goals came from exactly where playoff goals come from. <strong>Net-front chaos, rebounds, traffic.</strong> Stankoven opened it; Hall was in the mess for the insurance.</li>
+        <li>Andersen's 22 saves weren't about volume. They were about timing. The overturned goal. The scramble save on Tkachuk. <strong>Elite goaltending is knowing which saves matter.</strong></li>
+      </ul>
+      <div class="pullquote">
+        Ottawa stayed in the fight. Carolina won the moments that decide playoff games.
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Ottawa's Path</div>
+        <div class="content">Generate more <strong>interior offense</strong>. Net-front traffic earlier, not as a third-period adjustment. Finish the power play chances — they'll get fewer, not more, from here. Watch Zub's status; depth will matter.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Carolina's Path</div>
+        <div class="content">Don't change anything. The system works. The goalie is locked in. <strong>Keep forcing low-quality shots and wait for the mistake</strong> — it always comes.</div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook · Updated</div>
+        <div class="otext">We said Carolina in 5 or 6 after Game 1. Nothing has happened to change that. If anything, the double-OT survival win tightens it — Ottawa can hang, they just can't solve Andersen. Carolina in 5.</div>
+      </div>
+    </div>
+  </article>
+
   <!-- § 03 TRENDS -->
   <div class="section-head" id="section-03">
     <div class="num">§ 03</div>
@@ -872,26 +922,26 @@
       <h4>Structure beats possession.</h4>
       <ul class="bullets compact">
         <li>Pittsburgh doubled Philly in shot attempts — and lost 3–0</li>
-        <li>Minnesota, Carolina, Philly all winning with <strong>less puck time</strong></li>
-        <li>This playoffs, "territorial dominance" is a losing metric without finish</li>
+        <li>Ottawa couldn't generate Grade A chances all night — and lost in 2OT</li>
+        <li>Three games, three times the structured team beat the chasing team. <strong>Territorial dominance is a losing metric without finish.</strong></li>
       </ul>
     </div>
     <div class="trend">
       <div class="ticker">TREND / 02</div>
-      <h4>Special teams are swinging series.</h4>
+      <h4>Goaltending is deciding series.</h4>
       <ul class="bullets compact">
-        <li>Pittsburgh: 0-for-7 PP, shorthanded goal against — now down 2–0</li>
-        <li>Montreal: 3 PP goals, Slafkovsky hat trick — stole Game 1 on Tampa ice</li>
-        <li>Both stories tell the same truth: <strong>mid-tier 5v5 teams need their PP to work</strong></li>
+        <li>Andersen's overturned-goal save was the difference in a 3–2 double-OT win</li>
+        <li>Vladar shut out Pittsburgh while his team got outshot nearly 2-to-1</li>
+        <li>Not volume saves — <strong>timing saves.</strong> The goalie who makes one impossible stop at the right moment is worth more than 40 ordinary ones.</li>
       </ul>
     </div>
     <div class="trend">
       <div class="ticker">TREND / 03</div>
       <h4>Veteran teams keep showing up late.</h4>
       <ul class="bullets compact">
-        <li>Vegas closed Utah in the third. Philly closed Pittsburgh by never letting it open.</li>
-        <li>The experienced teams aren't panicking when tied or trailing</li>
-        <li>The younger teams are either surging (Montreal) or collapsing (Utah, Pittsburgh)</li>
+        <li>Carolina survived 2OT without blinking. Vegas closed Utah in the third. Philly closed Pittsburgh by never letting it open.</li>
+        <li>The experienced teams aren't panicking when tied, trailing, or dragged into overtime</li>
+        <li>The younger teams are either surging (Montreal) or collapsing (Utah, Pittsburgh, Ottawa in key moments)</li>
       </ul>
     </div>
   </section>
@@ -916,15 +966,15 @@
     <div class="watch-item">
       <div class="check">✓</div>
       <div>
-        <h5>High-Danger Chances</h5>
-        <p>Shot attempts lie. Count the looks from the slot, the net-front, the royal road. That's the real scoreboard.</p>
+        <h5>Ottawa's Interior Offense</h5>
+        <p>Down 2–0, no Grade A chances in Game 2, Zub possibly out. If they can't get pucks to the net-front in Game 3, this ends in five.</p>
       </div>
     </div>
     <div class="watch-item">
       <div class="check">✓</div>
       <div>
         <h5>Home-Ice Response</h5>
-        <p>Pittsburgh heads home down 2–0. First 10 minutes of Game 3 tell us whether they're urgent or broken.</p>
+        <p>Both Pittsburgh and Ottawa head home down 2–0. First 10 minutes tell us who's urgent and who's broken.</p>
       </div>
     </div>
     <div class="watch-item">
@@ -940,7 +990,7 @@
   <section class="closing">
     <div class="overline">The Take</div>
     <blockquote>
-      Day 1 told us what <em>might</em> be true. Day 2 is telling us what <em>is</em>. And right now, the data says smart hockey is beating hard hockey — everywhere it's been tested.
+      Day 1 told us what <em>might</em> be true. Day 2 confirmed it twice. Structure wins. Goaltending closes. And the favourites that looked in control on Saturday still are — for exactly the reasons we named.
     </blockquote>
     <div class="sig">— Round 1 · Day 2 · Filed after Game 2s</div>
   </section>
