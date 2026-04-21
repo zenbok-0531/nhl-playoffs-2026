@@ -35,6 +35,8 @@
     --bos: #FCB514;
     --vgk: #B4975A;
     --uta: #6CACE4;
+    --edm: #FF4C00;
+    --ana: #B9975B;
     --close: #E88B3D;
   }
 
@@ -217,6 +219,7 @@
   .score .tag.close { color: var(--close); }
   .score .tag.confirmed { color: var(--ice); }
   .score .tag.reversed { color: var(--goal); }
+  .score .tag.newread { color: var(--gold); }
   .score .matchup {
     font-family: "Playfair Display", Georgia, serif;
     font-weight: 500;
@@ -714,17 +717,17 @@
 
   <!-- HERO -->
   <header class="hero">
-    <div class="overline">Stanley Cup Playoffs &nbsp;·&nbsp; Game 2 &amp; Game 1</div>
+    <div class="overline">Stanley Cup Playoffs &nbsp;·&nbsp; Three Game 2s &amp; the Final Opener</div>
     <h1 class="headline">The Second <em>Look.</em></h1>
     <p class="dek">
-      Day 2 is where Day 1 gets tested. Three Game 2s played — two confirmed Saturday's reading,
-      one overturned it. Dallas punched back in Minnesota and suddenly the most interesting
-      series of Round 1 is wide open. One game still to come tonight in Edmonton.
+      Day 2 is where Day 1 gets tested. Four games on the card — two confirmed Saturday's reading,
+      one overturned it, and the last series of Round 1 finally opened with Edmonton surviving
+      a wild Anaheim push. <em>Margins, not minutes — that's this tournament.</em>
     </p>
     <div class="byline">
       <div><strong>Round 1</strong> · Day 2 Analysis</div>
       <div><strong>Filed</strong> · April 20, 2026</div>
-      <div><strong>Read</strong> · 6 minutes</div>
+      <div><strong>Read</strong> · 7 minutes</div>
     </div>
   </header>
 
@@ -751,12 +754,12 @@
       </div>
       <div class="final">Series tied 1–1 &nbsp;·&nbsp; Dallas wins the margins</div>
     </div>
-    <div class="pending">
-      <div class="tag">Tonight · Series 08 · Game 1</div>
+    <div class="score">
+      <div class="tag newread">Game 1 · Series 08 · New Read</div>
       <div class="matchup">
-        <span style="color: var(--muted)">Anaheim at Edmonton — pending</span>
+        <span class="winner">Edmonton</span> def. <span class="loser">Anaheim</span>, 4–3
       </div>
-      <div class="final">Last series of Round 1 opens tonight</div>
+      <div class="final">Oilers lead series 1–0 &nbsp;·&nbsp; Depth won it, McDavid pointless</div>
     </div>
   </section>
 
@@ -788,9 +791,11 @@
     <p>
       Day 1 gave us theses. Day 2 gives us verdicts — and for the first time, a reversal.
       Philadelphia shut out Pittsburgh 3–0. Carolina outlasted Ottawa 3–2 in double overtime.
-      Both confirmed. But Dallas answered Minnesota's Saturday statement by winning the margins
-      4–2, and just like that the loudest upset of opening night is a 1–1 series again.
-      Structure wins. Goaltending closes. <em>And special teams are starting to look like the sharpest edge of all.</em>
+      Both confirmed. Dallas answered Minnesota's Saturday statement by winning the margins 4–2,
+      and just like that the loudest upset of opening night is a 1–1 series again. And late in
+      Edmonton, the last Round 1 series finally opened with a 4–3 Oilers survival — blew a
+      2–0 lead, took it back, and won it without a McDavid point. Structure wins. Goaltending closes.
+      <em>And special teams are the sharpest edge of all.</em>
     </p>
   </section>
 
@@ -839,7 +844,7 @@
     <div class="num">§ 02</div>
     <div class="section-head-text">
       <h2>The Game 2s, <em>a deeper read.</em></h2>
-      <p class="section-lead">Three games. Two favourites holding serve, one punching back. The common thread — margins, not minutes.</p>
+      <p class="section-lead">Four games. Two favourites holding serve, one punching back, one new series opened in chaos. The common thread — margins, not minutes.</p>
     </div>
   </div>
 
@@ -965,6 +970,47 @@
     </div>
   </article>
 
+  <!-- ANA vs EDM -->
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Series 08 · West &nbsp;·&nbsp; <span style="color: var(--gold)">New Read</span></div>
+      <h3>Anaheim <span class="vs">at</span> Edmonton</h3>
+      <div class="colorbar">
+        <span style="background: var(--ana)"></span>
+        <span style="background: var(--edm)"></span>
+      </div>
+      <div class="series-stand">
+        <div class="ss-label">Series Standing</div>
+        <div class="ss-score">Oilers 1 — Ducks 0</div>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Edmonton 4, Anaheim 3. The Oilers survived a game that swung <strong>three different ways in three periods.</strong></li>
+        <li>Edmonton outshot Anaheim 14–4 in the first, took a 2–0 lead, looked like a runaway</li>
+        <li>Anaheim answered with <strong>three goals in the second</strong> — Troy Terry (2G, 1A) driving the swing, Carlsson dangerous on every shift</li>
+        <li>Edmonton stabilized in the third. Tied it off a rebound. Won it on a Kapanen finish with under two minutes left.</li>
+        <li>The depth story: <strong>Dickinson and Kapanen scored two each. McDavid had zero points.</strong> Draisaitl returned from injury with two assists and no rust.</li>
+        <li>Ingram held the line with 25 saves including the late one that mattered. Dostal was solid at 30 — neither goalie stole it, but Ingram made the last stop that did.</li>
+      </ul>
+      <div class="pullquote">
+        Anaheim proved they can push Edmonton. The Oilers showed they can recover, reset, and finish. That's what wins playoff games.
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Edmonton's Path</div>
+        <div class="content">Sustain that first-period pace longer — they can't afford to hand Anaheim a full period of life. <strong>Clean up the D-zone reads</strong> that gave up three second-period goals. Keep activating the depth; McDavid will find his game.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Anaheim's Path</div>
+        <div class="content">Tighten net-front coverage — lost both the tying rebound and the winning setup there. <strong>Manage momentum better</strong> after scoring: they got the lead and then gave it back inside five minutes. Fewer turnovers under pressure.</div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook</div>
+        <div class="otext">Edmonton's still the favourite. But not comfortable. If this stays high-event and volatile, Anaheim has genuine chances to steal a game. If Edmonton gets the forecheck and depth scoring they had tonight on a consistent basis, they pull away by Game 4.</div>
+      </div>
+    </div>
+  </article>
+
   <!-- § 03 TRENDS -->
   <div class="section-head" id="section-03">
     <div class="num">§ 03</div>
@@ -996,12 +1042,12 @@
     </div>
     <div class="trend">
       <div class="ticker">TREND / 03</div>
-      <h4>Structure beats possession.</h4>
+      <h4>Structure beats stars.</h4>
       <ul class="bullets compact">
-        <li>Pittsburgh doubled Philly in shot attempts — and lost 3–0</li>
         <li>Ottawa couldn't generate Grade A chances all night — and lost in 2OT</li>
         <li>Minnesota outchanced Dallas in stretches — and never tied it</li>
-        <li>Territorial dominance without finish is <strong>a losing metric.</strong> Three games, three times.</li>
+        <li>Edmonton won <strong>without a McDavid point</strong>. Depth scoring, not superstars.</li>
+        <li>Territorial dominance and star power are <strong>losing metrics</strong> without structure and finish.</li>
       </ul>
     </div>
   </section>
@@ -1040,8 +1086,8 @@
     <div class="watch-item">
       <div class="check">✓</div>
       <div>
-        <h5>EDM/ANA Opener Tonight</h5>
-        <p>The last Round 1 series begins tonight. Does Anaheim play young-and-fearless (Montreal model) or young-and-overmatched (Utah model)?</p>
+        <h5>McDavid's Response</h5>
+        <p>Edmonton won Game 1 without a point from him. Can't count on that twice. Watch whether he's driving play from puck drop in Game 2, or whether Anaheim's checking is getting under his skin.</p>
       </div>
     </div>
   </section>
@@ -1058,7 +1104,7 @@
   <!-- FOOTER -->
   <footer>
     <div>Rink Report · NHL Playoff Coverage</div>
-    <div>Round 1 of 4 · Next: EDM/ANA opener + more Game 2s</div>
+    <div>Round 1 of 4 · Next: the rest of the Game 2 slate</div>
   </footer>
 
 </div>
