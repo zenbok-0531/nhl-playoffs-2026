@@ -216,6 +216,7 @@
   .score .tag.comeback { color: var(--ice); }
   .score .tag.close { color: var(--close); }
   .score .tag.confirmed { color: var(--ice); }
+  .score .tag.reversed { color: var(--goal); }
   .score .matchup {
     font-family: "Playfair Display", Georgia, serif;
     font-weight: 500;
@@ -311,8 +312,8 @@
   }
   .callback-content {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 36px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
   }
   .callback-block .cb-head {
     font-family: "JetBrains Mono", monospace;
@@ -324,13 +325,14 @@
   }
   .callback-block p {
     font-family: "Source Serif 4", Georgia, serif;
-    font-size: 17px;
+    font-size: 16px;
     line-height: 1.5;
     color: var(--paper);
     font-weight: 400;
   }
   .callback-block.proven .cb-head { color: var(--ice); }
-  .callback-block.open .cb-head { color: var(--goal); }
+  .callback-block.reversed .cb-head { color: var(--goal); }
+  .callback-block.open .cb-head { color: var(--gold); }
 
   /* SECTION HEADINGS */
   .section-head {
@@ -715,14 +717,14 @@
     <div class="overline">Stanley Cup Playoffs &nbsp;·&nbsp; Game 2 &amp; Game 1</div>
     <h1 class="headline">The Second <em>Look.</em></h1>
     <p class="dek">
-      Day 2 is where Day 1 gets tested. Two Game 2s already confirmed Saturday's reading.
-      Two more games tonight — Minnesota back at Dallas with real upset pressure, and the
-      last series of Round 1 finally opens in Edmonton.
+      Day 2 is where Day 1 gets tested. Three Game 2s played — two confirmed Saturday's reading,
+      one overturned it. Dallas punched back in Minnesota and suddenly the most interesting
+      series of Round 1 is wide open. One game still to come tonight in Edmonton.
     </p>
     <div class="byline">
       <div><strong>Round 1</strong> · Day 2 Analysis</div>
       <div><strong>Filed</strong> · April 20, 2026</div>
-      <div><strong>Read</strong> · 5 minutes</div>
+      <div><strong>Read</strong> · 6 minutes</div>
     </div>
   </header>
 
@@ -742,12 +744,12 @@
       </div>
       <div class="final">Hurricanes lead series 2–0 &nbsp;·&nbsp; Andersen saves held the line</div>
     </div>
-    <div class="pending">
-      <div class="tag">Tonight · Series 02 · Game 2</div>
+    <div class="score">
+      <div class="tag reversed">Game 2 · Series 02 · Reversed</div>
       <div class="matchup">
-        <span style="color: var(--muted)">Minnesota at Dallas — pending</span>
+        <span class="winner">Dallas</span> def. <span class="loser">Minnesota</span>, 4–2
       </div>
-      <div class="final">Upset watch: can the Wild make it 2–0?</div>
+      <div class="final">Series tied 1–1 &nbsp;·&nbsp; Dallas wins the margins</div>
     </div>
     <div class="pending">
       <div class="tag">Tonight · Series 08 · Game 1</div>
@@ -784,10 +786,11 @@
   <!-- LEDE -->
   <section class="lede">
     <p>
-      Day 1 gave us theses. Day 2 gives us verdicts. Philadelphia shut out Pittsburgh 3–0.
-      Carolina outlasted Ottawa 3–2 in double overtime. Two different games, two different
-      rhythms — but both confirmed the same Saturday reading: the favourites that looked in
-      control still are, and for the same reasons. Structure wins. Goaltending closes.
+      Day 1 gave us theses. Day 2 gives us verdicts — and for the first time, a reversal.
+      Philadelphia shut out Pittsburgh 3–0. Carolina outlasted Ottawa 3–2 in double overtime.
+      Both confirmed. But Dallas answered Minnesota's Saturday statement by winning the margins
+      4–2, and just like that the loudest upset of opening night is a 1–1 series again.
+      Structure wins. Goaltending closes. <em>And special teams are starting to look like the sharpest edge of all.</em>
     </p>
   </section>
 
@@ -806,17 +809,24 @@
       <div class="callback-block proven">
         <div class="cb-head">✓ Confirmed</div>
         <p>
-          Two outlooks already validated. Philly–Pittsburgh: we called it a <em>coin flip</em>
-          and warned the series would tilt if Pittsburgh didn't seize tempo. They didn't.
-          Ottawa–Carolina: we said Carolina remained the strong favourite but an early
-          Ottawa goal could change the dynamic. It didn't come.
+          <strong>Philly–Pittsburgh:</strong> Called it a coin flip; warned the series would tilt
+          if Pittsburgh couldn't seize tempo. They couldn't. 2–0 Flyers.<br><br>
+          <strong>Ottawa–Carolina:</strong> Said Carolina remained the favourite. Double-OT survival
+          win says we were right. 2–0 Hurricanes.
+        </p>
+      </div>
+      <div class="callback-block reversed">
+        <div class="cb-head">↩ Reversed</div>
+        <p>
+          <strong>Dallas–Minnesota:</strong> We called this the "swing series" and the real upset
+          story of Round 1. Dallas answered with a 4–2 win powered by PP execution and Oettinger
+          robbery. <em>Series is 1–1 and the narrative is open again.</em>
         </p>
       </div>
       <div class="callback-block open">
         <div class="cb-head">Still Open</div>
         <p>
-          Five Game 1 outlooks remain unproven until their second games play —
-          Minnesota–Dallas (upset watch), Tampa–Montreal's special teams story,
+          Four Game 1 outlooks remain unproven — Tampa–Montreal's special teams story,
           Buffalo–Boston's structural gap, Vegas–Utah's closing formula, and LA's
           ability to start finishing chances.
         </p>
@@ -829,9 +839,50 @@
     <div class="num">§ 02</div>
     <div class="section-head-text">
       <h2>The Game 2s, <em>a deeper read.</em></h2>
-      <p class="section-lead">Two games. Two favourites. One shared lesson — you close playoff games by taking them away, not by winning them.</p>
+      <p class="section-lead">Three games. Two favourites holding serve, one punching back. The common thread — margins, not minutes.</p>
     </div>
   </div>
+
+  <!-- MIN vs DAL -->
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Series 02 · West &nbsp;·&nbsp; <span style="color: var(--goal)">Reversed</span></div>
+      <h3>Minnesota <span class="vs">at</span> Dallas</h3>
+      <div class="colorbar">
+        <span style="background: var(--min)"></span>
+        <span style="background: var(--dal)"></span>
+      </div>
+      <div class="series-stand">
+        <div class="ss-label">Series Standing</div>
+        <div class="ss-score">Wild 1 — Stars 1</div>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Dallas 4, Minnesota 2. <strong>The upset narrative just got complicated.</strong></li>
+        <li>Special teams were the game. Minnesota 0-for-4 on the power play. Dallas 1-for-1.</li>
+        <li>Oettinger was the difference — 28 saves, <strong>robbery on Boldy</strong> breakaway, another on Hughes late. Timely, not volume.</li>
+        <li>Wallstedt was fine (28 saves of his own). But a weird bounce off the end boards, off his own body, into the net — <strong>one bad bounce in a margin game is the margin</strong></li>
+        <li>Minnesota's pattern all night: push, pull within one, stall. <strong>They never tied it.</strong> Faber scored twice and it still wasn't enough.</li>
+        <li>Zuccarello out, Trenin lost to a big hit early. <strong>Depth starting to show cost.</strong></li>
+      </ul>
+      <div class="pullquote">
+        Minnesota stayed competitive. Dallas won the margins. In playoff hockey, that's all that matters.
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Minnesota's Path</div>
+        <div class="content"><strong>Fix the power play immediately.</strong> Four chances, zero goals against a team you're trying to break. Get traffic on Oettinger — the clean looks aren't going in. Simplify the O-zone entries.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Dallas's Path</div>
+        <div class="content">Keep the pressure on Minnesota's PK. Net-front, net-front, net-front — the ugly goals are the ones going in. <strong>Lean on Oettinger</strong>; he's playing like a series-deciding goalie right now.</div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook · Updated</div>
+        <div class="otext">After Game 1 we said this was the swing series of Round 1. It still is — but the swing went back the other way. Series reset to 1–1, momentum with Dallas. The question now: can Minnesota solve Oettinger and their own power play?</div>
+      </div>
+    </div>
+  </article>
 
   <article class="game">
     <div class="game-title">
@@ -926,29 +977,31 @@
   <section class="trends">
     <div class="trend">
       <div class="ticker">TREND / 01</div>
-      <h4>Structure beats possession.</h4>
+      <h4>Special teams are the sharpest edge.</h4>
       <ul class="bullets compact">
-        <li>Pittsburgh doubled Philly in shot attempts — and lost 3–0</li>
-        <li>Ottawa couldn't generate Grade A chances all night — and lost in 2OT</li>
-        <li>Three games, three times the structured team beat the chasing team. <strong>Territorial dominance is a losing metric without finish.</strong></li>
+        <li>Dallas went 1-for-1. Minnesota went 0-for-4. Dallas won.</li>
+        <li>Pittsburgh is now <strong>0-for-7</strong> in the playoffs — and down 0–2.</li>
+        <li>Montreal's PP won Game 1 against Tampa. Dallas's PP answered Minnesota's Game 1 statement. <strong>Every close series is being decided here first.</strong></li>
       </ul>
     </div>
     <div class="trend">
       <div class="ticker">TREND / 02</div>
       <h4>Goaltending is deciding series.</h4>
       <ul class="bullets compact">
-        <li>Andersen's overturned-goal save was the difference in a 3–2 double-OT win</li>
+        <li>Oettinger robbed Boldy at a hinge moment and it flipped the night</li>
+        <li>Andersen's overturned-goal save held a 3–2 double-OT Carolina win</li>
         <li>Vladar shut out Pittsburgh while his team got outshot nearly 2-to-1</li>
-        <li>Not volume saves — <strong>timing saves.</strong> The goalie who makes one impossible stop at the right moment is worth more than 40 ordinary ones.</li>
+        <li>Not volume. <strong>Timing.</strong> The goalie who makes one impossible stop at the right moment is worth more than forty ordinary ones.</li>
       </ul>
     </div>
     <div class="trend">
       <div class="ticker">TREND / 03</div>
-      <h4>Veteran teams keep showing up late.</h4>
+      <h4>Structure beats possession.</h4>
       <ul class="bullets compact">
-        <li>Carolina survived 2OT without blinking. Vegas closed Utah in the third. Philly closed Pittsburgh by never letting it open.</li>
-        <li>The experienced teams aren't panicking when tied, trailing, or dragged into overtime</li>
-        <li>The younger teams are either surging (Montreal) or collapsing (Utah, Pittsburgh, Ottawa in key moments)</li>
+        <li>Pittsburgh doubled Philly in shot attempts — and lost 3–0</li>
+        <li>Ottawa couldn't generate Grade A chances all night — and lost in 2OT</li>
+        <li>Minnesota outchanced Dallas in stretches — and never tied it</li>
+        <li>Territorial dominance without finish is <strong>a losing metric.</strong> Three games, three times.</li>
       </ul>
     </div>
   </section>
@@ -966,22 +1019,22 @@
     <div class="watch-item">
       <div class="check">✓</div>
       <div>
-        <h5>Penguins PP Entries</h5>
-        <p>0-for-7. One more empty power play and the series is essentially over. Watch whether Pittsburgh changes their top PP unit personnel.</p>
+        <h5>Minnesota's Power Play</h5>
+        <p>0-for-4 in Game 2, 0-for-their-last-several. This is the single number that decides the series. If it stays broken, Dallas takes over.</p>
       </div>
     </div>
     <div class="watch-item">
       <div class="check">✓</div>
       <div>
-        <h5>Ottawa's Interior Offense</h5>
-        <p>Down 2–0, no Grade A chances in Game 2, Zub possibly out. If they can't get pucks to the net-front in Game 3, this ends in five.</p>
+        <h5>Penguins &amp; Senators PP</h5>
+        <p>Pittsburgh: 0-for-7. Ottawa: wasted a 6-on-4 late. Two teams down 0–2 both losing the special teams battle. One more empty PP ends either series.</p>
       </div>
     </div>
     <div class="watch-item">
       <div class="check">✓</div>
       <div>
         <h5>Home-Ice Response</h5>
-        <p>Both Pittsburgh and Ottawa head home down 2–0. First 10 minutes tell us who's urgent and who's broken.</p>
+        <p>Three teams heading home down 0–2. First 10 minutes of each Game 3 tell us who's urgent and who's broken.</p>
       </div>
     </div>
     <div class="watch-item">
@@ -997,7 +1050,7 @@
   <section class="closing">
     <div class="overline">The Take</div>
     <blockquote>
-      Day 1 told us what <em>might</em> be true. Day 2 confirmed it twice. Structure wins. Goaltending closes. And the favourites that looked in control on Saturday still are — for exactly the reasons we named.
+      Day 1 told us what <em>might</em> be true. Day 2 confirmed it twice and overturned it once. The favourites that looked in control still are. The upset that looked real just got tested. <em>Margins, not minutes — that's this tournament.</em>
     </blockquote>
     <div class="sig">— Round 1 · Day 2 · Filed after Game 2s</div>
   </section>
