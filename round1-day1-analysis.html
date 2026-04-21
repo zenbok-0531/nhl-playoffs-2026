@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Round 1, Day 1 — Signal vs Noise | NHL Playoffs Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0b0d12;
+    --ink-2: #13161f;
+    --ink-3: #1c1f2b;
+    --paper: #f2ebdc;
+    --paper-dim: #d6cdba;
+    --muted: #8a8374;
+    --ice: #7fb4d8;
+    --ice-deep: #3d6d93;
+    --goal: #d74e3a;
+    --gold: #d4a842;
+    --hairline: rgba(242, 235, 220, 0.14);
+    --hairline-strong: rgba(242, 235, 220, 0.28);
+    --car: #cc0000;
+    --ott: #c8102e;
+    --min: #154734;
+    --dal: #006847;
+    --phi: #f74902;
+    --pit: #ffb81c;
+    --col: #6F263D;
+    --lak: #A2AAAD;
+    --mtl: #AF1E2D;
+    --tbl: #002868;
+    --buf: #002654;
+    --bos: #FCB514;
+    --vgk: #B4975A;
+    --uta: #6CACE4;
+    --close: #E88B3D;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ─── BULLET SYSTEM ─── */
+  ul.bullets {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  ul.bullets li {
+    position: relative;
+    padding-left: 26px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+  ul.bullets li:last-child { margin-bottom: 0; }
+  ul.bullets li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 11px;
+    width: 14px;
+    height: 1px;
+    background: var(--goal);
+  }
+  ul.bullets li strong { color: var(--paper); font-weight: 500; }
+
+  /* Compact variant for theme/trend cards */
+  ul.bullets.compact li {
+    padding-left: 20px;
+    margin-bottom: 9px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  ul.bullets.compact li::before {
+    width: 10px;
+    top: 10px;
+  }
+
+  /* MASTHEAD */
+  .masthead {
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .masthead .brand { color: var(--paper); font-weight: 600; }
+  .masthead .brand span { color: var(--goal); }
+  .masthead .nav-link {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    border-bottom: 1px solid transparent;
+  }
+  .masthead .nav-link:hover { color: var(--paper); border-bottom-color: var(--hairline-strong); }
+
+  /* HERO */
+  .hero {
+    padding: 80px 0 72px;
+    border-bottom: 1px solid var(--hairline);
+    position: relative;
+  }
+  .overline {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .overline::before {
+    content: "";
+    width: 32px;
+    height: 1px;
+    background: var(--goal);
+  }
+  h1.headline {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(56px, 9vw, 136px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    margin-bottom: 40px;
+  }
+  h1.headline em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+  .dek {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: normal;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.5;
+    color: var(--paper);
+    max-width: 760px;
+    font-weight: 500;
+  }
+  .byline {
+    margin-top: 48px;
+    display: flex;
+    gap: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .byline strong { color: var(--paper); font-weight: 600; }
+
+  /* SCORE STRIP */
+  .scores {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .score {
+    padding: 34px 30px;
+    border-right: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    transition: background 0.3s;
+  }
+  .score:nth-child(3n) { border-right: none; }
+  .score.featured {
+    grid-column: 1 / -1;
+    border-right: none;
+    border-bottom: none;
+    padding: 40px 36px;
+    background: linear-gradient(180deg, var(--ink) 0%, var(--ink-2) 100%);
+  }
+  .score.featured .tag {
+    margin-bottom: 18px;
+  }
+  .score.featured .matchup {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+  .score.featured .final {
+    font-size: 14px;
+  }
+  .score:last-child { border-right: none; }
+  .score:hover { background: var(--ink-2); }
+  .score .tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .score .tag.upset { color: var(--goal); }
+  .score .tag.grind { color: var(--gold); }
+  .score .tag.comeback { color: var(--ice); }
+  .score .tag.close { color: var(--close); }
+  .score .matchup {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: 25px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .score .winner { color: var(--paper); font-weight: 600; }
+  .score .loser { color: var(--muted); }
+  .score .final {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--paper-dim);
+    margin-top: 10px;
+  }
+
+  /* LEDE */
+  .lede {
+    padding: 88px 0 64px;
+    max-width: 820px;
+  }
+  .lede p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 23px;
+    line-height: 1.58;
+    color: var(--paper);
+    font-weight: 400;
+  }
+  .lede p::first-letter {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 5.2em;
+    float: left;
+    line-height: 0.82;
+    padding: 10px 14px 0 0;
+    color: var(--goal);
+  }
+
+  /* SECTION HEADINGS */
+  .section-head {
+    padding: 56px 0 40px;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 40px;
+    align-items: baseline;
+    border-top: 1px solid var(--hairline);
+  }
+  .section-head .num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--goal);
+    letter-spacing: 0.1em;
+  }
+  .section-head-text { align-self: baseline; }
+  .section-lead {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.45;
+    letter-spacing: 0;
+    color: var(--goal);
+    margin-top: 20px;
+    max-width: 780px;
+  }
+  .section-head h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(38px, 5vw, 68px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+  }
+  .section-head h2 em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+
+  /* THEMES */
+  .themes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+    margin-bottom: 40px;
+  }
+  .theme {
+    background: var(--ink);
+    padding: 40px 32px;
+    transition: background 0.3s;
+  }
+  .theme:hover { background: var(--ink-2); }
+  .theme .idx {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 52px;
+    font-weight: 400;
+    color: var(--hairline-strong);
+    line-height: 0.8;
+    margin-bottom: 24px;
+  }
+  .theme h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 18px;
+  }
+
+  /* GAME BREAKDOWN */
+  .game {
+    padding: 64px 0;
+    border-top: 1px solid var(--hairline);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 56px;
+  }
+  .game:first-of-type { border-top: 1px solid var(--hairline-strong); }
+  .game-title {
+    position: sticky;
+    top: 40px;
+    align-self: start;
+  }
+  .game-title .series-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .game-title h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 54px;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .game-title .vs {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--muted);
+    display: block;
+    font-size: 0.6em;
+    margin: 4px 0;
+  }
+  .colorbar {
+    height: 6px;
+    width: 100%;
+    display: flex;
+    margin-top: 20px;
+  }
+  .colorbar span { flex: 1; }
+  .game-body {
+    font-size: 17px;
+    line-height: 1.65;
+  }
+  .game-body > ul.bullets { margin-bottom: 8px; }
+  .game-body > ul.bullets li { font-size: 16px; }
+
+  .pullquote {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    color: var(--paper);
+    padding: 28px 0 28px 28px;
+    border-left: 2px solid var(--goal);
+    margin: 28px 0;
+  }
+
+  .breakdown-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 24px;
+    padding: 18px 0;
+    border-top: 1px solid var(--hairline);
+    align-items: start;
+  }
+  .breakdown-row:last-child { border-bottom: 1px solid var(--hairline); }
+  .breakdown-row .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding-top: 4px;
+  }
+  .breakdown-row .content { color: var(--paper-dim); font-size: 16px; }
+  .breakdown-row .content strong { color: var(--paper); font-weight: 500; }
+
+  .outlook-box {
+    margin-top: 28px;
+    padding: 24px 28px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--ice);
+  }
+  .outlook-box .olabel {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ice);
+    margin-bottom: 10px;
+  }
+  .outlook-box .otext {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--paper);
+    letter-spacing: 0;
+  }
+
+  /* TRENDS */
+  .trends {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    padding: 16px 0 56px;
+  }
+  .trend {
+    border-top: 2px solid var(--gold);
+    padding-top: 24px;
+  }
+  .trend .ticker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    margin-bottom: 16px;
+  }
+  .trend h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 23px;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 18px;
+  }
+
+  /* WATCHLIST */
+  .watchlist {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border: 1px solid var(--hairline-strong);
+    margin-bottom: 56px;
+  }
+  .watch-item {
+    padding: 28px 32px;
+    border-right: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .watch-item:nth-child(2n) { border-right: none; }
+  .watch-item:nth-last-child(-n+2) { border-bottom: none; }
+  .watch-item .check {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 32px;
+    color: var(--ice);
+    line-height: 1;
+  }
+  .watch-item h5 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.005em;
+    color: var(--paper);
+    margin-bottom: 6px;
+  }
+  .watch-item p {
+    font-size: 15px;
+    color: var(--paper-dim);
+    line-height: 1.5;
+  }
+
+  /* CLOSING */
+  .closing {
+    padding: 72px 0 48px;
+    border-top: 1px solid var(--hairline-strong);
+  }
+  .closing .overline { color: var(--gold); }
+  .closing .overline::before { background: var(--gold); }
+  .closing blockquote {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    max-width: 980px;
+  }
+  .closing blockquote em {
+    font-style: italic;
+    color: var(--goal);
+    font-weight: 400;
+  }
+  .closing .sig {
+    margin-top: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 36px 0;
+    border-top: 1px solid var(--hairline);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* TABLE OF CONTENTS */
+  .toc {
+    padding: 40px 0 48px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .toc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .toc-label::before {
+    content: "";
+    width: 24px;
+    height: 1px;
+    background: var(--muted);
+  }
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .toc-list li { background: var(--ink); }
+  .toc-list a {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px 26px;
+    text-decoration: none;
+    color: var(--paper);
+    transition: background 0.3s;
+    height: 100%;
+  }
+  .toc-list a:hover { background: var(--ink-2); }
+  .toc-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--goal);
+  }
+  .toc-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+    color: var(--paper);
+    transition: color 0.3s;
+  }
+  .toc-list a:hover .toc-title { color: var(--ice); }
+
+  /* Anchor offset so section heads don't hug the top */
+  .section-head { scroll-margin-top: 24px; }
+
+  /* MOBILE */
+  @media (max-width: 820px) {
+    .wrap { padding: 0 20px; }
+    .scores { grid-template-columns: 1fr; }
+    .score { border-right: none; border-bottom: 1px solid var(--hairline); }
+    .score:last-child { border-bottom: none; }
+    .score.featured { padding: 32px 24px; }
+    .score.featured .matchup { font-size: 26px; }
+    .themes { grid-template-columns: 1fr; }
+    .section-head { grid-template-columns: 1fr; gap: 12px; padding: 44px 0 28px; }
+    .game { grid-template-columns: 1fr; gap: 28px; padding: 48px 0; }
+    .game-title { position: static; }
+    .game-title h3 { font-size: 42px; }
+    .breakdown-row { grid-template-columns: 1fr; gap: 8px; }
+    .trends { grid-template-columns: 1fr; gap: 32px; }
+    .watchlist { grid-template-columns: 1fr; }
+    .watch-item { border-right: none !important; }
+    .watch-item:nth-last-child(2) { border-bottom: 1px solid var(--hairline); }
+    .lede { padding: 56px 0 40px; }
+    .lede p { font-size: 20px; }
+    .byline { flex-direction: column; gap: 12px; }
+    .toc-list { grid-template-columns: 1fr; }
+    .toc { padding: 28px 0 32px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <div class="brand">Rink<span>&middot;</span>Report</div>
+    <div>
+      Vol. I &nbsp;/&nbsp; Round 01 &nbsp;/&nbsp; Day 01
+      &nbsp;&nbsp;<a href="round1-day2-analysis.html" class="nav-link">Day 02 →</a>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="overline">Stanley Cup Playoffs &nbsp;·&nbsp; Game 1 Recap</div>
+    <h1 class="headline">Signal <em>vs.</em> Noise.</h1>
+    <p class="dek">
+      Seven games. Three upsets. One comeback. One favourite surviving, one closing — and
+      a thread running through all of them. Structure, goaltending, and special teams are
+      running this tournament, not rosters.
+    </p>
+    <div class="byline">
+      <div><strong>Round 1</strong> · Day 1 Analysis</div>
+      <div><strong>Filed</strong> · April 19, 2026</div>
+      <div><strong>Read</strong> · 4 minutes</div>
+    </div>
+  </header>
+
+  <!-- SCORE STRIP -->
+  <section class="scores">
+    <div class="score">
+      <div class="tag">Game 1 · Expected</div>
+      <div class="matchup">
+        <span class="winner">Carolina</span> def. <span class="loser">Ottawa</span>
+      </div>
+      <div class="final">Hurricanes lead series 1–0</div>
+    </div>
+    <div class="score">
+      <div class="tag upset">Game 1 · Upset</div>
+      <div class="matchup">
+        <span class="winner">Minnesota</span> def. <span class="loser">Dallas</span>, 6–1
+      </div>
+      <div class="final">Wild lead series 1–0</div>
+    </div>
+    <div class="score">
+      <div class="tag upset">Game 1 · Upset</div>
+      <div class="matchup">
+        <span class="winner">Philadelphia</span> def. <span class="loser">Pittsburgh</span>, 3–2
+      </div>
+      <div class="final">Flyers lead series 1–0</div>
+    </div>
+    <div class="score">
+      <div class="tag grind">Game 1 · Grind</div>
+      <div class="matchup">
+        <span class="winner">Colorado</span> def. <span class="loser">Los Angeles</span>, 2–1
+      </div>
+      <div class="final">Avalanche lead series 1–0</div>
+    </div>
+    <div class="score">
+      <div class="tag upset">Game 1 · Upset</div>
+      <div class="matchup">
+        <span class="winner">Montreal</span> def. <span class="loser">Tampa Bay</span>, 4–3 OT
+      </div>
+      <div class="final">Canadiens lead series 1–0</div>
+    </div>
+    <div class="score">
+      <div class="tag comeback">Game 1 · Comeback</div>
+      <div class="matchup">
+        <span class="winner">Buffalo</span> def. <span class="loser">Boston</span>, 4–3
+      </div>
+      <div class="final">Sabres lead series 1–0</div>
+    </div>
+    <div class="score featured">
+      <div class="tag close">Game 1 · The Closer</div>
+      <div class="matchup">
+        <span class="winner">Vegas</span> def. <span class="loser">Utah</span>, 4–2
+      </div>
+      <div class="final">Golden Knights lead series 1–0 &nbsp;·&nbsp; Three goals in the third</div>
+    </div>
+  </section>
+
+  <!-- TABLE OF CONTENTS -->
+  <nav class="toc" aria-label="Table of contents">
+    <div class="toc-label">Contents</div>
+    <ol class="toc-list">
+      <li><a href="#section-01">
+        <span class="toc-num">§ 01</span>
+        <span class="toc-title">What Day One told us</span>
+      </a></li>
+      <li><a href="#section-02">
+        <span class="toc-num">§ 02</span>
+        <span class="toc-title">Series by series</span>
+      </a></li>
+      <li><a href="#section-03">
+        <span class="toc-num">§ 03</span>
+        <span class="toc-title">Trends emerging</span>
+      </a></li>
+      <li><a href="#section-04">
+        <span class="toc-num">§ 04</span>
+        <span class="toc-title">Watch Game 2</span>
+      </a></li>
+    </ol>
+  </nav>
+
+  <!-- LEDE (kept as prose — it's the hook) -->
+  <section class="lede">
+    <p>
+      Opening night is always a test of composure. On Saturday, the answer was loud — three
+      road upsets, a division favourite run off its own ice, a Western heavyweight grinding
+      out a 2–1 survival, a third-period avalanche that erased a two-goal deficit in seven
+      minutes, and a veteran team quietly closing a young opponent in the third. Across all
+      seven games, the winners won on structure, goaltending, and special teams — not rosters.
+      That's the thread.
+    </p>
+  </section>
+
+  <!-- § 01 THEMES -->
+  <div class="section-head" id="section-01">
+    <div class="num">§ 01</div>
+    <div class="section-head-text">
+      <h2>What Day One <em>actually</em> told us.</h2>
+      <p class="section-lead">Saturday's winners shared three traits — and each one is more decisive than any score line.</p>
+    </div>
+  </div>
+
+  <section class="themes">
+    <div class="theme">
+      <div class="idx">01</div>
+      <h3>Goaltending is already decisive.</h3>
+      <ul class="bullets compact">
+        <li>Andersen in full control of a system he trusts</li>
+        <li>Wallstedt didn't just hold serve — he <strong>elevated</strong> Minnesota</li>
+        <li>Goalie leverage compounds fast in playoffs</li>
+        <li>Two netminders are already tilting their series</li>
+      </ul>
+    </div>
+    <div class="theme">
+      <div class="idx">02</div>
+      <h3>Structure is ahead of talent.</h3>
+      <ul class="bullets compact">
+        <li><strong>Carolina:</strong> defensive suppression</li>
+        <li><strong>Minnesota:</strong> layered forecheck</li>
+        <li><strong>Philadelphia:</strong> composure in chaos</li>
+        <li>Regular season rewards skill. Playoffs reward system.</li>
+      </ul>
+    </div>
+    <div class="theme">
+      <div class="idx">03</div>
+      <h3>Road Game 1s hit different.</h3>
+      <ul class="bullets compact">
+        <li>Minnesota 6–1, Philadelphia 3–2, Montreal 4–3 (OT) — all on the road</li>
+        <li>Stolen Game 1s flip matchup pressure and force coaching adjustments</li>
+        <li>Three home teams now must win on the road just to get even</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- § 02 SERIES BY SERIES -->
+  <div class="section-head" id="section-02">
+    <div class="num">§ 02</div>
+    <div class="section-head-text">
+      <h2>Series by series, <em>a deeper read.</em></h2>
+      <p class="section-lead">Seven games. Seven stories. One through-line — execution beat talent wherever it showed up.</p>
+    </div>
+  </div>
+
+  <!-- OTT vs CAR -->
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Series 01 · East</div>
+      <h3>Ottawa <span class="vs">at</span> Carolina</h3>
+      <div class="colorbar">
+        <span style="background: var(--ott)"></span>
+        <span style="background: var(--car)"></span>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Ottawa didn't play poorly — that's the part worth sitting with</li>
+        <li>Carolina made the game feel <strong>unwinnable</strong></li>
+        <li>Middle ice locked down, shots pushed to the perimeter</li>
+        <li>Transition killed before it could breathe</li>
+        <li>Ottawa generated effort. Carolina generated suffocation.</li>
+      </ul>
+      <div class="pullquote">
+        Carolina's system is already playoff-ready. Ottawa can hang — they just can't dictate.
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Ottawa's Path</div>
+        <div class="content">Net-front chaos. Screens, rebounds, second efforts. <strong>Shot volume over quality</strong>, and faster transition before Carolina's structure sets.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Carolina's Plan</div>
+        <div class="content">Double down. Pucks to the perimeter, trust Andersen, let Ottawa wear themselves out on the wall.</div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook</div>
+        <div class="otext">Carolina in 5 or 6. Still the strong favourite — but an early Ottawa goal in Game 2 changes the dynamic fast.</div>
+      </div>
+    </div>
+  </article>
+
+  <!-- MIN vs DAL -->
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Series 02 · West &nbsp;·&nbsp; <span style="color: var(--goal)">Upset Watch</span></div>
+      <h3>Minnesota <span class="vs">at</span> Dallas</h3>
+      <div class="colorbar">
+        <span style="background: var(--min)"></span>
+        <span style="background: var(--dal)"></span>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Not a win — a <strong>statement</strong></li>
+        <li>Minnesota: faster, more physical, more connected</li>
+        <li>Dallas: reactive, half-step late, overwhelmed by pace shifts</li>
+        <li>The real question — emotional high, or <strong>matchup problem</strong>?</li>
+        <li>Early evidence points to matchup problem: the Wild's forecheck and pace variation are exactly what disrupts Dallas's possession game</li>
+      </ul>
+      <div class="pullquote">
+        Before Game 1, Dallas was the favourite. After Game 1, it's 50/50. Win Game 2, and this becomes the upset story of Round 1.
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Dallas's Path</div>
+        <div class="content">Clean up breakouts under pressure. Reduce neutral-zone turnovers. Slow the game down — controlled entries, not firefights.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Minnesota's Plan</div>
+        <div class="content">Keep the forecheck dialled up. Keep changing the pace. Ride Wallstedt — <strong>goalie confidence snowballs</strong> in playoffs.</div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook</div>
+        <div class="otext">The swing series of Round 1. If Minnesota takes Game 2, the whole Western bracket narrative shifts.</div>
+      </div>
+    </div>
+  </article>
+
+  <!-- PHI vs PIT -->
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Series 03 · East</div>
+      <h3>Philadelphia <span class="vs">at</span> Pittsburgh</h3>
+      <div class="colorbar">
+        <span style="background: var(--phi)"></span>
+        <span style="background: var(--pit)"></span>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Tight game. Philly finished better late.</li>
+        <li>Real story: how <strong>uncomfortable Pittsburgh looked</strong> in a playoff-style game</li>
+        <li>No tempo control</li>
+        <li>Dragged into a physical grind they didn't want</li>
+        <li>Unable to dictate from possession the way they're built to</li>
+      </ul>
+      <div class="pullquote">
+        Younger legs, higher energy, more willing to grind — the Flyers made Pittsburgh play Philadelphia's game.
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Pittsburgh's Path</div>
+        <div class="content">Crosby and Malkin lines have to dominate shift-for-shift. Avoid the scrums. Control early tempo — play it in Pittsburgh's rhythm.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Philadelphia's Plan</div>
+        <div class="content">Stay physical. Stay patient late. Lean into the chaos — every messy minute favours them.</div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook</div>
+        <div class="otext">Coin flip. If Pittsburgh doesn't seize tempo early in Game 2, Philadelphia takes genuine series control.</div>
+      </div>
+    </div>
+  </article>
+
+  <!-- LAK vs COL -->
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Series 04 · West &nbsp;·&nbsp; <span style="color: var(--gold)">Grind</span></div>
+      <h3>Los Angeles <span class="vs">at</span> Colorado</h3>
+      <div class="colorbar">
+        <span style="background: var(--lak)"></span>
+        <span style="background: var(--col)"></span>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>2–1 final. Colorado won a game played entirely on <strong>LA's terms</strong></li>
+        <li>Low scoring, tight checking, limited high-danger looks — the Kings' blueprint, executed</li>
+        <li>Colorado had to earn every inch. Lehkonen in tight, net-front battles, zero rush offense.</li>
+        <li>The twist: <strong>LA had the better chances</strong> (~57% xG at 5v5) and missed them — Doughty left a wide-open net, point-blank looks went begging</li>
+        <li>Wedgewood calm for 24 saves. Forsberg steady for 28. Not goalie theft — two good goalies in a tight system game.</li>
+        <li>Colorado's power play went 0-for-4 — a season-long problem that won't get quieter against teams like LA</li>
+      </ul>
+      <div class="pullquote">
+        This wasn't Colorado dominating. This was Colorado surviving a game they easily could have lost.
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Colorado's Path</div>
+        <div class="content">Faster puck movement in the O-zone. <strong>Cleaner PP entries</strong>. Stop settling for the outside — more middle-lane attacks.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">LA's Path</div>
+        <div class="content">Finish what they create — the chances were already there. More bodies to the net. Keep it slow, keep it physical.</div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook</div>
+        <div class="otext">Still Colorado's series — but more fragile than expected. If LA starts burying its chances, this stretches to 6 or 7 games.</div>
+      </div>
+    </div>
+  </article>
+
+  <!-- MTL vs TBL -->
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Series 05 · East &nbsp;·&nbsp; <span style="color: var(--goal)">Upset</span></div>
+      <h3>Montreal <span class="vs">at</span> Tampa Bay</h3>
+      <div class="colorbar">
+        <span style="background: var(--mtl)"></span>
+        <span style="background: var(--tbl)"></span>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>4–3 in OT. Slafkovsky <strong>hat trick</strong> — all three on the power play, OT winner on a clean release</li>
+        <li>Not a good night. A <strong>star-emergence</strong> playoff game.</li>
+        <li>Special teams decided it: Montreal's PP clinical, Tampa's PK collapsed (3 goals against)</li>
+        <li>5v5 was roughly even — <strong>Montreal didn't outplay Tampa, they out-executed them</strong></li>
+        <li>Vasilevskiy wasn't elite — and against underdogs, Tampa usually needs him to be</li>
+        <li>Demidov threading high-skill passes, Anderson chipping in — young Canadiens playing without fear</li>
+      </ul>
+      <div class="pullquote">
+        Montreal didn't outlast Tampa. They out-executed them in the moments that mattered most. That's how upsets begin.
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Montreal's Path</div>
+        <div class="content">Keep attacking off the rush. Keep the <strong>PP dialled in</strong>. Don't get hemmed in defensively — that's the trap that ends the run.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Tampa's Path</div>
+        <div class="content"><strong>Fix the PK immediately.</strong> Simplify defensive structure. Get more from top players at 5v5 — losing the Slafkovsky matchup is not survivable.</div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook</div>
+        <div class="otext">Tampa was a clear favourite. Now the series is open. Real upset potential — if Montreal can keep scoring without living on the power play.</div>
+      </div>
+    </div>
+  </article>
+
+  <!-- BOS vs BUF -->
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Series 06 · East &nbsp;·&nbsp; <span style="color: var(--ice)">Comeback</span></div>
+      <h3>Boston <span class="vs">at</span> Buffalo</h3>
+      <div class="colorbar">
+        <span style="background: var(--bos)"></span>
+        <span style="background: var(--buf)"></span>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Buffalo 4, Boston 3. The scoreboard says comeback. <strong>The tape says reckoning.</strong></li>
+        <li>Boston led 2–0 entering the third. Buffalo scored <strong>four goals in seven minutes</strong>.</li>
+        <li>Buffalo controlled every period — outshot, outchanced, owned the O-zone from puck drop</li>
+        <li>Boston's lead was <strong>goalie-driven, not play-driven</strong>. Swayman held the dam with 34 saves until Tage Thompson broke him.</li>
+        <li>Thompson's two quick strikes did more than tie it — they broke Swayman's rhythm and ignited the building</li>
+        <li>No Boston timeout. No structural reset. No answer. Momentum went one way and stayed.</li>
+      </ul>
+      <div class="pullquote">
+        Boston didn't lose this game in the third. They were losing it all night and finally ran out of margin.
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Buffalo's Path</div>
+        <div class="content">Keep the pressure style — <strong>it's working</strong>. Net-front traffic earlier, not as an answer to trailing. Make Boston spend energy staying ahead from minute one.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Boston's Path</div>
+        <div class="content">Fix breakouts immediately. Create sustained O-zone time — you can't outlast Buffalo on scraps and breakaways. Support Swayman before he's run ragged.</div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook</div>
+        <div class="otext">Buffalo was a slight favourite going in. Now they're firmly in control. If Boston can't play anything but goalie-dependent hockey, this ends in 5 or 6.</div>
+      </div>
+    </div>
+  </article>
+
+  <!-- UTA vs VGK -->
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Series 07 · West &nbsp;·&nbsp; <span style="color: var(--close)">The Close</span></div>
+      <h3>Utah <span class="vs">at</span> Vegas</h3>
+      <div class="colorbar">
+        <span style="background: var(--uta)"></span>
+        <span style="background: var(--vgk)"></span>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Utah played a near-perfect road game — for 40 minutes. Led twice. Executed the plan.</li>
+        <li>Then Vegas scored <strong>three goals in the third</strong> and the game was gone</li>
+        <li>The tell wasn't the score — it was the hits. <strong>Vegas 52, Utah 29.</strong> That's attrition strategy, not coincidence.</li>
+        <li>Utah didn't lose to a better team — they lost to a team that <strong>absorbs and closes</strong></li>
+        <li>Dowd's winner came off a D-zone turnover. Stone added a leadership goal. No single line carried it — depth did.</li>
+        <li>Keller held pointless. In the playoffs, your best players have to show up, and Vegas's did.</li>
+      </ul>
+      <div class="pullquote">
+        Utah showed they can compete. Vegas showed they can close. That's the difference in playoff series.
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Utah's Path</div>
+        <div class="content"><strong>Puck management.</strong> D-zone turnovers were the decisive mistake. Simplify breakouts, cut the emotional reactions, get Keller and the top six involved early.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Vegas's Path</div>
+        <div class="content">Push the physicality earlier. Take the lead instead of chasing it. <strong>Keep wearing Utah down</strong> — the cumulative fatigue is the whole plan.</div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook</div>
+        <div class="otext">Vegas was a moderate favourite. Now they're clearly in control. Utah can compete for 40 minutes — the question is whether they can survive a full 60.</div>
+      </div>
+    </div>
+  </article>
+
+  <!-- § 03 TRENDS -->
+  <div class="section-head" id="section-03">
+    <div class="num">§ 03</div>
+    <div class="section-head-text">
+      <h2>Trends <em>emerging.</em></h2>
+      <p class="section-lead">Three patterns forming across the bracket — and each one compounds from here.</p>
+    </div>
+  </div>
+
+  <section class="trends">
+    <div class="trend">
+      <div class="ticker">TREND / 01</div>
+      <h4>The "hot goalie early" effect.</h4>
+      <ul class="bullets compact">
+        <li>Andersen and Wallstedt entered with question marks, left with momentum</li>
+        <li>Goalie confidence compounds fast</li>
+        <li>Shapes defensive gap, forecheck aggression, offensive looseness</li>
+      </ul>
+    </div>
+    <div class="trend">
+      <div class="ticker">TREND / 02</div>
+      <h4>The third period decides everything.</h4>
+      <ul class="bullets compact">
+        <li>Buffalo scored 4 in 7 minutes to erase a 2–0 deficit</li>
+        <li>Vegas scored 3 in the third to close Utah</li>
+        <li>Playoff games aren't won in the first 40 — they're <strong>closed in the third</strong></li>
+      </ul>
+    </div>
+    <div class="trend">
+      <div class="ticker">TREND / 03</div>
+      <h4>Experience vs. energy.</h4>
+      <ul class="bullets compact">
+        <li>Carolina and Vegas play calm. Minnesota, Philly, Montreal play fast and fearless.</li>
+        <li>Both approaches are winning — it's the teams caught in between who are losing</li>
+        <li>The winner imposes style — roster quality is secondary</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- § 04 WATCHLIST -->
+  <div class="section-head" id="section-04">
+    <div class="num">§ 04</div>
+    <div class="section-head-text">
+      <h2>What to watch <em>in Game 2.</em></h2>
+      <p class="section-lead">Forget the score lines. These four tells reveal where each series is actually trending.</p>
+    </div>
+  </div>
+
+  <section class="watchlist">
+    <div class="watch-item">
+      <div class="check">✓</div>
+      <div>
+        <h5>Shot Location</h5>
+        <p>Forget totals. The tell is whether teams generate from the middle, or settle for the perimeter.</p>
+      </div>
+    </div>
+    <div class="watch-item">
+      <div class="check">✓</div>
+      <div>
+        <h5>Breakouts</h5>
+        <p>Clean vs. chaotic zone exits predict who controls territory.</p>
+      </div>
+    </div>
+    <div class="watch-item">
+      <div class="check">✓</div>
+      <div>
+        <h5>The First Ten Minutes</h5>
+        <p>Whoever sets the pace early dictates the shape of the next forty. Especially in Game 2s.</p>
+      </div>
+    </div>
+    <div class="watch-item">
+      <div class="check">✓</div>
+      <div>
+        <h5>Goalie Body Language</h5>
+        <p>Rebound control. Calm movement vs. scrambling. The tell arrives before the stat line.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING -->
+  <section class="closing">
+    <div class="overline">The Take</div>
+    <blockquote>
+      This isn't shaping up to be a <em>star-driven</em> playoffs. It's a structure-and-goaltending tournament — and that changes every bracket prediction.
+    </blockquote>
+    <div class="sig">— Round 1 · Day 1 · Filed after Game 1s</div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>Rink Report · NHL Playoff Coverage</div>
+    <div>Round 1 of 4 · Next: Game 2 adjustments</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
