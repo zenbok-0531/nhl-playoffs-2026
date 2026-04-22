@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rink Report — NHL Playoffs 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0b0d12;
+    --ink-2: #13161f;
+    --ink-3: #1c1f2b;
+    --paper: #f2ebdc;
+    --paper-dim: #d6cdba;
+    --muted: #8a8374;
+    --ice: #7fb4d8;
+    --ice-deep: #3d6d93;
+    --goal: #d74e3a;
+    --gold: #d4a842;
+    --hairline: rgba(242, 235, 220, 0.14);
+    --hairline-strong: rgba(242, 235, 220, 0.28);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* MASTHEAD */
+  .masthead {
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .masthead .brand { color: var(--paper); font-weight: 600; }
+  .masthead .brand span { color: var(--goal); }
+
+  /* HEADER */
+  .site-header {
+    padding: 88px 0 56px;
+    border-bottom: 1px solid var(--hairline);
+    text-align: left;
+  }
+  .site-header .overline {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .site-header .overline::before {
+    content: "";
+    width: 32px;
+    height: 1px;
+    background: var(--goal);
+  }
+  .site-header h1 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(64px, 10vw, 148px);
+    line-height: 0.92;
+    letter-spacing: -0.025em;
+    color: var(--paper);
+    margin-bottom: 28px;
+  }
+  .site-header h1 em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+  .site-header .about {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: normal;
+    font-size: clamp(18px, 1.6vw, 22px);
+    line-height: 1.55;
+    color: var(--paper-dim);
+    max-width: 680px;
+    font-weight: 400;
+  }
+  .site-header .about strong { color: var(--paper); font-weight: 600; }
+
+  /* STATUS STRIP */
+  .status {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .status-cell {
+    padding: 28px 24px;
+    border-right: 1px solid var(--hairline);
+  }
+  .status-cell:last-child { border-right: none; }
+  .status-cell .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .status-cell .value {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 1.1;
+    color: var(--paper);
+    letter-spacing: -0.01em;
+  }
+  .status-cell .value em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+  .status-cell .value .unit {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-left: 6px;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+
+  /* LIVE QUOTE — featured player moment */
+  .live-quote {
+    padding: 72px 0 64px;
+    border-bottom: 1px solid var(--hairline);
+    position: relative;
+  }
+  .live-quote .live-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .live-quote .live-label::before {
+    content: "";
+    width: 32px;
+    height: 1px;
+    background: var(--gold);
+  }
+  .live-quote .live-label .pulse {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--goal);
+    margin-left: 4px;
+    animation: pulseDot 2s ease-in-out infinite;
+  }
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+  }
+
+  .live-quote .quote-mark {
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: clamp(100px, 14vw, 180px);
+    line-height: 0.6;
+    color: var(--goal);
+    position: absolute;
+    left: -12px;
+    top: 96px;
+    opacity: 0.18;
+    pointer-events: none;
+    user-select: none;
+  }
+  .live-quote blockquote {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: clamp(34px, 5vw, 64px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    max-width: 960px;
+    margin-bottom: 32px;
+    position: relative;
+    z-index: 1;
+  }
+  .live-quote .attribution {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 32px;
+    align-items: start;
+    padding-top: 24px;
+    border-top: 1px solid var(--hairline-strong);
+    max-width: 960px;
+  }
+  .live-quote .attribution-who {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+  .live-quote .attribution-who .name {
+    color: var(--paper);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .live-quote .attribution-context {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+    font-weight: 400;
+  }
+
+  /* LATEST FEATURE */
+  .latest-section {
+    padding: 72px 0 48px;
+  }
+  .latest-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .latest-label::before {
+    content: "";
+    width: 32px;
+    height: 1px;
+    background: var(--goal);
+  }
+
+  .feature {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 48px;
+    align-items: start;
+    padding: 40px 0;
+    border-top: 2px solid var(--goal);
+    border-bottom: 1px solid var(--hairline-strong);
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.3s;
+  }
+  .feature:hover { background: var(--ink-2); }
+  .feature-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+  .feature-meta .issue {
+    color: var(--goal);
+    margin-bottom: 10px;
+    display: block;
+  }
+  .feature-meta .date { color: var(--paper-dim); }
+  .feature-meta .read { color: var(--muted); }
+
+  .feature-body h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(40px, 5.5vw, 72px);
+    line-height: 1.0;
+    letter-spacing: -0.025em;
+    color: var(--paper);
+    margin-bottom: 24px;
+    transition: color 0.3s;
+  }
+  .feature:hover .feature-body h2 { color: var(--ice); }
+  .feature-body h2 em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+  .feature-body .feature-dek {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: clamp(17px, 1.6vw, 20px);
+    line-height: 1.55;
+    color: var(--paper);
+    font-weight: 400;
+    margin-bottom: 24px;
+    max-width: 640px;
+  }
+  .feature-body .read-more {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--goal);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .feature-body .read-more .arrow {
+    transition: transform 0.3s;
+  }
+  .feature:hover .read-more .arrow { transform: translateX(6px); }
+
+  /* ARCHIVE */
+  .archive-section {
+    padding: 56px 0 72px;
+  }
+  .archive-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .archive-label::before {
+    content: "";
+    width: 24px;
+    height: 1px;
+    background: var(--muted);
+  }
+
+  .archive-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .archive-item a {
+    display: grid;
+    grid-template-columns: 180px 1fr auto;
+    gap: 32px;
+    align-items: baseline;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--hairline);
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.3s;
+  }
+  .archive-item a:hover { background: var(--ink-2); }
+  .archive-item:first-child a { border-top: 1px solid var(--hairline); }
+
+  .archive-meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .archive-meta .issue {
+    color: var(--goal);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .archive-content h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 600;
+    font-size: 26px;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    margin-bottom: 8px;
+    transition: color 0.3s;
+  }
+  .archive-item a:hover h3 { color: var(--ice); }
+  .archive-content h3 em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+  .archive-content .archive-summary {
+    font-size: 15px;
+    color: var(--paper-dim);
+    line-height: 1.5;
+    max-width: 580px;
+  }
+  .archive-arrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 14px;
+    color: var(--muted);
+    transition: transform 0.3s, color 0.3s;
+    padding-top: 6px;
+  }
+  .archive-item a:hover .archive-arrow {
+    transform: translateX(6px);
+    color: var(--goal);
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 36px 0;
+    border-top: 1px solid var(--hairline);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+  footer .tagline em {
+    font-style: italic;
+    color: var(--paper-dim);
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0.05em;
+  }
+
+  /* MOBILE */
+  @media (max-width: 820px) {
+    .wrap { padding: 0 20px; }
+    .site-header { padding: 56px 0 40px; }
+    .status { grid-template-columns: repeat(2, 1fr); }
+    .status-cell { border-right: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); }
+    .status-cell:nth-child(2n) { border-right: none; }
+    .status-cell:nth-last-child(-n+2) { border-bottom: none; }
+    .feature { grid-template-columns: 1fr; gap: 20px; padding: 32px 0; }
+    .feature-body h2 { font-size: 40px; }
+    .live-quote { padding: 48px 0 40px; }
+    .live-quote blockquote { font-size: 30px; }
+    .live-quote .attribution { grid-template-columns: 1fr; gap: 16px; }
+    .live-quote .quote-mark { top: 72px; font-size: 120px; }
+    .archive-item a { grid-template-columns: 1fr; gap: 8px; padding: 24px 0; }
+    .archive-arrow { display: none; }
+    .latest-section, .archive-section { padding: 40px 0; }
+    footer { flex-direction: column; gap: 12px; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <div class="brand">Rink<span>&middot;</span>Report</div>
+    <div>Vol. I &nbsp;/&nbsp; 2026 Stanley Cup Playoffs</div>
+  </div>
+
+  <!-- SITE HEADER -->
+  <header class="site-header">
+    <div class="overline">Front Page</div>
+    <h1>Rink <em>Report.</em></h1>
+    <p class="about">
+      Daily analysis from the 2026 NHL playoffs — signal over noise, structure over scoreboards,
+      and the patterns that decide series before the box scores catch up.
+      <strong>Newest post up top. Start there.</strong>
+    </p>
+  </header>
+
+  <!-- STATUS STRIP -->
+  <section class="status">
+    <div class="status-cell">
+      <div class="label">Current Round</div>
+      <div class="value">Round <em>1</em> <span class="unit">of 4</span></div>
+    </div>
+    <div class="status-cell">
+      <div class="label">Series In Play</div>
+      <div class="value">8 <span class="unit">matchups</span></div>
+    </div>
+    <div class="status-cell">
+      <div class="label">Games Filed</div>
+      <div class="value">10 <span class="unit">through day 3</span></div>
+    </div>
+    <div class="status-cell">
+      <div class="label">Day 1 Reversals</div>
+      <div class="value">3 <span class="unit">of 3 tested</span></div>
+    </div>
+  </section>
+
+  <!-- LIVE QUOTE -->
+  <section class="live-quote">
+    <div class="live-label">From the Ice <span class="pulse"></span></div>
+    <div class="quote-mark">&ldquo;</div>
+    <blockquote>
+      There's no bicycles allowed on the highway.
+    </blockquote>
+    <div class="attribution">
+      <div class="attribution-who">
+        <span class="name">Scott Laughton</span>
+        LA Kings vs Colorado<br>
+        Round 01 &nbsp;·&nbsp; Game 02
+      </div>
+      <div class="attribution-context">
+        Asked on a TV break how he was holding up after getting absolutely flattened. Translation:
+        he needs to keep his head up. A good sport, taking the hit and finding the line. Full
+        game analysis files when the final horn sounds.
+      </div>
+    </div>
+  </section>
+
+  <!-- LATEST FEATURE -->
+  <section class="latest-section">
+    <div class="latest-label">Latest Issue</div>
+    <a href="round1-day3-analysis.html" class="feature">
+      <div class="feature-meta">
+        <span class="issue">Round 01 · Day 03</span>
+        <div class="date">April 21, 2026</div>
+        <div class="read">5 min read</div>
+      </div>
+      <div class="feature-body">
+        <h2>The <em>Adjustment.</em></h2>
+        <p class="feature-dek">
+          Tampa matched Montreal's physicality and won in overtime. Boston exploited Buffalo's
+          goaltending and ran away with the second period. Two Day 1 reads flipped in one night —
+          the favourites are pushing back hard.
+        </p>
+        <span class="read-more">
+          Read the issue <span class="arrow">→</span>
+        </span>
+      </div>
+    </a>
+  </section>
+
+  <!-- ARCHIVE -->
+  <section class="archive-section">
+    <div class="archive-label">Previous Issues</div>
+    <ol class="archive-list">
+      <li class="archive-item">
+        <a href="round1-day2-analysis.html">
+          <div class="archive-meta">
+            <span class="issue">Round 01 · Day 02</span>
+            April 20, 2026 · 7 min
+          </div>
+          <div class="archive-content">
+            <h3>The Second <em>Look.</em></h3>
+            <p class="archive-summary">
+              Philadelphia shut out Pittsburgh. Carolina survived Ottawa in double overtime.
+              Dallas answered Minnesota's Saturday statement. Edmonton opened the last series
+              with a wild 4–3 survival. Margins, not minutes — that's this tournament.
+            </p>
+          </div>
+          <span class="archive-arrow">→</span>
+        </a>
+      </li>
+      <li class="archive-item">
+        <a href="round1-day1-analysis.html">
+          <div class="archive-meta">
+            <span class="issue">Round 01 · Day 01</span>
+            April 19, 2026 · 5 min
+          </div>
+          <div class="archive-content">
+            <h3>Signal <em>vs. Noise.</em></h3>
+            <p class="archive-summary">
+              Seven Game 1s over the opening weekend. Three upsets, one comeback, one grind,
+              one close, one expected win. The thread running through all of them — structure,
+              goaltending, and special teams are running this tournament, not rosters.
+            </p>
+          </div>
+          <span class="archive-arrow">→</span>
+        </a>
+      </li>
+    </ol>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>Rink Report · NHL Playoff Coverage 2026</div>
+    <div class="tagline"><em>For the group chat. For the love of the game.</em></div>
+  </footer>
+
+</div>
+
+</body>
+</html>
