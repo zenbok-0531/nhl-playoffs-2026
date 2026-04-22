@@ -123,6 +123,12 @@
   }
   .masthead .brand { color: var(--paper); font-weight: 600; }
   .masthead .brand span { color: var(--goal); }
+  .masthead .brand-link {
+    text-decoration: none;
+    transition: opacity 0.3s;
+    display: inline-block;
+  }
+  .masthead .brand-link:hover { opacity: 0.7; }
   .masthead .nav-link {
     color: var(--muted);
     text-decoration: none;
@@ -661,7 +667,7 @@
 
   <!-- MASTHEAD -->
   <div class="masthead">
-    <div class="brand">Rink<span>&middot;</span>Report</div>
+    <a href="index.html" class="brand-link"><div class="brand">Rink<span>&middot;</span>Report</div></a>
     <div>
       Vol. I &nbsp;/&nbsp; Round 01 &nbsp;/&nbsp; Day 01
       &nbsp;&nbsp;<a href="round1-day2-analysis.html" class="nav-link">Day 02 →</a>
