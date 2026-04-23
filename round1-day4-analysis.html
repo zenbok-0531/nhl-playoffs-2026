@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Round 1, Day 4 — The Separation | NHL Playoffs Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0b0d12;
+    --ink-2: #13161f;
+    --ink-3: #1c1f2b;
+    --paper: #f2ebdc;
+    --paper-dim: #d6cdba;
+    --muted: #8a8374;
+    --ice: #7fb4d8;
+    --ice-deep: #3d6d93;
+    --goal: #d74e3a;
+    --gold: #d4a842;
+    --hairline: rgba(242, 235, 220, 0.14);
+    --hairline-strong: rgba(242, 235, 220, 0.28);
+    --car: #cc0000;
+    --ott: #c8102e;
+    --min: #154734;
+    --dal: #006847;
+    --phi: #f74902;
+    --pit: #ffb81c;
+    --col: #6F263D;
+    --lak: #A2AAAD;
+    --mtl: #AF1E2D;
+    --tbl: #002868;
+    --buf: #002654;
+    --bos: #FCB514;
+    --vgk: #B4975A;
+    --uta: #6CACE4;
+    --edm: #FF4C00;
+    --ana: #B9975B;
+    --close: #E88B3D;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* BULLETS */
+  ul.bullets { list-style: none; padding: 0; margin: 0; }
+  ul.bullets li {
+    position: relative;
+    padding-left: 26px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+  ul.bullets li:last-child { margin-bottom: 0; }
+  ul.bullets li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 11px;
+    width: 14px; height: 1px;
+    background: var(--goal);
+  }
+  ul.bullets li strong { color: var(--paper); font-weight: 500; }
+  ul.bullets.compact li {
+    padding-left: 20px;
+    margin-bottom: 9px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  ul.bullets.compact li::before { width: 10px; top: 10px; }
+
+  /* MASTHEAD */
+  .masthead {
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .masthead .brand { color: var(--paper); font-weight: 600; }
+  .masthead .brand span { color: var(--goal); }
+  .masthead .brand-link {
+    text-decoration: none;
+    transition: opacity 0.3s;
+    display: inline-block;
+  }
+  .masthead .brand-link:hover { opacity: 0.7; }
+  .masthead .nav-link {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    border-bottom: 1px solid transparent;
+  }
+  .masthead .nav-link:hover { color: var(--paper); border-bottom-color: var(--hairline-strong); }
+
+  /* HERO */
+  .hero {
+    padding: 80px 0 72px;
+    border-bottom: 1px solid var(--hairline);
+    position: relative;
+  }
+  .overline {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .overline::before {
+    content: "";
+    width: 32px; height: 1px;
+    background: var(--goal);
+  }
+  h1.headline {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(56px, 9vw, 136px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    margin-bottom: 40px;
+  }
+  h1.headline em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+  .dek {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: normal;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.5;
+    color: var(--paper);
+    max-width: 760px;
+    font-weight: 500;
+  }
+  .byline {
+    margin-top: 48px;
+    display: flex;
+    gap: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .byline strong { color: var(--paper); font-weight: 600; }
+
+  /* SCORE STRIP */
+  .scores {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .score {
+    padding: 32px 28px;
+    border-right: 1px solid var(--hairline);
+    transition: background 0.3s;
+  }
+  .score:last-child { border-right: none; }
+  .score:hover { background: var(--ink-2); }
+  .score .tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .score .tag.stranglehold { color: var(--goal); }
+  .score .tag.separation { color: var(--ice); }
+  .score .tag.survival { color: var(--gold); }
+  .score .matchup {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: 26px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .score .winner { color: var(--paper); font-weight: 600; }
+  .score .loser { color: var(--muted); }
+  .score .final {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--paper-dim);
+    margin-top: 10px;
+  }
+
+  /* PENDING */
+  .pending {
+    background: var(--ink);
+    padding: 32px 28px;
+    border-right: 1px solid var(--hairline);
+    transition: background 0.3s;
+  }
+  .pending:last-child { border-right: none; }
+  .pending:hover { background: var(--ink-2); }
+  .pending .tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .pending .matchup {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .pending .final {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+
+  /* LEDE */
+  .lede {
+    padding: 88px 0 64px;
+    max-width: 820px;
+  }
+  .lede p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 23px;
+    line-height: 1.58;
+    color: var(--paper);
+    font-weight: 400;
+  }
+  .lede p::first-letter {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 5.2em;
+    float: left;
+    line-height: 0.82;
+    padding: 10px 14px 0 0;
+    color: var(--goal);
+  }
+
+  /* ─── PER-SERIES TRACKER (new for Day 4+) ─── */
+  .tracker {
+    background: var(--ink-2);
+    border-top: 1px solid var(--hairline-strong);
+    border-bottom: 1px solid var(--hairline-strong);
+    padding: 48px 40px;
+    margin: 0 -40px;
+  }
+  .tracker-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 28px;
+  }
+  .tracker-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .tseries {
+    background: var(--ink);
+    padding: 22px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .tseries .t-match {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    line-height: 1.2;
+  }
+  .tseries .t-state {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--paper-dim);
+  }
+  .tseries .t-note {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .tseries.stranglehold { border-left: 3px solid var(--goal); }
+  .tseries.stranglehold .t-state { color: var(--goal); }
+  .tseries.control { border-left: 3px solid var(--ice); }
+  .tseries.control .t-state { color: var(--ice); }
+  .tseries.even { border-left: 3px solid var(--gold); }
+  .tseries.even .t-state { color: var(--gold); }
+  .tseries.fresh { border-left: 3px solid var(--muted); }
+  .tseries.fresh .t-state { color: var(--muted); }
+
+  /* SECTION HEADINGS */
+  .section-head {
+    padding: 56px 0 40px;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 40px;
+    align-items: baseline;
+    border-top: 1px solid var(--hairline);
+    scroll-margin-top: 24px;
+  }
+  .section-head .num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--goal);
+    letter-spacing: 0.1em;
+  }
+  .section-head-text { align-self: baseline; }
+  .section-lead {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.45;
+    letter-spacing: 0;
+    color: var(--goal);
+    margin-top: 20px;
+    max-width: 780px;
+  }
+  .section-head h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(38px, 5vw, 68px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+  }
+  .section-head h2 em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+
+  /* GAME */
+  .game {
+    padding: 64px 0;
+    border-top: 1px solid var(--hairline-strong);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 56px;
+  }
+  .game-title { position: sticky; top: 40px; align-self: start; }
+  .game-title .series-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .game-title h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 54px;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .game-title .vs {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--muted);
+    display: block;
+    font-size: 0.6em;
+    margin: 4px 0;
+  }
+  .colorbar {
+    height: 6px; width: 100%;
+    display: flex; margin-top: 20px;
+  }
+  .colorbar span { flex: 1; }
+
+  .series-stand {
+    margin-top: 24px;
+    padding: 18px 20px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--goal);
+  }
+  .series-stand .ss-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 6px;
+  }
+  .series-stand .ss-score {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--paper);
+    letter-spacing: -0.01em;
+  }
+
+  .game-body { font-size: 17px; line-height: 1.65; }
+  .game-body > ul.bullets { margin-bottom: 8px; }
+  .game-body > ul.bullets li { font-size: 16px; }
+
+  .pullquote {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    color: var(--paper);
+    padding: 28px 0 28px 28px;
+    border-left: 2px solid var(--goal);
+    margin: 28px 0;
+  }
+
+  .breakdown-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 24px;
+    padding: 18px 0;
+    border-top: 1px solid var(--hairline);
+    align-items: start;
+  }
+  .breakdown-row:last-child { border-bottom: 1px solid var(--hairline); }
+  .breakdown-row .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding-top: 4px;
+  }
+  .breakdown-row .content { color: var(--paper-dim); font-size: 16px; }
+  .breakdown-row .content strong { color: var(--paper); font-weight: 500; }
+
+  .outlook-box {
+    margin-top: 28px;
+    padding: 24px 28px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--ice);
+  }
+  .outlook-box .olabel {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ice);
+    margin-bottom: 10px;
+  }
+  .outlook-box .otext {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--paper);
+    letter-spacing: 0;
+  }
+
+  /* TRENDS */
+  .trends {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    padding: 16px 0 56px;
+  }
+  .trend {
+    border-top: 2px solid var(--gold);
+    padding-top: 24px;
+  }
+  .trend .ticker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    margin-bottom: 16px;
+  }
+  .trend h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 23px;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 18px;
+  }
+
+  /* WATCHLIST */
+  .watchlist {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border: 1px solid var(--hairline-strong);
+    margin-bottom: 56px;
+  }
+  .watch-item {
+    padding: 28px 32px;
+    border-right: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .watch-item:nth-child(2n) { border-right: none; }
+  .watch-item:nth-last-child(-n+2) { border-bottom: none; }
+  .watch-item .check {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 32px;
+    color: var(--ice);
+    line-height: 1;
+  }
+  .watch-item h5 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.005em;
+    color: var(--paper);
+    margin-bottom: 6px;
+  }
+  .watch-item p {
+    font-size: 15px;
+    color: var(--paper-dim);
+    line-height: 1.5;
+  }
+
+  /* CLOSING */
+  .closing {
+    padding: 72px 0 48px;
+    border-top: 1px solid var(--hairline-strong);
+  }
+  .closing .overline { color: var(--gold); }
+  .closing .overline::before { background: var(--gold); }
+  .closing blockquote {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    max-width: 980px;
+  }
+  .closing blockquote em {
+    font-style: italic;
+    color: var(--goal);
+    font-weight: 400;
+  }
+  .closing .sig {
+    margin-top: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* TOC */
+  .toc {
+    padding: 40px 0 48px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .toc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .toc-label::before {
+    content: "";
+    width: 24px; height: 1px;
+    background: var(--muted);
+  }
+  .toc-list {
+    list-style: none;
+    padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .toc-list li { background: var(--ink); }
+  .toc-list a {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px 26px;
+    text-decoration: none;
+    color: var(--paper);
+    transition: background 0.3s;
+    height: 100%;
+  }
+  .toc-list a:hover { background: var(--ink-2); }
+  .toc-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--goal);
+  }
+  .toc-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+    color: var(--paper);
+    transition: color 0.3s;
+  }
+  .toc-list a:hover .toc-title { color: var(--ice); }
+
+  /* FOOTER */
+  footer {
+    padding: 36px 0;
+    border-top: 1px solid var(--hairline);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* MOBILE */
+  @media (max-width: 820px) {
+    .wrap { padding: 0 20px; }
+    .scores { grid-template-columns: 1fr; }
+    .score, .pending { border-right: none; border-bottom: 1px solid var(--hairline); }
+    .score:last-child, .pending:last-child { border-bottom: none; }
+    .tracker { margin: 0 -20px; padding: 32px 24px; }
+    .tracker-grid { grid-template-columns: repeat(2, 1fr); }
+    .section-head { grid-template-columns: 1fr; gap: 12px; padding: 44px 0 28px; }
+    .game { grid-template-columns: 1fr; gap: 28px; padding: 48px 0; }
+    .game-title { position: static; }
+    .game-title h3 { font-size: 42px; }
+    .breakdown-row { grid-template-columns: 1fr; gap: 8px; }
+    .trends { grid-template-columns: 1fr; gap: 32px; }
+    .watchlist { grid-template-columns: 1fr; }
+    .watch-item { border-right: none !important; }
+    .watch-item:nth-last-child(2) { border-bottom: 1px solid var(--hairline); }
+    .lede { padding: 56px 0 40px; }
+    .lede p { font-size: 20px; }
+    .byline { flex-direction: column; gap: 12px; }
+    .toc-list { grid-template-columns: 1fr; }
+    .toc { padding: 28px 0 32px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <a href="index.html" class="brand-link"><div class="brand">Rink<span>&middot;</span>Report</div></a>
+    <div>
+      <a href="round1-day3-analysis.html" class="nav-link">← Day 03</a>
+      &nbsp;&nbsp;Vol. I &nbsp;/&nbsp; Round 01 &nbsp;/&nbsp; Day 04
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="overline">Stanley Cup Playoffs &nbsp;·&nbsp; First Game 3s</div>
+    <h1 class="headline">The <em>Separation.</em></h1>
+    <p class="dek">
+      Game 3s are where the pretenders and the contenders start separating. Philadelphia just
+      drew the sharpest line yet — a 3–0 stranglehold built on a six-minute scoring burst and
+      Pittsburgh's ongoing offensive collapse. Two more Game 3s tonight decide whether this
+      day produces one story or three.
+    </p>
+    <div class="byline">
+      <div><strong>Round 1</strong> · Day 4 Analysis</div>
+      <div><strong>Filed</strong> · April 22, 2026</div>
+      <div><strong>Read</strong> · 4 minutes</div>
+    </div>
+  </header>
+
+  <!-- SCORE STRIP -->
+  <section class="scores">
+    <div class="score">
+      <div class="tag stranglehold">Game 3 · Series 03 · Stranglehold</div>
+      <div class="matchup">
+        <span class="winner">Philadelphia</span> def. <span class="loser">Pittsburgh</span>, 5–2
+      </div>
+      <div class="final">Flyers lead 3–0 &nbsp;·&nbsp; 3 goals in 6 minutes ended it</div>
+    </div>
+    <div class="pending">
+      <div class="tag">Tonight · Series 02 · Game 3</div>
+      <div class="matchup">
+        <span style="color: var(--muted)">Dallas at Minnesota — pending</span>
+      </div>
+      <div class="final">Series tied 1–1 &nbsp;·&nbsp; Swing series, swing game</div>
+    </div>
+    <div class="pending">
+      <div class="tag">Tonight · Series 08 · Game 2</div>
+      <div class="matchup">
+        <span style="color: var(--muted)">Anaheim at Edmonton — pending</span>
+      </div>
+      <div class="final">Oilers up 1–0 &nbsp;·&nbsp; McDavid's response game</div>
+    </div>
+  </section>
+
+  <!-- TOC -->
+  <nav class="toc" aria-label="Table of contents">
+    <div class="toc-label">Contents</div>
+    <ol class="toc-list">
+      <li><a href="#section-01">
+        <span class="toc-num">§ 01</span>
+        <span class="toc-title">Series tracker</span>
+      </a></li>
+      <li><a href="#section-02">
+        <span class="toc-num">§ 02</span>
+        <span class="toc-title">Philly–Pittsburgh, Game 3</span>
+      </a></li>
+      <li><a href="#section-03">
+        <span class="toc-num">§ 03</span>
+        <span class="toc-title">Trends &amp; patterns</span>
+      </a></li>
+      <li><a href="#section-04">
+        <span class="toc-num">§ 04</span>
+        <span class="toc-title">Watch next</span>
+      </a></li>
+    </ol>
+  </nav>
+
+  <!-- LEDE -->
+  <section class="lede">
+    <p>
+      Game 3 is when the shape of a series becomes undeniable. Philadelphia walked into Pittsburgh
+      down one early, then scored three goals in six minutes, then another, then another. A 5–2
+      final that felt like a 7–1. The Penguins have now scored four goals in three games. The
+      Flyers have Dan Vladar, a depth chart that's outworking a star chart, and — after a
+      2-for-3 night — a power play that's finally earning its keep. <em>This isn't a series
+      anymore. It's a countdown.</em>
+    </p>
+  </section>
+
+  <!-- § 01 SERIES TRACKER -->
+  <div class="section-head" id="section-01">
+    <div class="num">§ 01</div>
+    <div class="section-head-text">
+      <h2>The bracket <em>at a glance.</em></h2>
+      <p class="section-lead">Eight series. One on the verge of closing. Five still wide open. Two waiting on tonight.</p>
+    </div>
+  </div>
+
+  <section class="tracker">
+    <div class="tracker-label">Series Tracker · Round 1</div>
+    <div class="tracker-grid">
+      <div class="tseries stranglehold">
+        <div class="t-match">PHI at PIT</div>
+        <div class="t-state">Flyers 3 — 0</div>
+        <div class="t-note">One win from sweep. Pens can't score.</div>
+      </div>
+      <div class="tseries control">
+        <div class="t-match">CAR at OTT</div>
+        <div class="t-state">Canes 2 — 0</div>
+        <div class="t-note">System locked in. Andersen elite.</div>
+      </div>
+      <div class="tseries control">
+        <div class="t-match">COL at LAK</div>
+        <div class="t-state">Avs 2 — 0</div>
+        <div class="t-note">Patient, disciplined, dominant.</div>
+      </div>
+      <div class="tseries even">
+        <div class="t-match">DAL at MIN</div>
+        <div class="t-state">Tied 1 — 1</div>
+        <div class="t-note">Game 3 tonight. Real swing game.</div>
+      </div>
+      <div class="tseries even">
+        <div class="t-match">TBL at MTL</div>
+        <div class="t-state">Tied 1 — 1</div>
+        <div class="t-note">Tampa adjusted. Margin series.</div>
+      </div>
+      <div class="tseries even">
+        <div class="t-match">BOS at BUF</div>
+        <div class="t-state">Tied 1 — 1</div>
+        <div class="t-note">Sabres' goaltending question unresolved.</div>
+      </div>
+      <div class="tseries even">
+        <div class="t-match">UTA at VGK</div>
+        <div class="t-state">Tied 1 — 1</div>
+        <div class="t-note">Speed broke structure. Upset watch.</div>
+      </div>
+      <div class="tseries fresh">
+        <div class="t-match">ANA at EDM</div>
+        <div class="t-state">Oilers 1 — 0</div>
+        <div class="t-note">Game 2 tonight. McDavid's turn.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- § 02 GAME -->
+  <div class="section-head" id="section-02">
+    <div class="num">§ 02</div>
+    <div class="section-head-text">
+      <h2>Philly–Pittsburgh, <em>Game 3.</em></h2>
+      <p class="section-lead">Six minutes of hockey erased a series. Pittsburgh is out of answers — and running out of games.</p>
+    </div>
+  </div>
+
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Series 03 · East &nbsp;·&nbsp; <span style="color: var(--goal)">Stranglehold</span></div>
+      <h3>Philadelphia <span class="vs">at</span> Pittsburgh</h3>
+      <div class="colorbar">
+        <span style="background: var(--phi)"></span>
+        <span style="background: var(--pit)"></span>
+      </div>
+      <div class="series-stand">
+        <div class="ss-label">Series Standing</div>
+        <div class="ss-score">Flyers 3 — Penguins 0</div>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Philadelphia 5, Pittsburgh 2. <strong>The margin lies. This wasn't close.</strong></li>
+        <li>Malkin scored first on the power play. It looked briefly like this was Pittsburgh's night to flip the series.</li>
+        <li>Then a massive scrum. <strong>Eleven minor penalties at once.</strong> A Flyers power play out of the chaos. Zegras scored. Everything changed.</li>
+        <li>Within six minutes, the Flyers scored <strong>three goals</strong> — Zegras, Ristolainen, Seeler. Game over. Series effectively over.</li>
+        <li>Karlsson cut it to 3–2 to give Pittsburgh a pulse. <strong>Noah Cates killed it inside a minute.</strong> Then Tippett on the empty net.</li>
+        <li>Pittsburgh's series totals: <strong>four goals in three games. One even-strength goal.</strong> That's not variance. That's systemic.</li>
+        <li>Vladar in the series: <strong>.947 save percentage.</strong> Not heroic — just quietly closing the door every time Pittsburgh remembers how to shoot.</li>
+      </ul>
+      <div class="pullquote">
+        Pittsburgh had a moment. Philadelphia overwhelmed them with structure and a scoring burst. The series is effectively over.
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Pittsburgh's Path</div>
+        <div class="content">Generate <strong>interior offense</strong> — period. Four goals in three games is the entire problem, not a symptom. Simplify. Fewer east-west plays, more pucks to the net, more bodies in front. Hope for a goaltending swing. Not much else left.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Philly's Path</div>
+        <div class="content">Don't change anything. <strong>Play to close.</strong> Same forecheck, same net-front pressure, same trust in Vladar. Game 4 is about execution, not adjustment.</div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook · Updated</div>
+        <div class="otext">Flyers in 4 or 5. The only remaining question is whether Pittsburgh can score more than one or two goals in a single game. If they can't — and so far they haven't — this ends on home ice.</div>
+      </div>
+    </div>
+  </article>
+
+  <!-- § 03 TRENDS -->
+  <div class="section-head" id="section-03">
+    <div class="num">§ 03</div>
+    <div class="section-head-text">
+      <h2>Trends <em>hardening.</em></h2>
+      <p class="section-lead">Three games deep into a playoff series is when the patterns stop being patterns and start being verdicts.</p>
+    </div>
+  </div>
+
+  <section class="trends">
+    <div class="trend">
+      <div class="ticker">TREND / 01</div>
+      <h4>The 2–0 leads are holding.</h4>
+      <ul class="bullets compact">
+        <li>Philly went up 3–0. Carolina and Colorado both sit 2–0 and look in control.</li>
+        <li>No team has ever come back from 3–0. Only four have come back from 2–0 in the last decade.</li>
+        <li><strong>The bracket is narrowing fast.</strong> Three of eight series already have a team on the ropes.</li>
+      </ul>
+    </div>
+    <div class="trend">
+      <div class="ticker">TREND / 02</div>
+      <h4>Scoring bursts decide games.</h4>
+      <ul class="bullets compact">
+        <li>Philly: 3 goals in 6 minutes tonight</li>
+        <li>Boston: 3 goals in the 2nd period to flip Game 2</li>
+        <li>Buffalo: 4 goals in 7 minutes to steal Game 1</li>
+        <li><strong>Playoff games don't trickle.</strong> They flip in short, decisive windows.</li>
+      </ul>
+    </div>
+    <div class="trend">
+      <div class="ticker">TREND / 03</div>
+      <h4>Pittsburgh has collapsed.</h4>
+      <ul class="bullets compact">
+        <li>Four goals in three games. One even-strength goal.</li>
+        <li>Power play 0-for-7 until tonight's Malkin goal. Shorthanded goal against in Game 2.</li>
+        <li><strong>This is the first series-level collapse of Round 1.</strong> And it happened to a team that was supposed to be competitive.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- § 04 WATCHLIST -->
+  <div class="section-head" id="section-04">
+    <div class="num">§ 04</div>
+    <div class="section-head-text">
+      <h2>What to watch <em>next.</em></h2>
+      <p class="section-lead">Two games tonight. Both could reshape their series by morning.</p>
+    </div>
+  </div>
+
+  <section class="watchlist">
+    <div class="watch-item">
+      <div class="check">✓</div>
+      <div>
+        <h5>Dallas at Minnesota, Game 3</h5>
+        <p>The real swing series of Round 1. Tied 1–1 and now on Wild ice. If Minnesota wins this, the upset narrative is back on. If Dallas takes it, the Stars are in control of a series they were "supposed" to win.</p>
+      </div>
+    </div>
+    <div class="watch-item">
+      <div class="check">✓</div>
+      <div>
+        <h5>Anaheim at Edmonton, Game 2</h5>
+        <p>McDavid held pointless in Game 1 and the Oilers still won. That's not a number he'll accept twice. Watch for a statement night — or an Anaheim upset building.</p>
+      </div>
+    </div>
+    <div class="watch-item">
+      <div class="check">✓</div>
+      <div>
+        <h5>Penguins Coaching Response</h5>
+        <p>Down 3–0, offense nonexistent, goaltending shaky. Line combinations haven't worked. At some point the coaching staff has to try <em>something</em> different. Game 4 tells us what.</p>
+      </div>
+    </div>
+    <div class="watch-item">
+      <div class="check">✓</div>
+      <div>
+        <h5>The Next Stranglehold</h5>
+        <p>Carolina and Colorado both enter Game 3 up 2–0 tomorrow. If either takes a 3–0 lead, three of eight series will be functionally over before the weekend.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING -->
+  <section class="closing">
+    <div class="overline">The Take</div>
+    <blockquote>
+      Game 3 is where hockey stops pretending. Philadelphia isn't trying to win a series — they're trying to finish one. <em>Pittsburgh isn't losing. They're being put away.</em>
+    </blockquote>
+    <div class="sig">— Round 1 · Day 4 · Filed after the first Game 3</div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>Rink Report · NHL Playoff Coverage</div>
+    <div>Round 1 of 4 · Next: DAL/MIN + EDM/ANA tonight</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
