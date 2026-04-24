@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Round 1, Day 4 — The Separation | NHL Playoffs Analysis</title>
+<title>Round 1, Day 5 — The Formula | NHL Playoffs Analysis</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
@@ -264,6 +264,26 @@
     margin-top: 10px;
   }
 
+  /* LIVE indicator for in-progress games */
+  .pending.live .tag {
+    color: var(--goal);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pending.live .tag .pulse {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--goal);
+    animation: pulseDot 2s ease-in-out infinite;
+  }
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+  }
+
   /* LEDE */
   .lede {
     padding: 88px 0 64px;
@@ -286,7 +306,7 @@
     color: var(--goal);
   }
 
-  /* ─── PER-SERIES TRACKER (new for Day 4+) ─── */
+  /* PER-SERIES TRACKER */
   .tracker {
     background: var(--ink-2);
     border-top: 1px solid var(--hairline-strong);
@@ -711,52 +731,49 @@
   <div class="masthead">
     <a href="index.html" class="brand-link"><div class="brand">Rink<span>&middot;</span>Report</div></a>
     <div>
-      <a href="round1-day3-analysis.html" class="nav-link">← Day 03</a>
-      &nbsp;&nbsp;Vol. I &nbsp;/&nbsp; Round 01 &nbsp;/&nbsp; Day 04
-      &nbsp;&nbsp;<a href="round1-day5-analysis.html" class="nav-link">Day 05 →</a>
+      <a href="round1-day4-analysis.html" class="nav-link">← Day 04</a>
+      &nbsp;&nbsp;Vol. I &nbsp;/&nbsp; Round 01 &nbsp;/&nbsp; Day 05
     </div>
   </div>
 
   <!-- HERO -->
   <header class="hero">
-    <div class="overline">Stanley Cup Playoffs &nbsp;·&nbsp; Three Game 3s</div>
-    <h1 class="headline">The <em>Separation.</em></h1>
+    <div class="overline">Stanley Cup Playoffs &nbsp;·&nbsp; The Second Game 3s</div>
+    <h1 class="headline">The <em>Formula.</em></h1>
     <p class="dek">
-      Game 3s are where the pretenders and the contenders start separating. Three games tonight
-      and three different lessons. Philadelphia drew the sharpest line yet — a 3–0 stranglehold.
-      Anaheim walked into Edmonton and flipped the series. Dallas outlasted Minnesota in double
-      overtime to take a 2–1 lead that's anything but comfortable. <em>Favourites in trouble
-      everywhere except where they matter most.</em>
+      Day 5 is where teams that have found something start trusting it — and teams that haven't
+      run out of time. Buffalo trusted a goaltending change and took a 2–1 series lead in Boston.
+      Two more Game 3s coming tonight, both favourites up 2–0 and sniffing a chance to close.
     </p>
     <div class="byline">
-      <div><strong>Round 1</strong> · Day 4 Analysis</div>
-      <div><strong>Filed</strong> · April 22, 2026</div>
-      <div><strong>Read</strong> · 7 minutes</div>
+      <div><strong>Round 1</strong> · Day 5 Analysis</div>
+      <div><strong>Filed</strong> · April 23, 2026</div>
+      <div><strong>Read</strong> · 4 minutes</div>
     </div>
   </header>
 
   <!-- SCORE STRIP -->
   <section class="scores">
     <div class="score">
-      <div class="tag stranglehold">Game 3 · Series 03 · Stranglehold</div>
+      <div class="tag separation">Game 3 · Series 06 · Separation</div>
       <div class="matchup">
-        <span class="winner">Philadelphia</span> def. <span class="loser">Pittsburgh</span>, 5–2
+        <span class="winner">Buffalo</span> def. <span class="loser">Boston</span>, 3–1
       </div>
-      <div class="final">Flyers lead 3–0 &nbsp;·&nbsp; 3 goals in 6 minutes ended it</div>
+      <div class="final">Sabres lead 2–1 &nbsp;·&nbsp; Lyon in net, Tuch game-winner</div>
     </div>
-    <div class="score">
-      <div class="tag separation">Game 3 · Series 02 · Separation</div>
+    <div class="pending live">
+      <div class="tag">Live <span class="pulse"></span> Series 01 · Game 3</div>
       <div class="matchup">
-        <span class="winner">Dallas</span> def. <span class="loser">Minnesota</span>, 4–3 (2OT)
+        <span style="color: var(--muted)">Ottawa at Carolina — in progress</span>
       </div>
-      <div class="final">Stars lead 2–1 &nbsp;·&nbsp; Johnston deflection in 2OT, PP 3-for-8</div>
+      <div class="final">Canes up 2–0 &nbsp;·&nbsp; Sweep watch starts here</div>
     </div>
-    <div class="score">
-      <div class="tag flipped">Game 2 · Series 08 · Flipped</div>
+    <div class="pending">
+      <div class="tag">Tonight · Series 04 · Game 3</div>
       <div class="matchup">
-        <span class="winner">Anaheim</span> def. <span class="loser">Edmonton</span>, 6–4
+        <span style="color: var(--muted)">LA Kings at Colorado — 7pm</span>
       </div>
-      <div class="final">Series tied 1–1 &nbsp;·&nbsp; Gauthier GWG, McDavid pointless again</div>
+      <div class="final">Avs up 2–0 &nbsp;·&nbsp; Third stranglehold watch</div>
     </div>
   </section>
 
@@ -770,7 +787,7 @@
       </a></li>
       <li><a href="#section-02">
         <span class="toc-num">§ 02</span>
-        <span class="toc-title">Three games</span>
+        <span class="toc-title">Buffalo–Boston, Game 3</span>
       </a></li>
       <li><a href="#section-03">
         <span class="toc-num">§ 03</span>
@@ -786,12 +803,12 @@
   <!-- LEDE -->
   <section class="lede">
     <p>
-      Game 3 is when the shape of a series becomes undeniable. Philadelphia went to Pittsburgh
-      and scored three in six minutes to all but end that series. Anaheim went to Edmonton and
-      won a 6–4 chaos game with McDavid silent again. And Dallas went to Minnesota, survived
-      a Wild onslaught, and won a double-overtime thriller on a power-play deflection — their
-      third power-play goal of the night. Three games, three favourites tested. <em>Only one
-      still looks like a favourite.</em>
+      Day 4 was about separation. Day 5 is about formula. Buffalo flagged on Day 3 that their
+      goaltending was the open question of the series — and today they answered it. Alex Lyon
+      got the start over Luukkonen, neutralized Boston's one clear advantage, and Buffalo rode
+      depth scoring and one veteran finisher to a 2–1 series lead. Two more Game 3s tonight,
+      both with favourites up 2–0 and a chance to put their series on ice. <em>The teams that
+      have found their formula are running it. The teams that haven't are running out of time.</em>
     </p>
   </section>
 
@@ -800,7 +817,7 @@
     <div class="num">§ 01</div>
     <div class="section-head-text">
       <h2>The bracket <em>at a glance.</em></h2>
-      <p class="section-lead">Eight series. One close to closing, three in firm control, four still wide open. Day 4 didn't sort the bracket — it sharpened it.</p>
+      <p class="section-lead">Eight series. One closing out. Four in firm control. Three still even. Tonight could push three series to 3–0.</p>
     </div>
   </div>
 
@@ -815,27 +832,27 @@
       <div class="tseries control">
         <div class="t-match">CAR at OTT</div>
         <div class="t-state">Canes 2 — 0</div>
-        <div class="t-note">System locked in. Andersen elite.</div>
+        <div class="t-note">Game 3 in progress. Sweep in reach.</div>
       </div>
       <div class="tseries control">
         <div class="t-match">COL at LAK</div>
         <div class="t-state">Avs 2 — 0</div>
-        <div class="t-note">Patient, disciplined, dominant.</div>
+        <div class="t-note">Game 3 tonight 7pm. LA must finish.</div>
       </div>
       <div class="tseries control">
         <div class="t-match">DAL at MIN</div>
         <div class="t-state">Stars 2 — 1</div>
-        <div class="t-note">Won 2OT. PP 3-for-8. Control.</div>
+        <div class="t-note">Won 2OT on PP. Formula works.</div>
+      </div>
+      <div class="tseries control">
+        <div class="t-match">BOS at BUF</div>
+        <div class="t-state">Sabres 2 — 1</div>
+        <div class="t-note">Lyon in net. Goaltending solved.</div>
       </div>
       <div class="tseries even">
         <div class="t-match">TBL at MTL</div>
         <div class="t-state">Tied 1 — 1</div>
         <div class="t-note">Tampa adjusted. Margin series.</div>
-      </div>
-      <div class="tseries even">
-        <div class="t-match">BOS at BUF</div>
-        <div class="t-state">Tied 1 — 1</div>
-        <div class="t-note">Sabres' goaltending question unresolved.</div>
       </div>
       <div class="tseries even">
         <div class="t-match">UTA at VGK</div>
@@ -845,139 +862,56 @@
       <div class="tseries even">
         <div class="t-match">ANA at EDM</div>
         <div class="t-state">Tied 1 — 1</div>
-        <div class="t-note">Ducks win chaos. McDavid pointless.</div>
+        <div class="t-note">Ducks won chaos. McDavid pointless.</div>
       </div>
     </div>
   </section>
 
-  <!-- § 02 GAMES -->
+  <!-- § 02 GAME -->
   <div class="section-head" id="section-02">
     <div class="num">§ 02</div>
     <div class="section-head-text">
-      <h2>Three games, <em>three verdicts.</em></h2>
-      <p class="section-lead">Philadelphia tightened the vice. Anaheim cracked Edmonton open. Dallas outlasted Minnesota in double overtime. Three different templates for taking Game 3.</p>
+      <h2>Buffalo–Boston, <em>Game 3.</em></h2>
+      <p class="section-lead">A goaltending change. A missed penalty shot. A 2–1 series lead built on execution in the moments that mattered.</p>
     </div>
   </div>
 
   <article class="game">
     <div class="game-title">
-      <div class="series-tag">Series 03 · East &nbsp;·&nbsp; <span style="color: var(--goal)">Stranglehold</span></div>
-      <h3>Philadelphia <span class="vs">at</span> Pittsburgh</h3>
+      <div class="series-tag">Series 06 · East &nbsp;·&nbsp; <span style="color: var(--ice)">Separation</span></div>
+      <h3>Buffalo <span class="vs">at</span> Boston</h3>
       <div class="colorbar">
-        <span style="background: var(--phi)"></span>
-        <span style="background: var(--pit)"></span>
+        <span style="background: var(--buf)"></span>
+        <span style="background: var(--bos)"></span>
       </div>
       <div class="series-stand">
         <div class="ss-label">Series Standing</div>
-        <div class="ss-score">Flyers 3 — Penguins 0</div>
+        <div class="ss-score">Sabres 2 — Bruins 1</div>
       </div>
     </div>
     <div class="game-body">
       <ul class="bullets">
-        <li>Philadelphia 5, Pittsburgh 2. <strong>The margin lies. This wasn't close.</strong></li>
-        <li>Malkin scored first on the power play. It looked briefly like this was Pittsburgh's night to flip the series.</li>
-        <li>Then a massive scrum. <strong>Eleven minor penalties at once.</strong> A Flyers power play out of the chaos. Zegras scored. Everything changed.</li>
-        <li>Within six minutes, the Flyers scored <strong>three goals</strong> — Zegras, Ristolainen, Seeler. Game over. Series effectively over.</li>
-        <li>Karlsson cut it to 3–2 to give Pittsburgh a pulse. <strong>Noah Cates killed it inside a minute.</strong> Then Tippett on the empty net.</li>
-        <li>Pittsburgh's series totals: <strong>four goals in three games. One even-strength goal.</strong> That's not variance. That's systemic.</li>
-        <li>Vladar in the series: <strong>.947 save percentage.</strong> Not heroic — just quietly closing the door every time Pittsburgh remembers how to shoot.</li>
+        <li>Buffalo 3, Boston 1. A game decided by a goaltending call and a missed shot — <strong>two moments that redefined a series.</strong></li>
+        <li><strong>Alex Lyon got the start over Luukkonen.</strong> We flagged Sabres goaltending as the open question on Day 3. Today it got its answer: calm, composed, sharp under pressure, elite in the slot.</li>
+        <li>Boston scored first (third straight game — strange trend for a team leading the series). The moment that defined the night came minutes later.</li>
+        <li><strong>Arvidsson missed a penalty shot.</strong> Could have been 2–0 Boston, could have been the dagger. Instead: Byram ties it inside one shift. Tuch scores the winner from a prime slot chance. Östlund — rookie, playoff debut — gets the primary assist on the tying goal and looks veteran doing it.</li>
+        <li>Buffalo's power play is still <strong>0-for-its-last-35</strong>. Four penalties taken. Allowed the penalty shot. And they still won.</li>
+        <li>Boston outplayed Buffalo on structure. <strong>Buffalo out-executed Boston in the moments that mattered.</strong> That's the whole difference.</li>
       </ul>
       <div class="pullquote">
-        Pittsburgh had a moment. Philadelphia overwhelmed them with structure and a scoring burst. The series is effectively over.
+        Buffalo didn't dominate this game. They out-executed Boston in the moments that mattered most. That is often the difference in playoff hockey.
       </div>
       <div class="breakdown-row">
-        <div class="label">Pittsburgh's Path</div>
-        <div class="content">Generate <strong>interior offense</strong> — period. Four goals in three games is the entire problem, not a symptom. Simplify. Fewer east-west plays, more pucks to the net, more bodies in front. Hope for a goaltending swing. Not much else left.</div>
+        <div class="label">Buffalo's Path</div>
+        <div class="content">Stay with Lyon — he <strong>earned it.</strong> Fix the power play before it becomes the series-ending story. Keep leaning on depth: Tuch as veteran finisher, Byram driving the blue line, Östlund already looking like a real playoff piece.</div>
       </div>
       <div class="breakdown-row">
-        <div class="label">Philly's Path</div>
-        <div class="content">Don't change anything. <strong>Play to close.</strong> Same forecheck, same net-front pressure, same trust in Vladar. Game 4 is about execution, not adjustment.</div>
+        <div class="label">Boston's Path</div>
+        <div class="content">Finish the chances. A missed penalty shot doesn't happen twice, but <strong>not converting 2–0 leads does.</strong> Get the forecheck going earlier. Demand more from top-six players — Arvidsson can't be the guy who gets the penalty shot and misses it.</div>
       </div>
       <div class="outlook-box">
         <div class="olabel">Series Outlook · Updated</div>
-        <div class="otext">Flyers in 4 or 5. The only remaining question is whether Pittsburgh can score more than one or two goals in a single game. If they can't — and so far they haven't — this ends on home ice.</div>
-      </div>
-    </div>
-  </article>
-
-  <!-- ANA vs EDM -->
-  <article class="game">
-    <div class="game-title">
-      <div class="series-tag">Series 08 · West &nbsp;·&nbsp; <span style="color: var(--goal)">Flipped</span></div>
-      <h3>Anaheim <span class="vs">at</span> Edmonton</h3>
-      <div class="colorbar">
-        <span style="background: var(--ana)"></span>
-        <span style="background: var(--edm)"></span>
-      </div>
-      <div class="series-stand">
-        <div class="ss-label">Series Standing</div>
-        <div class="ss-score">Ducks 1 — Oilers 1</div>
-      </div>
-    </div>
-    <div class="game-body">
-      <ul class="bullets">
-        <li>Anaheim 6, Edmonton 4. <strong>Connor McDavid is now pointless through two playoff games.</strong> That's the series.</li>
-        <li>Pure chaos from puck drop. Multiple lead changes. Ducks led 3–1, then 4–2. Oilers tied it 4–4 late in the third.</li>
-        <li>Special teams ran the game — and <strong>Anaheim won both sides.</strong> Two power-play goals plus a shorthanded goal off a McDavid turnover. In a playoff game that math is fatal.</li>
-        <li>Cutter Gauthier got promoted to the top line. <strong>Scored twice</strong>, including the game-winner with five minutes left. Empty-netter sealed it.</li>
-        <li>McDavid: zero points, brief injury scare, the turnover that led to Anaheim's shorthanded goal. <strong>Edmonton's engine isn't driving the car.</strong></li>
-        <li>Draisaitl's line was productive again. The rest of the lineup was not. <strong>One line cannot carry a playoff series.</strong></li>
-      </ul>
-      <div class="pullquote">
-        Edmonton had chances. Anaheim won the chaos, the special teams battle, and the final moments. That's why the series is tied.
-      </div>
-      <div class="breakdown-row">
-        <div class="label">Edmonton's Path</div>
-        <div class="content"><strong>Free up McDavid.</strong> The Ducks are pressuring him hard and Edmonton hasn't answered. Tighten defensive coverage — four goals against in a home Game 2 is not playoff hockey. Fix the penalty kill. Find a second line that contributes.</div>
-      </div>
-      <div class="breakdown-row">
-        <div class="label">Anaheim's Path</div>
-        <div class="content">Keep the pressure on McDavid. Keep winning special teams. <strong>Lean into the chaos</strong> — the Ducks are the team that thrives when this series stays high-event, and they know it.</div>
-      </div>
-      <div class="outlook-box">
-        <div class="olabel">Series Outlook · Updated</div>
-        <div class="otext">After Game 1 we said Edmonton was still the favourite but not comfortable. After Game 2, they're <strong>in genuine trouble.</strong> If McDavid doesn't emerge in Game 3, Anaheim isn't just stealing a game — they're winning a series they weren't supposed to win.</div>
-      </div>
-    </div>
-  </article>
-
-  <!-- DAL vs MIN -->
-  <article class="game">
-    <div class="game-title">
-      <div class="series-tag">Series 02 · West &nbsp;·&nbsp; <span style="color: var(--ice)">Separation</span></div>
-      <h3>Dallas <span class="vs">at</span> Minnesota</h3>
-      <div class="colorbar">
-        <span style="background: var(--dal)"></span>
-        <span style="background: var(--min)"></span>
-      </div>
-      <div class="series-stand">
-        <div class="ss-label">Series Standing</div>
-        <div class="ss-score">Stars 2 — Wild 1</div>
-      </div>
-    </div>
-    <div class="game-body">
-      <ul class="bullets">
-        <li>Dallas 4, Minnesota 3 — in <strong>double overtime</strong>. Decided on a Johnston deflection. A power-play goal. Of course.</li>
-        <li>Dallas built a quick 2–0 lead. Rantanen on the early power play, then a second goal before the Wild could settle. <strong>Executing under pressure while Minnesota didn't.</strong></li>
-        <li>Minnesota fought back — Johansson, Eriksson Ek, McCarron. Flipped the game 3–2. <strong>Everything was set up for a statement home win.</strong></li>
-        <li>Then they stopped converting. <strong>Five power plays across the third and OT. One goal.</strong> Kaprizov hit a post in overtime. Duchene made a save-goal sequence — denied a Wild shorthander, then tied it on Dallas's next power play.</li>
-        <li>Dallas's night on special teams: <strong>3-for-8.</strong> Minnesota's: 1-for-7. That's the series now.</li>
-        <li>The 2OT winner came from exactly where playoff OT goals always come from. <strong>A deflection, in traffic, off a point shot.</strong></li>
-      </ul>
-      <div class="pullquote">
-        It's not about how many chances you get. It's about what you do with them.
-      </div>
-      <div class="breakdown-row">
-        <div class="label">Minnesota's Path</div>
-        <div class="content"><strong>The power play has to work or the series is over.</strong> 1-for-7 with multiple chances to put the game away is not unlucky — it's structural. Reduce the penalties. Finish at the net front. Hit Kaprizov with better looks than posts.</div>
-      </div>
-      <div class="breakdown-row">
-        <div class="label">Dallas's Path</div>
-        <div class="content">Keep drawing penalties, keep scoring on them. Duchene and Johnston are delivering in the biggest moments — <strong>ride them.</strong> Stay disciplined defensively when the Wild push. The formula is working.</div>
-      </div>
-      <div class="outlook-box">
-        <div class="olabel">Series Outlook · Updated</div>
-        <div class="otext">Minnesota stole Game 1. Dallas has answered twice since — a 4–2 reversal and now a 4–3 double-OT heist on the road. <strong>This is Dallas's series now</strong> unless Minnesota solves the power play and stops giving the Stars easy offense.</div>
+        <div class="otext">Buffalo now has what it didn't have in Game 1: <strong>a goaltender they trust, a formula that survives imperfection, and a series lead.</strong> Boston has to win the next game or this becomes a 3–1 hole. Heavy pressure flips to the team that was supposed to be the underdog here.</div>
       </div>
     </div>
   </article>
@@ -987,41 +921,40 @@
     <div class="num">§ 03</div>
     <div class="section-head-text">
       <h2>Trends <em>hardening.</em></h2>
-      <p class="section-lead">Three games deep into a playoff series is when the patterns stop being patterns and start being verdicts.</p>
+      <p class="section-lead">Day 5 is where patterns turn into verdicts. Five series now have a team in control — and they share a signature.</p>
     </div>
   </div>
 
   <section class="trends">
     <div class="trend">
       <div class="ticker">TREND / 01</div>
-      <h4>Special teams is deciding everything.</h4>
+      <h4>Goaltending calls are series calls.</h4>
       <ul class="bullets compact">
-        <li>Dallas tonight: 3 power-play goals in a 4–3 2OT win</li>
-        <li>Anaheim: 2 PP goals + a shorthanded goal to flip Edmonton</li>
-        <li>Philly: 2-for-3 on the power play in Game 3</li>
-        <li>Minnesota: 1-for-7, lost a game they dominated</li>
-        <li><strong>Every Day 4 winner won the special teams battle.</strong> Not coincidence. The sharpest edge in the tournament.</li>
+        <li>Buffalo swapped Luukkonen for Lyon. Won Game 3.</li>
+        <li>Colorado's Wedgewood: penalty-shot save in Game 2. Won in OT.</li>
+        <li>Carolina's Andersen: overturned goal save. Double-OT win.</li>
+        <li>Philly's Vladar: .947 SV% across the series, all three wins.</li>
+        <li><strong>The five teams in firm control all have goalies playing above expectation.</strong> Not volume saves — timing saves.</li>
       </ul>
     </div>
     <div class="trend">
       <div class="ticker">TREND / 02</div>
-      <h4>The favourites split.</h4>
+      <h4>Execution beats dominance.</h4>
       <ul class="bullets compact">
-        <li>Pittsburgh: 4 goals in 3 games. Down 3–0.</li>
-        <li>Edmonton: Surrendered 6 at home. McDavid pointless through 2.</li>
-        <li>Dallas: Answered every Minnesota punch. Up 2–1.</li>
-        <li>The road team has won six of the last eight games across the bracket</li>
-        <li><strong>Some favourites are asserting. Others are buckling.</strong> Execution, not seeding, separates them.</li>
+        <li>Buffalo was outplayed tonight. Won anyway.</li>
+        <li>Minnesota dominated stretches of Game 3. Lost in 2OT.</li>
+        <li>Pittsburgh doubled Philly in shot attempts earlier. Lost 3–0.</li>
+        <li><strong>Territorial dominance is a losing metric when you don't finish.</strong> Six separate games have now confirmed it.</li>
       </ul>
     </div>
     <div class="trend">
       <div class="ticker">TREND / 03</div>
-      <h4>Stars that can't score become liabilities.</h4>
+      <h4>The sweep watch is real.</h4>
       <ul class="bullets compact">
-        <li>McDavid: 0 points in 2, plus a turnover for a shorthanded goal against</li>
-        <li>Kaprizov: hit a post in OT. No points in Game 3.</li>
-        <li>Crosby &amp; Malkin: not enough, not often enough, not at 5v5</li>
-        <li><strong>In tight games, a silent superstar costs their team more than a silent role player.</strong> The minutes are there. The production isn't.</li>
+        <li>Philly 3–0 on Pittsburgh. Could close Game 4.</li>
+        <li>Carolina up 2–0, Game 3 in progress. Sweep in reach.</li>
+        <li>Colorado up 2–0, Game 3 tonight. Third stranglehold possible.</li>
+        <li><strong>By tomorrow morning, three of eight series could be functionally over.</strong> The bracket is narrowing faster than expected.</li>
       </ul>
     </div>
   </section>
@@ -1030,8 +963,8 @@
   <div class="section-head" id="section-04">
     <div class="num">§ 04</div>
     <div class="section-head-text">
-      <h2>What to watch <em>next.</em></h2>
-      <p class="section-lead">Two games tonight. Both could reshape their series by morning.</p>
+      <h2>What to watch <em>tonight.</em></h2>
+      <p class="section-lead">Two Game 3s with three possible outcomes each. The next 24 hours decide how fast the bracket closes.</p>
     </div>
   </div>
 
@@ -1039,29 +972,29 @@
     <div class="watch-item">
       <div class="check">✓</div>
       <div>
-        <h5>Minnesota's Power Play, Game 4</h5>
-        <p>1-for-7 in Game 3. Cost them a 2–0 lead, cost them overtime, cost them home ice advantage. If it stays broken against Dallas, the series is over by Game 5.</p>
+        <h5>Carolina's Killer Instinct</h5>
+        <p>Up 2–0, on the road, Andersen elite. A win here is a stranglehold. A loss opens a door Ottawa hasn't earned yet. Watch Carolina's first ten minutes — that's when they win these games.</p>
       </div>
     </div>
     <div class="watch-item">
       <div class="check">✓</div>
       <div>
-        <h5>McDavid's Game 3</h5>
-        <p>Zero points in two games. An icon doesn't stay silent for three. The question isn't whether he finds his game — it's whether Edmonton's role players help him once he does.</p>
+        <h5>LA's 5v5 Puzzle</h5>
+        <p>Every LA goal in the series has come on special teams. You cannot beat Colorado on that alone. Game 3 is the deadline — either they generate 5v5 offense tonight or they're down 3–0 by morning.</p>
       </div>
     </div>
     <div class="watch-item">
       <div class="check">✓</div>
       <div>
-        <h5>Penguins Coaching Response</h5>
-        <p>Down 3–0, offense nonexistent, goaltending shaky. Line combinations haven't worked. At some point the coaching staff has to try <em>something</em> different. Game 4 tells us what.</p>
+        <h5>Boston's Response Window</h5>
+        <p>Down 2–1 heading into Game 4. The Bruins are structurally sound but losing games they feel they should win. If they can't find a converting touch in Game 4, they're the next team in real trouble.</p>
       </div>
     </div>
     <div class="watch-item">
       <div class="check">✓</div>
       <div>
-        <h5>The Next Stranglehold</h5>
-        <p>Carolina and Colorado both enter Game 3 up 2–0 tomorrow. If either takes a 3–0 lead, three of eight series will be functionally over before the weekend.</p>
+        <h5>Buffalo's Power Play</h5>
+        <p>0-for-35. They're winning the series anyway, which is almost more damning — imagine if it worked. Boston will draw more penalties. Eventually the drought ends or it doesn't.</p>
       </div>
     </div>
   </section>
@@ -1070,15 +1003,15 @@
   <section class="closing">
     <div class="overline">The Take</div>
     <blockquote>
-      Game 3 is where hockey stops pretending. Pittsburgh is being put away. Edmonton is being exposed. Minnesota is being outclassed where it matters most. <em>Three games, one scoreboard: special teams still wins in spring.</em>
+      Day 5 is where the teams that know themselves start winning games the teams that don't should have won. Buffalo has a formula now. <em>Boston is still looking for theirs.</em>
     </blockquote>
-    <div class="sig">— Round 1 · Day 4 · Filed after three Game 3s</div>
+    <div class="sig">— Round 1 · Day 5 · Filed after Buffalo, before tonight</div>
   </section>
 
   <!-- FOOTER -->
   <footer>
     <div>Rink Report · NHL Playoff Coverage</div>
-    <div>Round 1 of 4 · Next: CAR/OTT, COL/LAK Game 3s tomorrow</div>
+    <div>Round 1 of 4 · Next: CAR/OTT live, COL/LAK at 7pm</div>
   </footer>
 
 </div>
