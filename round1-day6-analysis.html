@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Round 1, Day 5 — The Formula | NHL Playoffs Analysis</title>
+<title>Round 1, Day 6 — The Margins | NHL Playoffs Analysis</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
@@ -263,8 +263,6 @@
     color: var(--muted);
     margin-top: 10px;
   }
-
-  /* LIVE indicator for in-progress games */
   .pending.live .tag {
     color: var(--goal);
     display: flex;
@@ -366,6 +364,16 @@
   .tseries.even .t-state { color: var(--gold); }
   .tseries.fresh { border-left: 3px solid var(--muted); }
   .tseries.fresh .t-state { color: var(--muted); }
+  .tseries.live { border-left: 3px solid var(--goal); }
+  .tseries.live .t-state { color: var(--goal); display: flex; align-items: center; gap: 6px; }
+  .tseries.live .t-state::before {
+    content: "";
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--goal);
+    animation: pulseDot 2s ease-in-out infinite;
+  }
 
   /* SECTION HEADINGS */
   .section-head {
@@ -442,12 +450,8 @@
     font-size: 0.6em;
     margin: 4px 0;
   }
-  .colorbar {
-    height: 6px; width: 100%;
-    display: flex; margin-top: 20px;
-  }
+  .colorbar { height: 6px; width: 100%; display: flex; margin-top: 20px; }
   .colorbar span { flex: 1; }
-
   .series-stand {
     margin-top: 24px;
     padding: 18px 20px;
@@ -469,11 +473,9 @@
     color: var(--paper);
     letter-spacing: -0.01em;
   }
-
   .game-body { font-size: 17px; line-height: 1.65; }
   .game-body > ul.bullets { margin-bottom: 8px; }
   .game-body > ul.bullets li { font-size: 16px; }
-
   .pullquote {
     font-family: "Source Serif 4", Georgia, serif;
     font-weight: 500;
@@ -486,7 +488,6 @@
     border-left: 2px solid var(--goal);
     margin: 28px 0;
   }
-
   .breakdown-row {
     display: grid;
     grid-template-columns: 160px 1fr;
@@ -506,7 +507,6 @@
   }
   .breakdown-row .content { color: var(--paper-dim); font-size: 16px; }
   .breakdown-row .content strong { color: var(--paper); font-weight: 500; }
-
   .outlook-box {
     margin-top: 28px;
     padding: 24px 28px;
@@ -537,10 +537,7 @@
     gap: 40px;
     padding: 16px 0 56px;
   }
-  .trend {
-    border-top: 2px solid var(--gold);
-    padding-top: 24px;
-  }
+  .trend { border-top: 2px solid var(--gold); padding-top: 24px; }
   .trend .ticker {
     font-family: "JetBrains Mono", monospace;
     font-size: 11px;
@@ -590,11 +587,7 @@
     color: var(--paper);
     margin-bottom: 6px;
   }
-  .watch-item p {
-    font-size: 15px;
-    color: var(--paper-dim);
-    line-height: 1.5;
-  }
+  .watch-item p { font-size: 15px; color: var(--paper-dim); line-height: 1.5; }
 
   /* CLOSING */
   .closing {
@@ -612,11 +605,7 @@
     color: var(--paper);
     max-width: 980px;
   }
-  .closing blockquote em {
-    font-style: italic;
-    color: var(--goal);
-    font-weight: 400;
-  }
+  .closing blockquote em { font-style: italic; color: var(--goal); font-weight: 400; }
   .closing .sig {
     margin-top: 40px;
     font-family: "JetBrains Mono", monospace;
@@ -627,10 +616,7 @@
   }
 
   /* TOC */
-  .toc {
-    padding: 40px 0 48px;
-    border-bottom: 1px solid var(--hairline);
-  }
+  .toc { padding: 40px 0 48px; border-bottom: 1px solid var(--hairline); }
   .toc-label {
     font-family: "JetBrains Mono", monospace;
     font-size: 11px;
@@ -731,52 +717,51 @@
   <div class="masthead">
     <a href="index.html" class="brand-link"><div class="brand">Rink<span>&middot;</span>Report</div></a>
     <div>
-      <a href="round1-day4-analysis.html" class="nav-link">← Day 04</a>
-      &nbsp;&nbsp;Vol. I &nbsp;/&nbsp; Round 01 &nbsp;/&nbsp; Day 05
-      &nbsp;&nbsp;<a href="round1-day6-analysis.html" class="nav-link">Day 06 →</a>
+      <a href="round1-day5-analysis.html" class="nav-link">← Day 05</a>
+      &nbsp;&nbsp;Vol. I &nbsp;/&nbsp; Round 01 &nbsp;/&nbsp; Day 06
     </div>
   </div>
 
   <!-- HERO -->
   <header class="hero">
-    <div class="overline">Stanley Cup Playoffs &nbsp;·&nbsp; Three Game 3s, Three Favourites Win</div>
-    <h1 class="headline">The <em>Formula.</em></h1>
+    <div class="overline">Stanley Cup Playoffs &nbsp;·&nbsp; The Even Series Resolve</div>
+    <h1 class="headline">The <em>Margins.</em></h1>
     <p class="dek">
-      Day 5 is where teams that have found something start trusting it — and teams that haven't
-      run out of time. Three games tonight and three different paths to the same verdict:
-      <em>formula matters more than talent.</em> Buffalo changed goalies. Carolina changed
-      nothing. Colorado beat LA at LA's own game. Three series pushed into control, two into
-      Stranglehold territory. The bracket is closing fast.
+      Day 5 was about formula. Day 6 is about everything formula leaves behind. Three Game 3s
+      in the bracket's even series, all decided by inches. Montreal beat Tampa in overtime
+      again — three games, three OTs. Utah and Edmonton play tonight with everything still
+      open. <em>The favourites already in control are running. The series that aren't are
+      trading inches, not advantages.</em>
     </p>
     <div class="byline">
-      <div><strong>Round 1</strong> · Day 5 Analysis</div>
-      <div><strong>Filed</strong> · April 23, 2026</div>
-      <div><strong>Read</strong> · 8 minutes</div>
+      <div><strong>Round 1</strong> · Day 6 Analysis</div>
+      <div><strong>Filed</strong> · April 24, 2026</div>
+      <div><strong>Read</strong> · 4 minutes</div>
     </div>
   </header>
 
   <!-- SCORE STRIP -->
   <section class="scores">
     <div class="score">
-      <div class="tag separation">Game 3 · Series 06 · Separation</div>
+      <div class="tag separation">Game 3 · Series 05 · Separation</div>
       <div class="matchup">
-        <span class="winner">Buffalo</span> def. <span class="loser">Boston</span>, 3–1
+        <span class="winner">Montreal</span> def. <span class="loser">Tampa Bay</span>, 3–2 (OT)
       </div>
-      <div class="final">Sabres lead 2–1 &nbsp;·&nbsp; Lyon in net, Tuch game-winner</div>
+      <div class="final">Habs lead 2–1 &nbsp;·&nbsp; Hutson OT winner, Dach line drives 2 goals</div>
     </div>
-    <div class="score">
-      <div class="tag stranglehold">Game 3 · Series 01 · Stranglehold</div>
+    <div class="pending live">
+      <div class="tag">Live <span class="pulse"></span> Series 07 · Game 3</div>
       <div class="matchup">
-        <span class="winner">Carolina</span> def. <span class="loser">Ottawa</span>, 2–1
+        <span style="color: var(--muted)">Vegas at Utah — in progress</span>
       </div>
-      <div class="final">Hurricanes lead 3–0 &nbsp;·&nbsp; Stankoven opens, Blake seals</div>
+      <div class="final">Tied 1–1 &nbsp;·&nbsp; Speed vs structure, Round 2</div>
     </div>
-    <div class="score">
-      <div class="tag stranglehold">Game 3 · Series 04 · Stranglehold</div>
+    <div class="pending live">
+      <div class="tag">Live <span class="pulse"></span> Series 08 · Game 3</div>
       <div class="matchup">
-        <span class="winner">Colorado</span> def. <span class="loser">LA Kings</span>
+        <span style="color: var(--muted)">Edmonton at Anaheim — in progress</span>
       </div>
-      <div class="final">Avalanche lead 3–0 &nbsp;·&nbsp; Bounces, shorthanded, depth — LA has no Plan B</div>
+      <div class="final">Tied 1–1 &nbsp;·&nbsp; McDavid's response game</div>
     </div>
   </section>
 
@@ -790,7 +775,7 @@
       </a></li>
       <li><a href="#section-02">
         <span class="toc-num">§ 02</span>
-        <span class="toc-title">Three games</span>
+        <span class="toc-title">Montreal–Tampa, Game 3</span>
       </a></li>
       <li><a href="#section-03">
         <span class="toc-num">§ 03</span>
@@ -798,7 +783,7 @@
       </a></li>
       <li><a href="#section-04">
         <span class="toc-num">§ 04</span>
-        <span class="toc-title">Watch next</span>
+        <span class="toc-title">Watch tonight</span>
       </a></li>
     </ol>
   </nav>
@@ -806,13 +791,12 @@
   <!-- LEDE -->
   <section class="lede">
     <p>
-      Day 4 was about separation. Day 5 is about formula — and tonight the teams running formulas
-      ran the table. Buffalo made the goaltending change we flagged on Day 3 and took a 2–1
-      series lead in Boston. Carolina ran their same system for the third straight game and
-      walked out 3–0, controlling every minute. Colorado did something more unusual: they beat
-      LA at LA's own low-event, structured, margin-hunting game — and took a 3–0 series lead
-      with MacKinnon and Makar combining for two points in the entire series. <em>Three different
-      ways to win. Three favourites closer to Round 2.</em>
+      Day 6 is the bracket's other half showing up. Day 5 belonged to Philly, Carolina,
+      Colorado — favourites engineering 3–0 leads with depth and structure. Tonight Montreal
+      and Tampa played their <strong>third straight overtime game</strong>, decided by Lane
+      Hutson 2:09 into extra hockey. Three games, three OTs, no separation. Two more even
+      series playing tonight. <em>The bracket has bifurcated.</em> Half the series are
+      closing. Half are coin flips.
     </p>
   </section>
 
@@ -821,7 +805,7 @@
     <div class="num">§ 01</div>
     <div class="section-head-text">
       <h2>The bracket <em>at a glance.</em></h2>
-      <p class="section-lead">Three strangleholds. Two in firm control. Three still even. The bracket has narrowed to the ten most dangerous teams — and five of them are playing for their lives.</p>
+      <p class="section-lead">Three strangleholds. Three in firm control. Two live and even tonight. The bracket has bifurcated cleanly — and the even series are getting harder, not easier.</p>
     </div>
   </div>
 
@@ -831,17 +815,17 @@
       <div class="tseries stranglehold">
         <div class="t-match">PHI at PIT</div>
         <div class="t-state">Flyers 3 — 0</div>
-        <div class="t-note">One win from sweep. Pens can't score.</div>
+        <div class="t-note">Sweep watch. Game 4 looming.</div>
       </div>
       <div class="tseries stranglehold">
         <div class="t-match">CAR at OTT</div>
         <div class="t-state">Canes 3 — 0</div>
-        <div class="t-note">Sweep in reach. Dictating every minute.</div>
+        <div class="t-note">Sweep watch. Dictating every minute.</div>
       </div>
       <div class="tseries stranglehold">
         <div class="t-match">COL at LAK</div>
         <div class="t-state">Avs 3 — 0</div>
-        <div class="t-note">Beat LA at LA's own game. Scary.</div>
+        <div class="t-note">Sweep watch. Stars haven't woken up.</div>
       </div>
       <div class="tseries control">
         <div class="t-match">DAL at MIN</div>
@@ -853,152 +837,69 @@
         <div class="t-state">Sabres 2 — 1</div>
         <div class="t-note">Lyon in net. Goaltending solved.</div>
       </div>
-      <div class="tseries even">
+      <div class="tseries control">
         <div class="t-match">TBL at MTL</div>
-        <div class="t-state">Tied 1 — 1</div>
-        <div class="t-note">Tampa adjusted. Margin series.</div>
+        <div class="t-state">Habs 2 — 1</div>
+        <div class="t-note">3 games, 3 OTs. Razor margin.</div>
       </div>
-      <div class="tseries even">
+      <div class="tseries live">
         <div class="t-match">UTA at VGK</div>
-        <div class="t-state">Tied 1 — 1</div>
-        <div class="t-note">Speed broke structure. Upset watch.</div>
+        <div class="t-state">Live · Tied 1 — 1</div>
+        <div class="t-note">Speed vs structure. Game 3 in play.</div>
       </div>
-      <div class="tseries even">
+      <div class="tseries live">
         <div class="t-match">ANA at EDM</div>
-        <div class="t-state">Tied 1 — 1</div>
-        <div class="t-note">Ducks won chaos. McDavid pointless.</div>
+        <div class="t-state">Live · Tied 1 — 1</div>
+        <div class="t-note">McDavid response game. Pivotal.</div>
       </div>
     </div>
   </section>
 
-  <!-- § 02 GAMES -->
+  <!-- § 02 GAME -->
   <div class="section-head" id="section-02">
     <div class="num">§ 02</div>
     <div class="section-head-text">
-      <h2>Three games, <em>three formulas.</em></h2>
-      <p class="section-lead">Buffalo changed what wasn't working. Carolina ran theirs again. Colorado borrowed LA's — and beat them with it. Three distinct paths to control.</p>
+      <h2>Montreal–Tampa, <em>Game 3.</em></h2>
+      <p class="section-lead">Three games. Three overtimes. One series lead — earned by a coaching call that refused to abandon its own player.</p>
     </div>
   </div>
 
   <article class="game">
     <div class="game-title">
-      <div class="series-tag">Series 06 · East &nbsp;·&nbsp; <span style="color: var(--ice)">Separation</span></div>
-      <h3>Buffalo <span class="vs">at</span> Boston</h3>
+      <div class="series-tag">Series 05 · East &nbsp;·&nbsp; <span style="color: var(--ice)">Separation</span></div>
+      <h3>Tampa <span class="vs">at</span> Montreal</h3>
       <div class="colorbar">
-        <span style="background: var(--buf)"></span>
-        <span style="background: var(--bos)"></span>
+        <span style="background: var(--tbl)"></span>
+        <span style="background: var(--mtl)"></span>
       </div>
       <div class="series-stand">
         <div class="ss-label">Series Standing</div>
-        <div class="ss-score">Sabres 2 — Bruins 1</div>
+        <div class="ss-score">Canadiens 2 — Lightning 1</div>
       </div>
     </div>
     <div class="game-body">
       <ul class="bullets">
-        <li>Buffalo 3, Boston 1. A game decided by a goaltending call and a missed shot — <strong>two moments that redefined a series.</strong></li>
-        <li><strong>Alex Lyon got the start over Luukkonen.</strong> We flagged Sabres goaltending as the open question on Day 3. Today it got its answer: calm, composed, sharp under pressure, elite in the slot.</li>
-        <li>Boston scored first (third straight game — strange trend for a team leading the series). The moment that defined the night came minutes later.</li>
-        <li><strong>Arvidsson missed a penalty shot.</strong> Could have been 2–0 Boston, could have been the dagger. Instead: Byram ties it inside one shift. Tuch scores the winner from a prime slot chance. Östlund — rookie, playoff debut — gets the primary assist on the tying goal and looks veteran doing it.</li>
-        <li>Buffalo's power play is still <strong>0-for-its-last-35</strong>. Four penalties taken. Allowed the penalty shot. And they still won.</li>
-        <li>Boston outplayed Buffalo on structure. <strong>Buffalo out-executed Boston in the moments that mattered.</strong> That's the whole difference.</li>
+        <li>Montreal 3, Tampa 2 in overtime. <strong>Lane Hutson wins it 2:09 into OT.</strong> Three games, three overtimes. The closest series in the tournament.</li>
+        <li>The story behind the box score: <strong>Kirby Dach.</strong> Blamed for Montreal's Game 2 OT loss. Social media wanted him benched. The coaching staff moved him to center on a new line — and that line drove both Habs goals.</li>
+        <li>Trust → deployment → production. <strong>That's a coaching win, not just a player win.</strong> A different staff plays the panic card. Montreal doubled down.</li>
+        <li>Vasilevskiy was excellent — 26 saves, denied Caufield and Anderson on third-period breakaways that should have ended it. <strong>Tampa had every chance.</strong></li>
+        <li>Texier opened scoring at 4:53 of the first. Point answered on a Montreal power play. Hagel made it 2–1 in the second. Dach tied it from the top of the right circle through traffic. <strong>Hutson finishes it in OT.</strong></li>
+        <li>Three OTs in a row says something fundamental about this matchup: <strong>no system advantage, no goaltending edge, no consistent gap.</strong> This is the series that will go seven.</li>
       </ul>
       <div class="pullquote">
-        Buffalo didn't dominate this game. They out-executed Boston in the moments that mattered most. That is often the difference in playoff hockey.
+        Montreal didn't outplay Tampa. They made the right adjustment, won a few key moments, and capitalized when it mattered most. In a series this tight, that's all it takes.
       </div>
       <div class="breakdown-row">
-        <div class="label">Buffalo's Path</div>
-        <div class="content">Stay with Lyon — he <strong>earned it.</strong> Fix the power play before it becomes the series-ending story. Keep leaning on depth: Tuch as veteran finisher, Byram driving the blue line, Östlund already looking like a real playoff piece.</div>
+        <div class="label">Tampa's Path</div>
+        <div class="content">Finish the breakaways. Vasilevskiy is doing his job at the other end — <strong>the top six is leaving goals on the table.</strong> Special teams need to deliver one big swing. The structural sameness means the team that converts one extra opportunity wins.</div>
       </div>
       <div class="breakdown-row">
-        <div class="label">Boston's Path</div>
-        <div class="content">Finish the chances. A missed penalty shot doesn't happen twice, but <strong>not converting 2–0 leads does.</strong> Get the forecheck going earlier. Demand more from top-six players — Arvidsson can't be the guy who gets the penalty shot and misses it.</div>
+        <div class="label">Montreal's Path</div>
+        <div class="content">Keep Dach at center. Don't outsmart what's working. <strong>The home crowd is a real factor here</strong> — Bell Centre intensity has been a measurable swing in tight games. Win Game 4 at home and this becomes a 3–1 grip.</div>
       </div>
       <div class="outlook-box">
         <div class="olabel">Series Outlook · Updated</div>
-        <div class="otext">Buffalo now has what it didn't have in Game 1: <strong>a goaltender they trust, a formula that survives imperfection, and a series lead.</strong> Boston has to win the next game or this becomes a 3–1 hole. Heavy pressure flips to the team that was supposed to be the underdog here.</div>
-      </div>
-    </div>
-  </article>
-
-  <!-- OTT vs CAR -->
-  <article class="game">
-    <div class="game-title">
-      <div class="series-tag">Series 01 · East &nbsp;·&nbsp; <span style="color: var(--goal)">Stranglehold</span></div>
-      <h3>Ottawa <span class="vs">at</span> Carolina</h3>
-      <div class="colorbar">
-        <span style="background: var(--ott)"></span>
-        <span style="background: var(--car)"></span>
-      </div>
-      <div class="series-stand">
-        <div class="ss-label">Series Standing</div>
-        <div class="ss-score">Hurricanes 3 — Senators 0</div>
-      </div>
-    </div>
-    <div class="game-body">
-      <ul class="bullets">
-        <li>Carolina 2, Ottawa 1. <strong>The scoreline lies harder than any other this round.</strong></li>
-        <li>Carolina controlled pace from puck drop. Ottawa was <em>supposed</em> to bring the physicality and push back. Instead: <strong>Carolina dictated tempo, flow, and every swing</strong> of the game.</li>
-        <li>Stankoven opened scoring again — third straight game he's gotten Carolina on the board first. <strong>Pattern, not coincidence.</strong></li>
-        <li>Ottawa's equalizer came off a Carolina turnover (Batherson). <strong>The only way Ottawa has generated offense this series is Carolina making a mistake.</strong></li>
-        <li>Carolina's response: <strong>under three minutes.</strong> Clean sequence, Miller to Blake, back in front. No chaos, no fluke, no panic.</li>
-        <li>This is the tell: Carolina isn't winning with goaltending theft or power-play bursts. <strong>It's system-driven, repeatable, structurally sound.</strong> The profile of a team built for a deep run.</li>
-        <li>The deeper read: Ottawa isn't being shut down — they're being <strong>out-executed in the moments that decide games.</strong> Chances exist. Finishes don't.</li>
-      </ul>
-      <div class="pullquote">
-        Carolina isn't just beating Ottawa. They're controlling the conditions of the game itself — tempo, momentum, execution windows.
-      </div>
-      <div class="breakdown-row">
-        <div class="label">Ottawa's Path</div>
-        <div class="content">Honest answer: there isn't one that turns this series around. The Senators need <strong>sustained pressure, not moments</strong> — and the structural tools to do it haven't shown up. Best they can do is avoid the sweep by stealing a chaotic game at home.</div>
-      </div>
-      <div class="breakdown-row">
-        <div class="label">Carolina's Path</div>
-        <div class="content">Don't change anything. <strong>Close it out.</strong> Same opening pace, same Stankoven first line, same trust in Andersen. Ottawa's confidence is eroded, the injuries are stacking — press the advantage.</div>
-      </div>
-      <div class="outlook-box">
-        <div class="olabel">Series Outlook · Updated</div>
-        <div class="otext">Functionally over. <strong>Canes in 4.</strong> And here's the scary part for the rest of the bracket: Carolina is doing this while losing faceoffs badly (~60% Ottawa), getting minimal offense from defense, and no points from Jarvis. <em>They have room to get better.</em> That's the profile of the scariest team left in Round 1.</div>
-      </div>
-    </div>
-  </article>
-
-  <!-- LAK vs COL -->
-  <article class="game">
-    <div class="game-title">
-      <div class="series-tag">Series 04 · West &nbsp;·&nbsp; <span style="color: var(--goal)">Stranglehold</span></div>
-      <h3>LA Kings <span class="vs">at</span> Colorado</h3>
-      <div class="colorbar">
-        <span style="background: var(--lak)"></span>
-        <span style="background: var(--col)"></span>
-      </div>
-      <div class="series-stand">
-        <div class="ss-label">Series Standing</div>
-        <div class="ss-score">Avalanche 3 — Kings 0</div>
-      </div>
-    </div>
-    <div class="game-body">
-      <ul class="bullets">
-        <li>Colorado 3–0 on the series. The scorelines are all tight. <strong>The hockey isn't.</strong></li>
-        <li>Tonight's story: Colorado didn't try to out-run LA. They didn't try to break LA's structure. <strong>They played LA's game — low-event, tight-checking, margin-hunting — and beat the Kings inside their own style.</strong></li>
-        <li>Both Colorado goals came off variance. <strong>Landeskog's bounced off the boards, off the goalie's skate, in.</strong> Lehkonen's was a shorthanded deflection off a turnover. Not designed. Not pretty. Just the margin battles, won.</li>
-        <li>Here's the number: MacKinnon has <strong>one point in three games.</strong> Makar has one. The Avs' stars haven't arrived — and Colorado is up 3–0.</li>
-        <li>The power play remains broken. <strong>The penalty kill is scoring.</strong> Lehkonen's shorthanded goal is the kind of moment LA's system is built to prevent — and Colorado is creating chaos inside LA's controlled environment.</li>
-        <li>LA is playing their game. Forsberg is strong. The structure holds. <strong>And they still can't win.</strong> That's worse than being outplayed — it means the formula has no ceiling.</li>
-      </ul>
-      <div class="pullquote">
-        Colorado matched LA's low-event, structured game — and then beat them in the margins. When that happens, LA has no Plan B.
-      </div>
-      <div class="breakdown-row">
-        <div class="label">LA's Path</div>
-        <div class="content">There isn't a good one. The Kings are executing their identity — <strong>and losing anyway.</strong> The only remaining path is hoping Forsberg steals a game while the Avs' stars stay quiet. That's a prayer, not a plan.</div>
-      </div>
-      <div class="breakdown-row">
-        <div class="label">Colorado's Path</div>
-        <div class="content">Close it. <strong>Same discipline, same patience, same trust in depth.</strong> The Avs don't need to wake their stars up to win this series — they need to stay boring, efficient, and ruthless. Press the advantage in Game 4 and the round ends this weekend.</div>
-      </div>
-      <div class="outlook-box">
-        <div class="olabel">Series Outlook · Updated</div>
-        <div class="otext">Functionally over. <strong>Avs in 4.</strong> The deeper read: Colorado is 3–0 with MacKinnon and Makar combining for <em>two points.</em> When their stars arrive in Round 2, this team becomes terrifying. <strong>Two of the three Stranglehold leaders are winning without their best players.</strong> That's not a coincidence — it's the new shape of this tournament.</div>
+        <div class="otext">Going seven. Probably. <strong>This isn't separation hockey — it's coin-flip hockey,</strong> and Montreal has won two of three coin flips. The Hutson goal was a sliver. The Dach line move was a sliver. The next three games will be decided by slivers too. Whoever wins more of them wins the series.</div>
       </div>
     </div>
   </article>
@@ -1007,41 +908,40 @@
   <div class="section-head" id="section-03">
     <div class="num">§ 03</div>
     <div class="section-head-text">
-      <h2>Trends <em>hardening.</em></h2>
-      <p class="section-lead">Day 5 is where patterns turn into verdicts. Five series now have a team in control — and they share a signature.</p>
+      <h2>The bracket <em>has split.</em></h2>
+      <p class="section-lead">Day 6 is when one story ends and another begins. The closing series and the coin-flip series are running on different physics now.</p>
     </div>
   </div>
 
   <section class="trends">
     <div class="trend">
       <div class="ticker">TREND / 01</div>
-      <h4>Goaltending calls are series calls.</h4>
+      <h4>The bracket has bifurcated.</h4>
       <ul class="bullets compact">
-        <li>Buffalo swapped Luukkonen for Lyon. Won Game 3.</li>
-        <li>Carolina's Andersen flipped from a shaky regular season to <strong>elite playoff form</strong> — top in goals saved above expected</li>
-        <li>Philly's Vladar: .947 SV% across the series, all three wins.</li>
-        <li>Colorado's Wedgewood: penalty-shot save in Game 2. Won in OT.</li>
-        <li><strong>The five teams in firm control all have goalies playing above expectation.</strong> Not volume saves — timing saves.</li>
+        <li>Three series at 3–0 (PHI, CAR, COL). All facing potential sweeps in Game 4.</li>
+        <li>Three series in firm control (DAL, BUF, MTL — all 2–1).</li>
+        <li>Two series still genuinely tied, both playing tonight (UTA, ANA).</li>
+        <li><strong>Half the bracket is closing. Half is still anybody's.</strong> No middle ground.</li>
       </ul>
     </div>
     <div class="trend">
       <div class="ticker">TREND / 02</div>
-      <h4>The contenders are winning without their stars.</h4>
+      <h4>Coaching calls are series calls.</h4>
       <ul class="bullets compact">
-        <li>Colorado: MacKinnon and Makar have <strong>2 combined points</strong> in 3 games. 3–0.</li>
-        <li>Carolina: Jarvis pointless. Stankoven's third line is driving. 3–0.</li>
-        <li>Philly: Fourth line scored two Game 3 goals. Star chart outworked. 3–0.</li>
-        <li><strong>All three Stranglehold leaders are built on depth and system, not superstar production.</strong> When their stars wake up, these teams become terrifying.</li>
+        <li>Buffalo: Lyon over Luukkonen. Won Game 3. Goaltending solved.</li>
+        <li>Montreal: Doubled down on Dach. Dach drives Game 3. Series lead.</li>
+        <li>Anaheim: Promoted Gauthier to the top line. Game-winner.</li>
+        <li><strong>The teams trusting their internal calls are winning. The teams second-guessing are not.</strong></li>
       </ul>
     </div>
     <div class="trend">
       <div class="ticker">TREND / 03</div>
-      <h4>The sweep watch is real.</h4>
+      <h4>Margins are everything in even series.</h4>
       <ul class="bullets compact">
-        <li>Philly 3–0 on Pittsburgh. Could sweep Game 4.</li>
-        <li>Carolina 3–0 on Ottawa. Could sweep Game 4.</li>
-        <li>Colorado 3–0 on LA. Could sweep Game 4.</li>
-        <li><strong>Three of eight series functionally decided in five days.</strong> Round 1 is closing faster than anyone expected.</li>
+        <li>Three Montreal/Tampa games. Three overtimes. Combined margin: 3 goals across 9 periods.</li>
+        <li>Vasilevskiy stopped two third-period breakaways tonight. Hutson scored 2:09 into OT.</li>
+        <li>The series with no separation get decided by <strong>execution windows so thin you blink and miss them.</strong></li>
+        <li>That's why coaching calls and player redemption arcs (Dach) matter more than statistical edges in these matchups.</li>
       </ul>
     </div>
   </section>
@@ -1051,7 +951,7 @@
     <div class="num">§ 04</div>
     <div class="section-head-text">
       <h2>What to watch <em>tonight.</em></h2>
-      <p class="section-lead">Two Game 3s with three possible outcomes each. The next 24 hours decide how fast the bracket closes.</p>
+      <p class="section-lead">Two Game 3s in the last even series. Both could push the bracket from "three coin flips" to "one coin flip" by morning.</p>
     </div>
   </div>
 
@@ -1059,29 +959,29 @@
     <div class="watch-item">
       <div class="check">✓</div>
       <div>
+        <h5>Vegas at Utah, Game 3</h5>
+        <p>Utah's speed broke Vegas's structure in Game 2. Now they're at home, on their own ice, looking to take a 2–1 lead. If Vegas can't slow this game down, the upset narrative gets real fast.</p>
+      </div>
+    </div>
+    <div class="watch-item">
+      <div class="check">✓</div>
+      <div>
+        <h5>McDavid's Game 3</h5>
+        <p>Pointless through two. The icon doesn't stay quiet for three — but Edmonton hasn't given him the supporting cast either. Watch for either a 2-point response or a serious problem becoming a real one.</p>
+      </div>
+    </div>
+    <div class="watch-item">
+      <div class="check">✓</div>
+      <div>
+        <h5>Bell Centre Effect</h5>
+        <p>Montreal's home atmosphere has been a measurable factor in Games 1 and 3. Game 4 still in Montreal. If the Habs feed off the crowd one more time, this series is functionally over before they go back to Tampa.</p>
+      </div>
+    </div>
+    <div class="watch-item">
+      <div class="check">✓</div>
+      <div>
         <h5>The Three Sweeps</h5>
-        <p>Philly, Carolina, and Colorado all up 3–0. Each has a chance to end their series in Game 4. If all three close, Round 1 will have three series finished before Round 2 for the other five even begins.</p>
-      </div>
-    </div>
-    <div class="watch-item">
-      <div class="check">✓</div>
-      <div>
-        <h5>MacKinnon &amp; Makar</h5>
-        <p>Two points combined in three games. Colorado is 3–0 anyway. The question is whether the stars wake up against Round 2 competition — because if they do, this team is the Cup favourite.</p>
-      </div>
-    </div>
-    <div class="watch-item">
-      <div class="check">✓</div>
-      <div>
-        <h5>Boston's Response Window</h5>
-        <p>Down 2–1, goaltending outdueled by Lyon, offense missing its biggest chances. Game 4 in Buffalo is a must-win or this becomes the fourth series on the ropes.</p>
-      </div>
-    </div>
-    <div class="watch-item">
-      <div class="check">✓</div>
-      <div>
-        <h5>Buffalo's Power Play</h5>
-        <p>0-for-35. Winning anyway, which is almost more damning — imagine if it worked. Boston will draw more penalties. Eventually the drought ends or it doesn't.</p>
+        <p>Philly, Carolina, and Colorado all up 3–0. Each could close Game 4 in the next 24–48 hours. Three sweeps in Round 1 would be a near-historic result and would reshape the schedule for everyone.</p>
       </div>
     </div>
   </section>
@@ -1090,15 +990,15 @@
   <section class="closing">
     <div class="overline">The Take</div>
     <blockquote>
-      Day 5 is where the contenders stopped pretending. Three favourites, three paths, three 3–0 leads. And the scariest read of all: <em>MacKinnon, Makar, and Jarvis combined for three points across three completed games.</em> These teams haven't woken up yet — and they're already putting series away.
+      Day 6 is the day Round 1 stops being one tournament and becomes two. The favourites are running. <em>The toss-ups are bleeding inches.</em> Both halves end the same way — but only one of them is fun to watch right now.
     </blockquote>
-    <div class="sig">— Round 1 · Day 5 · Filed after three Game 3s, three strangleholds</div>
+    <div class="sig">— Round 1 · Day 6 · Filed after Montreal, before tonight's two</div>
   </section>
 
   <!-- FOOTER -->
   <footer>
     <div>Rink Report · NHL Playoff Coverage</div>
-    <div>Round 1 of 4 · Next: Game 4 closeouts across three series</div>
+    <div>Round 1 of 4 · Next: UTA/VGK and ANA/EDM live tonight</div>
   </footer>
 
 </div>
