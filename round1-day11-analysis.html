@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Round 1, Day 10 — The Inversion | NHL Playoffs Analysis</title>
+<title>Round 1, Day 11 — The Adaptation | NHL Playoffs Analysis</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
@@ -246,6 +246,41 @@
     color: var(--gold);
     margin-bottom: 14px;
   }
+  .pending .matchup {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .pending .final {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+  .pending.live .tag {
+    color: var(--goal);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pending.live .tag .pulse {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--goal);
+    animation: pulseDot 2s ease-in-out infinite;
+  }
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+  }
 
   /* LEDE */
   .lede { padding: 88px 0 64px; max-width: 820px; }
@@ -328,6 +363,15 @@
   .tseries.even { border-left: 3px solid var(--gold); }
   .tseries.even .t-state { color: var(--gold); }
   .tseries.live { border-left: 3px solid var(--goal); }
+  .tseries.live .t-state { color: var(--goal); display: flex; align-items: center; gap: 6px; }
+  .tseries.live .t-state::before {
+    content: "";
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--goal);
+    animation: pulseDot 2s ease-in-out infinite;
+  }
 
   /* SECTION HEADINGS */
   .section-head {
@@ -493,30 +537,6 @@
     color: var(--paper);
     letter-spacing: 0;
   }
-
-  /* TIER UPDATE CALLOUT */
-  .tier-update {
-    padding: 28px 32px;
-    background: var(--ink-2);
-    border-left: 3px solid var(--goal);
-    margin: 24px 0 8px;
-  }
-  .tier-update .tu-label {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--goal);
-    margin-bottom: 10px;
-  }
-  .tier-update .tu-text {
-    font-family: "Source Serif 4", Georgia, serif;
-    font-size: 17px;
-    line-height: 1.5;
-    color: var(--paper);
-    font-weight: 500;
-  }
-  .tier-update .tu-text strong { color: var(--gold); font-weight: 600; }
 
   /* TRENDS */
   .trends {
@@ -700,51 +720,50 @@
   <div class="masthead">
     <a href="index.html" class="brand-link"><div class="brand">Rink<span>&middot;</span>Report</div></a>
     <div>
-      <a href="round1-day9-analysis.html" class="nav-link">← Day 09</a>
-      &nbsp;&nbsp;Vol. I &nbsp;/&nbsp; Round 01 &nbsp;/&nbsp; Day 10
-      &nbsp;&nbsp;<a href="round1-day11-analysis.html" class="nav-link">Day 11 →</a>
+      <a href="round1-day10-analysis.html" class="nav-link">← Day 10</a>
+      &nbsp;&nbsp;Vol. I &nbsp;/&nbsp; Round 01 &nbsp;/&nbsp; Day 11
     </div>
   </div>
 
   <!-- HERO -->
   <header class="hero">
-    <div class="overline">Stanley Cup Playoffs &nbsp;·&nbsp; Three Game 5s, Three Trailing Wins</div>
-    <h1 class="headline">The <em>Inversion.</em></h1>
+    <div class="overline">Stanley Cup Playoffs &nbsp;·&nbsp; Wednesday's Game 5s &amp; Game 6</div>
+    <h1 class="headline">The <em>Adaptation.</em></h1>
     <p class="dek">
-      Boston staved off elimination on a Pastrnak OT breakaway. Edmonton finally played a
-      complete game and chased Dostal in the first period. Minnesota took the series lead
-      from Dallas at Dallas. <em>Three favourites went home with closeout chances.
-      Three trailing teams left with series leads or new life.</em> The bracket just inverted.
+      Montreal beat Tampa 3–2 to take the series lead — solving the same situation that beat
+      them in Game 4. Pittsburgh-Philly is live in OT in Philly. Vegas-Utah just dropped in
+      Vegas. <em>Round 1 isn't about which teams are best anymore. It's about which teams
+      learn fastest between games.</em>
     </p>
     <div class="byline">
-      <div><strong>Round 1</strong> · Day 10 Analysis</div>
-      <div><strong>Filed</strong> · April 28, 2026</div>
-      <div><strong>Read</strong> · 11 minutes</div>
+      <div><strong>Round 1</strong> · Day 11 Analysis</div>
+      <div><strong>Filed</strong> · April 29, 2026</div>
+      <div><strong>Read</strong> · 5 minutes</div>
     </div>
   </header>
 
   <!-- SCORE STRIP -->
   <section class="scores">
     <div class="score">
-      <div class="tag survival">Game 5 · Series 06 · Survival</div>
+      <div class="tag flipped">Game 5 · Series 05 · Flipped</div>
       <div class="matchup">
-        <span class="winner">Boston</span> def. <span class="loser">Buffalo</span>, 2–1 (OT)
+        <span class="winner">Montreal</span> def. <span class="loser">Tampa</span>, 3–2
       </div>
-      <div class="final">Sabres lead 3–2 &nbsp;·&nbsp; Pastrnak breakaway, Game 6 Friday in Boston</div>
+      <div class="final">Habs lead 3–2 &nbsp;·&nbsp; Game 6 Friday in Tampa, Caufield finally on board</div>
     </div>
-    <div class="score">
-      <div class="tag flipped">Game 5 · Series 02 · Flipped</div>
+    <div class="pending live">
+      <div class="tag">Live <span class="pulse"></span> Series 03 · Game 6</div>
       <div class="matchup">
-        <span class="winner">Minnesota</span> def. <span class="loser">Dallas</span>, 4–2
+        <span style="color: var(--muted)">Pittsburgh at Philadelphia — OT</span>
       </div>
-      <div class="final">Wild lead 3–2 &nbsp;·&nbsp; Kaprizov 1G+2A, Boldy decides it again</div>
+      <div class="final">0–0 in OT &nbsp;·&nbsp; Pens chase 3rd straight elimination win</div>
     </div>
-    <div class="score">
-      <div class="tag survival">Game 5 · Series 08 · Survival</div>
+    <div class="pending live">
+      <div class="tag">Live <span class="pulse"></span> Series 07 · Game 5</div>
       <div class="matchup">
-        <span class="winner">Edmonton</span> def. <span class="loser">Anaheim</span>, 4–1
+        <span style="color: var(--muted)">Utah at Vegas — 1st</span>
       </div>
-      <div class="final">Ducks lead 3–2 &nbsp;·&nbsp; Draisaitl 2G, Dostal chased in 1st</div>
+      <div class="final">0–0 1st &nbsp;·&nbsp; Vegas with home ice and momentum</div>
     </div>
   </section>
 
@@ -758,15 +777,15 @@
       </a></li>
       <li><a href="#section-02">
         <span class="toc-num">§ 02</span>
-        <span class="toc-title">Three Game 5s</span>
+        <span class="toc-title">Montreal flips back</span>
       </a></li>
       <li><a href="#section-03">
         <span class="toc-num">§ 03</span>
-        <span class="toc-title">Trends &amp; tier update</span>
+        <span class="toc-title">Trends &amp; patterns</span>
       </a></li>
       <li><a href="#section-04">
         <span class="toc-num">§ 04</span>
-        <span class="toc-title">Watch tomorrow</span>
+        <span class="toc-title">Watch tonight</span>
       </a></li>
     </ol>
   </nav>
@@ -774,13 +793,13 @@
   <!-- LEDE -->
   <section class="lede">
     <p>
-      Day 10 inverted Round 1. Boston, Edmonton, and Minnesota — three trailing teams whose
-      seasons looked nearly over — won their Game 5s. Two of them (Boston and Edmonton) saved
-      their seasons. The third (Minnesota) went one further: <strong>they took the series lead
-      from a Tier 1 team in Tier 1 fashion, controlling pace and winning the moments at
-      Dallas's own arena.</strong> By midnight, every series in Round 1 was either decided,
-      tied, or with the previous favourite trailing 3–2. <em>What looked like a closeout
-      cluster turned into the most disruptive single day of the round.</em>
+      Day 11 is when Round 1 became a learning competition. Montreal lost Game 4 by failing
+      to manage a momentum swing — Tampa scored three unanswered after a Crozier hit and
+      took back home ice. Three days later, Montreal got the same shape of game: 2–0 lead,
+      Tampa pushing back. <strong>This time the Habs held.</strong> They tightened their
+      special-teams discipline, kept Tampa from creating the emotional turning point, and
+      walked out of Bell Centre with a 3–2 series lead. <em>The young team that lost Game 4
+      didn't show up in Game 5. The team that played in Game 5 had learned.</em>
     </p>
   </section>
 
@@ -789,7 +808,7 @@
     <div class="num">§ 01</div>
     <div class="section-head-text">
       <h2>The bracket <em>at a glance.</em></h2>
-      <p class="section-lead">Two advanced. Five Game 6s coming. Every active series now has stakes — half of them with elimination on the line for the favourite.</p>
+      <p class="section-lead">Two advanced. Five active series, all of them with a Game 6 in front. The bracket is closer to fully resolved than at any point this round — and somehow less settled.</p>
     </div>
   </div>
 
@@ -807,220 +826,133 @@
         <div class="t-note">Second into Round 2.</div>
       </div>
       <div class="tseries control">
+        <div class="t-match">TBL at MTL</div>
+        <div class="t-state">Habs 3 — 2</div>
+        <div class="t-note">Montreal flipped it back. Game 6 Friday.</div>
+      </div>
+      <div class="tseries control">
         <div class="t-match">BOS at BUF</div>
         <div class="t-state">Sabres 3 — 2</div>
-        <div class="t-note">Pastrnak OT. Bruins alive.</div>
+        <div class="t-note">Pastrnak OT. Game 6 Friday in Boston.</div>
       </div>
       <div class="tseries control">
         <div class="t-match">ANA at EDM</div>
         <div class="t-state">Ducks 3 — 2</div>
-        <div class="t-note">Draisaitl 2G. Oilers alive.</div>
+        <div class="t-note">Game 6 Thursday in Anaheim.</div>
       </div>
       <div class="tseries control">
         <div class="t-match">DAL at MIN</div>
         <div class="t-state">Wild 3 — 2</div>
-        <div class="t-note">Wild flipped it. Stars eliminated math.</div>
+        <div class="t-note">Game 6 Thursday in Minnesota.</div>
       </div>
-      <div class="tseries control">
+      <div class="tseries live">
         <div class="t-match">PHI at PIT</div>
-        <div class="t-state">Flyers 3 — 2</div>
-        <div class="t-note">Game 6 Wednesday in Philly.</div>
+        <div class="t-state">Live · Game 6, OT 0–0</div>
+        <div class="t-note">Pens chase another extension.</div>
       </div>
-      <div class="tseries even">
-        <div class="t-match">TBL at MTL</div>
-        <div class="t-state">Tied 2 — 2</div>
-        <div class="t-note">Game 5 Wednesday in Tampa.</div>
-      </div>
-      <div class="tseries even">
+      <div class="tseries live">
         <div class="t-match">UTA at VGK</div>
-        <div class="t-state">Tied 2 — 2</div>
-        <div class="t-note">Game 5 Wednesday in Vegas.</div>
+        <div class="t-state">Live · Game 5, 1st 0–0</div>
+        <div class="t-note">Series tied 2–2.</div>
       </div>
     </div>
   </section>
 
-  <!-- § 02 GAMES -->
+  <!-- § 02 GAME -->
   <div class="section-head" id="section-02">
     <div class="num">§ 02</div>
     <div class="section-head-text">
-      <h2>Three Game 5s, <em>three reversals.</em></h2>
-      <p class="section-lead">The trailing team won every single Game 5 on the board today. Boston on a Pastrnak breakaway. Edmonton on a complete first period. Minnesota on outright control. Same pattern, three different reasons.</p>
+      <h2>Montreal <em>flips it back.</em></h2>
+      <p class="section-lead">Same shape of game as Game 4. Different result. Montreal didn't win Game 5 with a new tactic — they won it by not making the same mistake twice.</p>
     </div>
   </div>
 
-  <!-- BUF vs BOS -->
   <article class="game">
     <div class="game-title">
-      <div class="series-tag">Series 06 · East &nbsp;·&nbsp; <span style="color: var(--gold)">Survival</span></div>
-      <h3>Boston <span class="vs">at</span> Buffalo</h3>
+      <div class="series-tag">Series 05 · East &nbsp;·&nbsp; <span style="color: var(--goal)">Flipped</span></div>
+      <h3>Tampa <span class="vs">at</span> Montreal</h3>
       <div class="colorbar">
-        <span style="background: var(--bos)"></span>
-        <span style="background: var(--buf)"></span>
+        <span style="background: var(--tbl)"></span>
+        <span style="background: var(--mtl)"></span>
       </div>
       <div class="series-stand">
         <div class="ss-label">Series Standing</div>
-        <div class="ss-score">Sabres 3 — Bruins 2</div>
+        <div class="ss-score">Habs 3 — Lightning 2</div>
       </div>
     </div>
     <div class="game-body">
       <ul class="bullets">
-        <li>Boston 2, Buffalo 1 in OT. <strong>Pastrnak's breakaway 9:14 into overtime</strong> — caught Buffalo on a line change, Lindholm's stretch pass found him in stride, fake across, slip inside the right post. Boston staves off elimination, series back to Boston for Game 6 Friday.</li>
-        <li>Buffalo got their <strong>first power-play goal in nearly a month</strong> — Dahlin one-timer in the right circle in the first period. The 0-for-17 series-long drought ended. <strong>Didn't matter.</strong></li>
-        <li>Elias Lindholm tied it in the second on a bad-angle bouncer through traffic — exactly the kind of net-front goal Boston's structure had been failing to generate all series. <strong>The shape of the game had changed.</strong></li>
-        <li>Swayman finally got his swing performance: <strong>25 saves, including the critical Zucker stop 3:30 into OT</strong>. After being chased in Game 4, this was the goalie Boston needed all series.</li>
-        <li>Buffalo's Lyon was good (27 saves). Not the difference. <strong>Boston was simply more dangerous than they'd been in any prior game.</strong> They played without Arvidsson again, and still found their best 60 minutes.</li>
-        <li>The series math: Buffalo still leads 3–2 with home ice in Game 7 if needed. <strong>But every game from here is a knife fight.</strong> Boston has finally shown the structure they need; Buffalo's forecheck didn't dominate the way it had in Games 2–4.</li>
+        <li>Montreal 3, Tampa 2. <strong>The Habs flipped the series back to 3–2 in their favour</strong> with a road win at Bell Centre — Game 6 now goes Friday in Tampa, with Tampa needing to win at home to force a Game 7.</li>
+        <li>The shape of Game 5 mirrored Game 4 — Montreal up 2–0, Tampa pushing back, late physicality. <strong>Game 4 ended in a Tampa rally and a 3–2 Lightning win.</strong> Game 5 ended in Montreal closing it out. Same setup, different ending. <em>The variable was Montreal's discipline and execution under pressure.</em></li>
+        <li><strong>Cole Caufield finally on the scoresheet</strong> after 51 regular-season goals and a quiet series — albeit on the power play, not at 5v5. Suzuki's line still hasn't broken through at even strength, but the late-period PP goal was a real psychological release.</li>
+        <li>Tampa's adjustment formula — Cooper's mid-series lineup tweaks, the Hagel-Kucherov-Point reunion, the Cirelli-Gourde shutdown line — had carried them through Games 2 and 4. <strong>Tonight none of it activated cleanly.</strong> Hagel was still dangerous but didn't get the deflection or rebound that swings games.</li>
+        <li>The Bell Centre crowd did its work again. Montreal is now <strong>3–0 in this series at home</strong>, with the Bell Centre delivering exactly the energy lift the Habs need on home ice. Game 7 — if there is one — would also be in Montreal.</li>
+        <li>The Athletic-flagged structural problem hasn't disappeared: <strong>the Suzuki line still hasn't scored at 5v5 in five games.</strong> Montreal is winning a series with their top line dormant at even strength. <em>That's either the most surprising contender story of Round 1, or a time bomb waiting for Round 2.</em></li>
       </ul>
       <div class="pullquote">
-        Catching Buffalo on a line change, Hampus Lindholm fed a pass up the right boards to find Pastrnak in stride just as he crossed the blue line.
-        <span class="attribution">— Associated Press</span>
+        We didn't play a good enough third — they're a veteran team. They're very good at drawing penalties.
+        <span class="attribution">— Martin St. Louis, after Game 4</span>
       </div>
       <div class="breakdown-row">
-        <div class="label">Boston's Path</div>
-        <div class="content">Repeat Game 5. <strong>Swayman has to be the difference</strong>, the breakouts have to stay clean, McAvoy and Lindholm have to play like top-pair defensemen. Game 6 at home Friday — they've finally got the formula. Now they need to do it twice more.</div>
+        <div class="label">What Changed</div>
+        <div class="content"><strong>Discipline.</strong> Game 4: Montreal took penalties at the wrong moments and Tampa converted. Game 5: penalty count down, momentum swings managed, late-game lead protected. <em>That's the kind of in-series correction that separates teams that go home from teams that advance.</em></div>
       </div>
       <div class="breakdown-row">
-        <div class="label">Buffalo's Path</div>
-        <div class="content">The forecheck pressure that defined Games 2–4 needs to come back. <strong>Lyon was good but didn't steal a game</strong> — and Boston is going to be harder to forecheck in the TD Garden environment. <em>Game 6 in Boston is now genuinely closer to even than 3–2 implies.</em></div>
+        <div class="label">Montreal's Path</div>
+        <div class="content">Game 6 in Tampa with a chance to advance. <strong>Cooper now has last-change advantage</strong>, the most likely outcome is Tampa pushing this back to a Game 7 in Montreal. The Habs' real test is whether they can avoid Game 4's mistake on the road, in a building they don't control.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Tampa's Path</div>
+        <div class="content">Hagel needs the deflection or rebound that's been missing. <strong>Vasilevskiy needs a swing performance.</strong> Cooper needs the matchups to work the way they did in Game 4. Most importantly: <em>find the Crozier moment again.</em> Tampa won Game 4 by changing the game's emotional shape with a single hit. They need that energy to reappear in Game 6.</div>
       </div>
       <div class="outlook-box">
         <div class="olabel">Series Outlook · Updated</div>
-        <div class="otext">Sabres in 7. <strong>The structural advantages haven't disappeared</strong> — Buffalo is still faster, deeper, and forechecking better than Boston for stretches. But the Bruins have one win in their pocket and a Game 7 in Buffalo would now feel different than it would have 24 hours ago. <em>The closeout that looked inevitable on Sunday is now far from guaranteed.</em></div>
+        <div class="otext">Habs in 7, slight lean — assuming the series goes the distance, which now looks likely. <strong>Montreal proved they can play both styles of hockey: the loose, momentum-driven version they won Games 1–3 with, and the disciplined, structured version they won Game 5 with.</strong> Tampa's veteran adjustment edge isn't gone, but it's not decisive anymore. <em>This series is now a coin flip in everything but the score.</em></div>
       </div>
     </div>
   </article>
 
-  <!-- DAL at MIN (Game 5 in Dallas) -->
-  <article class="game">
-    <div class="game-title">
-      <div class="series-tag">Series 02 · West &nbsp;·&nbsp; <span style="color: var(--goal)">Flipped</span></div>
-      <h3>Minnesota <span class="vs">at</span> Dallas</h3>
-      <div class="colorbar">
-        <span style="background: var(--min)"></span>
-        <span style="background: var(--dal)"></span>
-      </div>
-      <div class="series-stand">
-        <div class="ss-label">Series Standing</div>
-        <div class="ss-score">Wild 3 — Stars 2</div>
-      </div>
-    </div>
-    <div class="game-body">
-      <ul class="bullets">
-        <li>Minnesota 4, Dallas 2 in Dallas. <strong>The Wild now lead 3–2 and head home for Game 6 with a chance to advance for the first time since 2015.</strong> They've lost their last nine playoff series, including to Dallas in 2016 and 2023. This time looks different.</li>
-        <li>Boldy's tiebreaking power-play goal with <strong>32 seconds left in the second period</strong> — one of the most damning end-of-period goals you'll see in playoff hockey. Boldy also had a goal called back earlier (interference). It's his fourth playoff goal, plus the Game 4 OT winner.</li>
-        <li><strong>Kaprizov is now dictating the series.</strong> 1 goal, 2 assists, including the empty-netter to seal it. He's not just producing — he's creating the dangerous sequences. <em>The most impactful player in this series wears Wild green, not Stars green.</em></li>
-        <li>Mats Zuccarello returned after a three-game absence and scored 3:51 in. <strong>Minnesota's depth got a real piece back</strong>, and the production was immediate.</li>
-        <li>Wallstedt had 20 saves — <strong>11 of them in the third period</strong> when Dallas pushed hardest. He's been the calm Minnesota needed, and the goalie Dallas hasn't had an answer for.</li>
-        <li>Dallas got Robertson again (5 straight games with a goal), Heiskanen on the power play. <strong>The pieces are producing. The team isn't dictating.</strong> That's been the series story, and Game 5 confirmed it on their home ice.</li>
-      </ul>
-      <div class="pullquote">
-        Minnesota is not just competing with a Tier 1 team. They are dictating the series — and they did it on Dallas's ice.
-      </div>
-      <div class="breakdown-row">
-        <div class="label">Minnesota's Path</div>
-        <div class="content">Game 6 at home Thursday with a chance to advance. <strong>Don't change a thing.</strong> Wallstedt holds the line, Kaprizov drives play, Boldy finishes, the structure neutralizes Dallas's offensive layers. <em>This is the formula. Run it back.</em></div>
-      </div>
-      <div class="breakdown-row">
-        <div class="label">Dallas's Path</div>
-        <div class="content">This is now an identity crisis. <strong>Dallas's preferred style of game just got beaten on Dallas's ice.</strong> They need to open it up — but doing so hands Minnesota's goaltending more chances. They need a swing performance from Oettinger they haven't gotten. They need <em>somebody</em> beyond Robertson to finish at 5v5. None of those are sure things.</div>
-      </div>
-      <div class="outlook-box">
-        <div class="olabel">Series Outlook · Updated</div>
-        <div class="otext">Wild in 6, real chance. <strong>Minnesota is now a Tier 1 disruptor, not a Tier 2 team punching up.</strong> They've out-executed Dallas at Dallas's own style of hockey — that's the championship trait that wins playoff series. Dallas faces elimination at the Xcel Energy Center on Thursday, with Wallstedt waiting and a building that hasn't had a Round 2 series in over a decade. <em>This is now Minnesota's series to lose.</em></div>
-      </div>
-    </div>
-  </article>
-
-  <!-- ANA at EDM -->
-  <article class="game">
-    <div class="game-title">
-      <div class="series-tag">Series 08 · West &nbsp;·&nbsp; <span style="color: var(--gold)">Survival</span></div>
-      <h3>Anaheim <span class="vs">at</span> Edmonton</h3>
-      <div class="colorbar">
-        <span style="background: var(--ana)"></span>
-        <span style="background: var(--edm)"></span>
-      </div>
-      <div class="series-stand">
-        <div class="ss-label">Series Standing</div>
-        <div class="ss-score">Ducks 3 — Oilers 2</div>
-      </div>
-    </div>
-    <div class="game-body">
-      <ul class="bullets">
-        <li>Edmonton 4, Anaheim 1. <strong>The Oilers finally played a complete playoff game</strong> — scored on the first shot 2:22 in, built a 3–0 first-period lead, chased Lukas Dostal after three goals on nine shots. Series back to Anaheim for Game 6 Thursday.</li>
-        <li>The story is what Edmonton finally <em>didn't</em> do: blow the lead. <strong>Through four games they had given up six separate leads.</strong> Game 5: scored first, never trailed, didn't collapse. <em>That's the first time they've played 60 minutes the right way in this series.</em></li>
-        <li>Draisaitl took over with two goals — including a wicked PP one-timer that <strong>tied Wayne Gretzky for the most postseason power-play goals in Oilers franchise history (23).</strong> Bouchard had three assists. McDavid and Nugent-Hopkins had two each. Stars produced when stars were required.</li>
-        <li>Connor Ingram, back in net, made 29 saves. <strong>The goaltending finally stabilized.</strong> Edmonton has now started Ingram, Jarry, then Ingram again across this series — and the third try produced the goalie they needed all along.</li>
-        <li>The historical context is stunning: <strong>Edmonton is now 18-3 all-time when scoring first while facing elimination.</strong> McDavid passed Adam Oates for the second-most points in NHL history when trailing in a series (only Gretzky has more, with 80). <em>This team has been here before, and they know how to win it.</em></li>
-        <li>Anaheim outshot Edmonton 24–8 over the final 40 minutes. <strong>The Ducks didn't play poorly.</strong> They got buried early, couldn't create the chaos they thrive in, and ran into a goalie who didn't break. <em>Their structural strengths got muted by Edmonton's first complete period of the series.</em></li>
-      </ul>
-      <div class="pullquote">
-        Desperation level is high.
-        <span class="attribution">— Leon Draisaitl, post-game</span>
-      </div>
-      <div class="breakdown-row">
-        <div class="label">Edmonton's Path</div>
-        <div class="content">Repeat the formula. <strong>Score first. Stay with Ingram. Simplify offense. Don't try to win pretty.</strong> Game 6 in Anaheim is the test of whether Game 5 was a desperation game or a sustainable shift. <em>If they play another 60-minute version of this, the series flips again.</em></div>
-      </div>
-      <div class="breakdown-row">
-        <div class="label">Anaheim's Path</div>
-        <div class="content">Don't get rattled. <strong>The Ducks have been the better team for most of this series</strong> — Game 5 was the exception, not the rule. Get a stronger start (Dostal got chased; need him to be ready). Force chaos. Lean on the depth that produced 20 goals in the first four games. <em>Game 6 at home is still a heavy favourite for Anaheim.</em></div>
-      </div>
-      <div class="outlook-box">
-        <div class="olabel">Series Outlook · Updated</div>
-        <div class="otext">Ducks still in 6, slight lean. <strong>Edmonton produced one good game — they need two.</strong> The historical numbers favour them when they're desperate, but the series-long pattern still favours Anaheim. <em>Game 6 at the Honda Center with the same chaotic-game formula that won them three games is the closeout scenario the Ducks have to expect.</em></div>
-      </div>
-    </div>
-  </article>
-
-  <!-- § 03 TRENDS + TIER UPDATE -->
+  <!-- § 03 TRENDS -->
   <div class="section-head" id="section-03">
     <div class="num">§ 03</div>
     <div class="section-head-text">
-      <h2>The patterns <em>shifting.</em></h2>
-      <p class="section-lead">Round 1's tier reads aren't holding up cleanly anymore. Three Game 5s went to the trailing team. The framework is being tested in real time.</p>
-    </div>
-  </div>
-
-  <div class="tier-update">
-    <div class="tu-label">Tier Update · Day 10</div>
-    <div class="tu-text">
-      <strong>Minnesota → Tier 1 disruptor.</strong> They're no longer playing above their tier — they're <em>controlling</em> a series against a Tier 1 team, on the road, in their preferred style. That's the championship trait. <strong>Dallas → Tier 2.</strong> The profile is still elite, but they've been out-executed in their own kind of game on their own ice. They need to win two straight to validate Tier 1 status — until then, they don't have it.
+      <h2>The patterns <em>refining.</em></h2>
+      <p class="section-lead">The "trailing teams win Game 5" trend held for a fifth straight series. The "young teams break under pressure" trend got challenged. Round 1's teaching moments are accumulating.</p>
     </div>
   </div>
 
   <section class="trends">
     <div class="trend">
       <div class="ticker">TREND / 01</div>
-      <h4>Trailing teams won every Game 5.</h4>
+      <h4>The trailing-team Game 5 streak hit five.</h4>
       <ul class="bullets compact">
-        <li>Boston (down 3–1) → won 2–1 OT</li>
-        <li>Edmonton (down 3–1) → won 4–1</li>
-        <li>Minnesota (tied 2–2) → won 4–2 to take the lead</li>
-        <li>Pittsburgh's Game 5 yesterday: same pattern (down 3–1, won 3–2)</li>
-        <li><strong>Four straight Game 5s won by the trailing team.</strong> That's not variance. That's desperation outworking expectation.</li>
+        <li>Pittsburgh (down 3–1) → won Game 5</li>
+        <li>Boston (down 3–1) → won Game 5 OT</li>
+        <li>Edmonton (down 3–1) → won Game 5</li>
+        <li>Minnesota (tied 2–2) → won Game 5 to take lead</li>
+        <li>Montreal (tied 2–2) → won Game 5 to take lead</li>
+        <li><strong>Five Game 5s, five trailing teams won.</strong> Desperation outworking expectation, repeatedly.</li>
       </ul>
     </div>
     <div class="trend">
       <div class="ticker">TREND / 02</div>
-      <h4>Goaltending swaps keep working.</h4>
+      <h4>Adaptation beats raw talent right now.</h4>
       <ul class="bullets compact">
-        <li>Buffalo: Lyon over Luukkonen → won 3 in a row</li>
-        <li>Pittsburgh: Silovs over Jarry → won 2 of 3 since</li>
-        <li>Edmonton: Ingram → Jarry → Ingram → 4–1 win</li>
-        <li>Boston: stayed with Swayman, finally got the goalie they needed</li>
-        <li><strong>Sometimes the swap is the move. Sometimes the patience is.</strong> The trailing teams are figuring it out either way.</li>
+        <li>Buffalo: Lyon swap → 3-game win streak</li>
+        <li>Edmonton: complete game discipline → Game 5 win</li>
+        <li>Pittsburgh: simplified offense → second-life series</li>
+        <li>Montreal: penalty discipline → series lead</li>
+        <li><strong>The teams making in-series corrections are advancing past teams that arrived perfect.</strong></li>
       </ul>
     </div>
     <div class="trend">
       <div class="ticker">TREND / 03</div>
-      <h4>Stars do still matter — when they show up.</h4>
+      <h4>Bell Centre is a real factor.</h4>
       <ul class="bullets compact">
-        <li>Pastrnak: OT breakaway, season-saving goal</li>
-        <li>Draisaitl: 2G + tied Gretzky franchise record on the PP</li>
-        <li>Kaprizov: 1G+2A, dictating sequences</li>
-        <li>McDavid: 63 career playoff points trailing in a series — 2nd all-time behind only Gretzky</li>
-        <li><strong>For ten days we said system beats stars.</strong> Day 10 said: stars and system together is what wins Game 5s. <em>Both are needed.</em></li>
+        <li>Montreal 3–0 at home in this series</li>
+        <li>Game 7 (if needed) would be in Montreal</li>
+        <li>The crowd has produced measurable game-state energy in 3 of 5 games</li>
+        <li><strong>Home ice in playoff hockey usually evens out. The Bell Centre this series has been a genuine variable.</strong></li>
       </ul>
     </div>
   </section>
@@ -1029,8 +961,8 @@
   <div class="section-head" id="section-04">
     <div class="num">§ 04</div>
     <div class="section-head-text">
-      <h2>What to watch <em>tomorrow.</em></h2>
-      <p class="section-lead">Three Game 5s on Wednesday, two of them with elimination on the line for the favourite. The bracket might look completely different by Thursday morning.</p>
+      <h2>What to watch <em>tonight &amp; tomorrow.</em></h2>
+      <p class="section-lead">Two games in progress could push the bracket forward. Two more on Thursday. By Friday morning, Round 2 might be 4 of 8 decided.</p>
     </div>
   </div>
 
@@ -1038,29 +970,29 @@
     <div class="watch-item">
       <div class="check">✓</div>
       <div>
-        <h5>Tampa–Montreal Game 5</h5>
-        <p>Wednesday in Tampa, tied 2–2. <strong>Cooper now has last-change advantage</strong> against a top line still pointless at 5v5 through four games. Either Tampa breaks the series open with the Cirelli-Gourde shutdown line, or Montreal proves their latent upside is real.</p>
+        <h5>PIT at PHI, Live in OT</h5>
+        <p>Tied 0–0 in overtime. <strong>Pittsburgh's third straight elimination game.</strong> Whichever team scores first wins, advances or extends. <em>Either Round 2 Bound ticks to 3 (Philly), or Pittsburgh forces a Game 7 in Pittsburgh.</em></p>
       </div>
     </div>
     <div class="watch-item">
       <div class="check">✓</div>
       <div>
-        <h5>PIT vs PHI, Game 6</h5>
-        <p>Wednesday in Philly, Flyers up 3–2. <strong>Pittsburgh's third elimination game of the series.</strong> They've won the first two on bounces, urgency, and Crosby finally arriving. Philly closes at home or this becomes Pittsburgh's series.</p>
+        <h5>UTA at VGK, Live</h5>
+        <p>Series tied 2–2, just dropped 0–0 in the 1st. <strong>Vegas with home ice and the psychological momentum from Monday's wild OT.</strong> Utah gets one more chance to prove they can dictate against a Tier 1 team — but they're playing in the building Vegas owns.</p>
       </div>
     </div>
     <div class="watch-item">
       <div class="check">✓</div>
       <div>
-        <h5>UTA at VGK, Game 5</h5>
-        <p>Wednesday in Vegas, tied 2–2. <strong>Vegas now has home ice and the psychological momentum after their wild OT win Monday.</strong> Utah missed their 91% window. The next test is whether Vegas can sustain the contender energy or if Utah re-establishes.</p>
+        <h5>DAL at MIN Game 6</h5>
+        <p>Thursday in Minnesota. <strong>The Wild's chance to advance for the first time since 2015.</strong> Dallas has to open it up, get a swing performance from Oettinger, and find 5v5 production beyond Robertson. <em>Wild in 6, real chance.</em></p>
       </div>
     </div>
     <div class="watch-item">
       <div class="check">✓</div>
       <div>
-        <h5>The Closeout Math</h5>
-        <p>Five active series, four with the favourite leading 3–2 or trailing 3–2. <strong>By Friday night, the Round 2 bracket could be 6 of 8 decided.</strong> If favourites close (BUF, ANA, PHI, TBL or VGK), Round 2 starts mid-week. If they don't, this becomes the most upset-heavy first round in years.</p>
+        <h5>EDM at ANA Game 6</h5>
+        <p>Thursday in Anaheim. <strong>Edmonton's complete-game formula meets Anaheim's home crowd and chaos identity.</strong> The Ducks should still be favoured at home — but Edmonton just gave the bracket the one thing that scares everyone: they figured out how to play 60 minutes.</p>
       </div>
     </div>
   </section>
@@ -1069,15 +1001,15 @@
   <section class="closing">
     <div class="overline">The Take</div>
     <blockquote>
-      Day 8 delivered the verdicts. Day 9 cast doubt. Day 10 inverted them. <em>Three trailing teams won. Two saved their seasons. One took control.</em> The bracket that looked nearly settled by Sunday is now actively unsettling itself. The favourites who close from here will have earned every inch — because the trailing teams have learned that the series isn't over until someone takes that fourth win, and right now, nobody's taking them quietly.
+      Round 1 is over for two teams and approaching its endgame for six. <em>The teams advancing right now aren't the most talented. They're the ones learning fastest.</em> Carolina learned how to absorb chaos before Round 1 started. Colorado learned how to win without their stars. Now Montreal, Edmonton, and Pittsburgh are learning in real time — adapting between games in ways that can change a series in 48 hours. The bracket is teaching its own lesson, and the favourites still standing are the ones taking notes.
     </blockquote>
-    <div class="sig">— Round 1 · Day 10 · Filed after three Game 5s reshaped the bracket</div>
+    <div class="sig">— Round 1 · Day 11 · Filed after Montreal's flip back, with two games still live</div>
   </section>
 
   <!-- FOOTER -->
   <footer>
     <div>Rink Report · NHL Playoff Coverage</div>
-    <div>Round 1 of 4 · 2 series advanced · 3 Game 5s &amp; 1 Game 6 Wednesday · Round 2 forming slowly</div>
+    <div>Round 1 of 4 · 2 advanced · 2 live · 2 Game 6s Thursday</div>
   </footer>
 
 </div>
