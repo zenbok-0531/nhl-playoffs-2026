@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Round 1, Day 12 — The Validation | NHL Playoffs Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0b0d12;
+    --ink-2: #13161f;
+    --ink-3: #1c1f2b;
+    --paper: #f2ebdc;
+    --paper-dim: #d6cdba;
+    --muted: #8a8374;
+    --ice: #7fb4d8;
+    --ice-deep: #3d6d93;
+    --goal: #d74e3a;
+    --gold: #d4a842;
+    --hairline: rgba(242, 235, 220, 0.14);
+    --hairline-strong: rgba(242, 235, 220, 0.28);
+    --car: #cc0000;
+    --ott: #c8102e;
+    --min: #154734;
+    --dal: #006847;
+    --phi: #f74902;
+    --pit: #ffb81c;
+    --col: #6F263D;
+    --lak: #A2AAAD;
+    --mtl: #AF1E2D;
+    --tbl: #002868;
+    --buf: #002654;
+    --bos: #FCB514;
+    --vgk: #B4975A;
+    --uta: #6CACE4;
+    --edm: #FF4C00;
+    --ana: #B9975B;
+    --close: #E88B3D;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  ul.bullets { list-style: none; padding: 0; margin: 0; }
+  ul.bullets li {
+    position: relative;
+    padding-left: 26px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+  ul.bullets li:last-child { margin-bottom: 0; }
+  ul.bullets li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 11px;
+    width: 14px; height: 1px;
+    background: var(--goal);
+  }
+  ul.bullets li strong { color: var(--paper); font-weight: 500; }
+  ul.bullets.compact li {
+    padding-left: 20px;
+    margin-bottom: 9px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  ul.bullets.compact li::before { width: 10px; top: 10px; }
+
+  /* MASTHEAD */
+  .masthead {
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .masthead .brand { color: var(--paper); font-weight: 600; }
+  .masthead .brand span { color: var(--goal); }
+  .masthead .brand-link {
+    text-decoration: none;
+    transition: opacity 0.3s;
+    display: inline-block;
+  }
+  .masthead .brand-link:hover { opacity: 0.7; }
+  .masthead .nav-link {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    border-bottom: 1px solid transparent;
+  }
+  .masthead .nav-link:hover { color: var(--paper); border-bottom-color: var(--hairline-strong); }
+
+  /* HERO */
+  .hero {
+    padding: 80px 0 72px;
+    border-bottom: 1px solid var(--hairline);
+    position: relative;
+  }
+  .overline {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .overline::before {
+    content: "";
+    width: 32px; height: 1px;
+    background: var(--goal);
+  }
+  h1.headline {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(56px, 9vw, 136px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    margin-bottom: 40px;
+  }
+  h1.headline em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+  .dek {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: normal;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.5;
+    color: var(--paper);
+    max-width: 760px;
+    font-weight: 500;
+  }
+  .byline {
+    margin-top: 48px;
+    display: flex;
+    gap: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .byline strong { color: var(--paper); font-weight: 600; }
+
+  /* SCORE STRIP */
+  .scores {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .score {
+    padding: 32px 28px;
+    border-right: 1px solid var(--hairline);
+    transition: background 0.3s;
+  }
+  .score:last-child { border-right: none; }
+  .score:hover { background: var(--ink-2); }
+  .score .tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .score .tag.sweep { color: var(--goal); }
+  .score .tag.stranglehold { color: var(--goal); }
+  .score .tag.separation { color: var(--ice); }
+  .score .tag.survival { color: var(--gold); }
+  .score .tag.flipped { color: var(--goal); }
+  .score .matchup {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: 26px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .score .winner { color: var(--paper); font-weight: 600; }
+  .score .loser { color: var(--muted); }
+  .score .final {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--paper-dim);
+    margin-top: 10px;
+  }
+
+  /* PENDING */
+  .pending {
+    background: var(--ink);
+    padding: 32px 28px;
+    border-right: 1px solid var(--hairline);
+    transition: background 0.3s;
+  }
+  .pending:last-child { border-right: none; }
+  .pending:hover { background: var(--ink-2); }
+  .pending .tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .pending .matchup {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .pending .final {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+  .pending.live .tag {
+    color: var(--goal);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pending.live .tag .pulse {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--goal);
+    animation: pulseDot 2s ease-in-out infinite;
+  }
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+  }
+
+  /* LEDE */
+  .lede { padding: 88px 0 64px; max-width: 820px; }
+  .lede p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 23px;
+    line-height: 1.58;
+    color: var(--paper);
+    font-weight: 400;
+  }
+  .lede p::first-letter {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 5.2em;
+    float: left;
+    line-height: 0.82;
+    padding: 10px 14px 0 0;
+    color: var(--goal);
+  }
+
+  /* TRACKER */
+  .tracker {
+    background: var(--ink-2);
+    border-top: 1px solid var(--hairline-strong);
+    border-bottom: 1px solid var(--hairline-strong);
+    padding: 48px 40px;
+    margin: 0 -40px;
+  }
+  .tracker-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 28px;
+  }
+  .tracker-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .tseries {
+    background: var(--ink);
+    padding: 22px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .tseries .t-match {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    line-height: 1.2;
+  }
+  .tseries .t-state {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--paper-dim);
+  }
+  .tseries .t-note {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .tseries.advanced { border-left: 3px solid var(--goal); background: linear-gradient(180deg, var(--ink) 0%, rgba(215, 78, 58, 0.06) 100%); }
+  .tseries.advanced .t-state { color: var(--goal); font-weight: 600; }
+  .tseries.advanced .t-match { color: var(--goal); }
+  .tseries.stranglehold { border-left: 3px solid var(--goal); }
+  .tseries.stranglehold .t-state { color: var(--goal); }
+  .tseries.control { border-left: 3px solid var(--ice); }
+  .tseries.control .t-state { color: var(--ice); }
+  .tseries.even { border-left: 3px solid var(--gold); }
+  .tseries.even .t-state { color: var(--gold); }
+  .tseries.live { border-left: 3px solid var(--goal); }
+  .tseries.live .t-state { color: var(--goal); display: flex; align-items: center; gap: 6px; }
+  .tseries.live .t-state::before {
+    content: "";
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--goal);
+    animation: pulseDot 2s ease-in-out infinite;
+  }
+
+  /* SECTION HEADINGS */
+  .section-head {
+    padding: 56px 0 40px;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 40px;
+    align-items: baseline;
+    border-top: 1px solid var(--hairline);
+    scroll-margin-top: 24px;
+  }
+  .section-head .num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--goal);
+    letter-spacing: 0.1em;
+  }
+  .section-head-text { align-self: baseline; }
+  .section-lead {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.45;
+    letter-spacing: 0;
+    color: var(--goal);
+    margin-top: 20px;
+    max-width: 780px;
+  }
+  .section-head h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(38px, 5vw, 68px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+  }
+  .section-head h2 em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+
+  /* GAME */
+  .game {
+    padding: 64px 0;
+    border-top: 1px solid var(--hairline-strong);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 56px;
+  }
+  .game-title { position: sticky; top: 40px; align-self: start; }
+  .game-title .series-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .game-title h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 54px;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .game-title .vs {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--muted);
+    display: block;
+    font-size: 0.6em;
+    margin: 4px 0;
+  }
+  .colorbar { height: 6px; width: 100%; display: flex; margin-top: 20px; }
+  .colorbar span { flex: 1; }
+  .series-stand {
+    margin-top: 24px;
+    padding: 18px 20px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--goal);
+  }
+  .series-stand .ss-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 6px;
+  }
+  .series-stand .ss-score {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--paper);
+    letter-spacing: -0.01em;
+  }
+  .game-body { font-size: 17px; line-height: 1.65; }
+  .game-body > ul.bullets { margin-bottom: 8px; }
+  .game-body > ul.bullets li { font-size: 16px; }
+  .pullquote {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    color: var(--paper);
+    padding: 28px 0 28px 28px;
+    border-left: 2px solid var(--goal);
+    margin: 28px 0;
+  }
+  .pullquote .attribution {
+    display: block;
+    margin-top: 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-style: normal;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .breakdown-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 24px;
+    padding: 18px 0;
+    border-top: 1px solid var(--hairline);
+    align-items: start;
+  }
+  .breakdown-row:last-child { border-bottom: 1px solid var(--hairline); }
+  .breakdown-row .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding-top: 4px;
+  }
+  .breakdown-row .content { color: var(--paper-dim); font-size: 16px; }
+  .breakdown-row .content strong { color: var(--paper); font-weight: 500; }
+  .outlook-box {
+    margin-top: 28px;
+    padding: 24px 28px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--ice);
+  }
+  .outlook-box .olabel {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ice);
+    margin-bottom: 10px;
+  }
+  .outlook-box .otext {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--paper);
+    letter-spacing: 0;
+  }
+
+  /* ROUND 2 BRACKET */
+  .bracket-preview {
+    background: var(--ink-2);
+    border: 1px solid var(--hairline-strong);
+    padding: 40px 36px;
+    margin: 32px 0 8px;
+  }
+  .bp-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 24px;
+  }
+  .bp-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--hairline);
+  }
+  .bp-cell {
+    background: var(--ink);
+    padding: 24px 26px;
+  }
+  .bp-side {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .bp-match {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--paper);
+    margin-bottom: 8px;
+  }
+  .bp-match .pending-team {
+    color: var(--muted);
+    font-style: italic;
+    font-weight: 400;
+  }
+  .bp-note {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+    font-style: italic;
+  }
+  .bp-cell.locked { border-left: 3px solid var(--goal); }
+  .bp-cell.partial { border-left: 3px solid var(--gold); }
+  .bp-cell.tbd { border-left: 3px solid var(--muted); }
+
+  /* TRENDS */
+  .trends {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    padding: 16px 0 56px;
+  }
+  .trend { border-top: 2px solid var(--gold); padding-top: 24px; }
+  .trend .ticker {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    margin-bottom: 16px;
+  }
+  .trend h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 23px;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 18px;
+  }
+
+  /* CLOSING */
+  .closing { padding: 72px 0 48px; border-top: 1px solid var(--hairline-strong); }
+  .closing .overline { color: var(--gold); }
+  .closing .overline::before { background: var(--gold); }
+  .closing blockquote {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    max-width: 980px;
+  }
+  .closing blockquote em { font-style: italic; color: var(--goal); font-weight: 400; }
+  .closing .sig {
+    margin-top: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* TOC */
+  .toc { padding: 40px 0 48px; border-bottom: 1px solid var(--hairline); }
+  .toc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .toc-label::before {
+    content: "";
+    width: 24px; height: 1px;
+    background: var(--muted);
+  }
+  .toc-list {
+    list-style: none;
+    padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .toc-list li { background: var(--ink); }
+  .toc-list a {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px 26px;
+    text-decoration: none;
+    color: var(--paper);
+    transition: background 0.3s;
+    height: 100%;
+  }
+  .toc-list a:hover { background: var(--ink-2); }
+  .toc-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--goal);
+  }
+  .toc-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+    color: var(--paper);
+    transition: color 0.3s;
+  }
+  .toc-list a:hover .toc-title { color: var(--ice); }
+
+  footer {
+    padding: 36px 0;
+    border-top: 1px solid var(--hairline);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 820px) {
+    .wrap { padding: 0 20px; }
+    .scores { grid-template-columns: 1fr; }
+    .score, .pending { border-right: none; border-bottom: 1px solid var(--hairline); }
+    .score:last-child, .pending:last-child { border-bottom: none; }
+    .tracker { margin: 0 -20px; padding: 32px 24px; }
+    .tracker-grid { grid-template-columns: repeat(2, 1fr); }
+    .section-head { grid-template-columns: 1fr; gap: 12px; padding: 44px 0 28px; }
+    .game { grid-template-columns: 1fr; gap: 28px; padding: 48px 0; }
+    .game-title { position: static; }
+    .game-title h3 { font-size: 42px; }
+    .breakdown-row { grid-template-columns: 1fr; gap: 8px; }
+    .trends { grid-template-columns: 1fr; gap: 32px; }
+    .bp-grid { grid-template-columns: 1fr; }
+    .lede { padding: 56px 0 40px; }
+    .lede p { font-size: 20px; }
+    .byline { flex-direction: column; gap: 12px; }
+    .toc-list { grid-template-columns: 1fr; }
+    .toc { padding: 28px 0 32px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <a href="index.html" class="brand-link"><div class="brand">Rink<span>&middot;</span>Report</div></a>
+    <div>
+      <a href="round1-day11-analysis.html" class="nav-link">← Day 11</a>
+      &nbsp;&nbsp;Vol. I &nbsp;/&nbsp; Round 01 &nbsp;/&nbsp; Day 12
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="overline">Stanley Cup Playoffs &nbsp;·&nbsp; Round 2 Bound: 4</div>
+    <h1 class="headline">The <em>Validation.</em></h1>
+    <p class="dek">
+      Minnesota beat Dallas 5–2 to win their first playoff series in eleven years. Quinn Hughes
+      scored twice. Wallstedt held. <strong>The Tier 1 disruptor we identified Day 10 just
+      validated the read by closing.</strong> Anaheim leads Edmonton 3–1 late in the second
+      with a Round 2 berth on the line. <em>The bracket is moving fast.</em>
+    </p>
+    <div class="byline">
+      <div><strong>Round 1</strong> · Day 12 Analysis</div>
+      <div><strong>Filed</strong> · April 30, 2026</div>
+      <div><strong>Read</strong> · 7 minutes</div>
+    </div>
+  </header>
+
+  <!-- SCORE STRIP -->
+  <section class="scores">
+    <div class="score">
+      <div class="tag sweep">Game 6 · Series 02 · Advanced</div>
+      <div class="matchup">
+        <span class="winner">Minnesota</span> def. <span class="loser">Dallas</span>, 5–2
+      </div>
+      <div class="final">Wild win 4–2 &nbsp;·&nbsp; Hughes 2G, faces Colorado in Round 2</div>
+    </div>
+    <div class="pending live">
+      <div class="tag">Live <span class="pulse"></span> Series 08 · Game 6</div>
+      <div class="matchup">
+        <span style="color: var(--muted)">Edmonton at Anaheim — late 2nd</span>
+      </div>
+      <div class="final">Ducks lead 3–1 &nbsp;·&nbsp; Edmonton facing elimination</div>
+    </div>
+  </section>
+
+  <!-- TOC -->
+  <nav class="toc" aria-label="Table of contents">
+    <div class="toc-label">Contents</div>
+    <ol class="toc-list">
+      <li><a href="#section-01">
+        <span class="toc-num">§ 01</span>
+        <span class="toc-title">Series tracker</span>
+      </a></li>
+      <li><a href="#section-02">
+        <span class="toc-num">§ 02</span>
+        <span class="toc-title">Wild close it</span>
+      </a></li>
+      <li><a href="#section-03">
+        <span class="toc-num">§ 03</span>
+        <span class="toc-title">Round 2 forming</span>
+      </a></li>
+      <li><a href="#section-04">
+        <span class="toc-num">§ 04</span>
+        <span class="toc-title">Patterns confirmed</span>
+      </a></li>
+    </ol>
+  </nav>
+
+  <!-- LEDE -->
+  <section class="lede">
+    <p>
+      Day 12 validated everything. Minnesota — flagged Day 10 as the Tier 1 disruptor that
+      had moved past their tier — closed Dallas 5–2 in Game 6 to win their first playoff
+      series since 2015. <strong>They didn't squeak through. They dominated.</strong>
+      Quinn Hughes (the December trade-deadline acquisition) scored twice. Tarasenko notched
+      his 50th career playoff goal. Wallstedt made 22 saves. The most revealing number: <em>Minnesota
+      outscored Dallas 17–5 at even strength in the series, including 12–4 at five-on-five.</em>
+      Dallas's Tier 1 profile crumbled at the foundation. The Wild now get the Avalanche —
+      Tier 1 vs Tier 1, the matchup the bracket has been pointing toward all round.
+    </p>
+  </section>
+
+  <!-- § 01 SERIES TRACKER -->
+  <div class="section-head" id="section-01">
+    <div class="num">§ 01</div>
+    <div class="section-head-text">
+      <h2>The bracket <em>nearly resolved.</em></h2>
+      <p class="section-lead">Four advanced. Three series with Game 6 closeout chances coming Friday and Saturday. The Round 2 bracket is now half-locked and visibly forming.</p>
+    </div>
+  </div>
+
+  <section class="tracker">
+    <div class="tracker-label">Series Tracker · Round 1</div>
+    <div class="tracker-grid">
+      <div class="tseries advanced">
+        <div class="t-match">CAR vs OTT</div>
+        <div class="t-state">Won 4 — 0</div>
+        <div class="t-note">Round 2: vs Philly.</div>
+      </div>
+      <div class="tseries advanced">
+        <div class="t-match">COL vs LAK</div>
+        <div class="t-state">Won 4 — 0</div>
+        <div class="t-note">Round 2: vs Minnesota.</div>
+      </div>
+      <div class="tseries advanced">
+        <div class="t-match">PHI vs PIT</div>
+        <div class="t-state">Won 4 — 2</div>
+        <div class="t-note">Round 2: vs Carolina.</div>
+      </div>
+      <div class="tseries advanced">
+        <div class="t-match">MIN vs DAL</div>
+        <div class="t-state">Won 4 — 2</div>
+        <div class="t-note">First win since 2015. vs Colorado.</div>
+      </div>
+      <div class="tseries control">
+        <div class="t-match">BOS at BUF</div>
+        <div class="t-state">Sabres 3 — 2</div>
+        <div class="t-note">Game 6 Friday in Boston.</div>
+      </div>
+      <div class="tseries control">
+        <div class="t-match">TBL at MTL</div>
+        <div class="t-state">Habs 3 — 2</div>
+        <div class="t-note">Game 6 Friday in Tampa.</div>
+      </div>
+      <div class="tseries control">
+        <div class="t-match">UTA at VGK</div>
+        <div class="t-state">Knights 3 — 2</div>
+        <div class="t-note">Game 6 Friday in Salt Lake.</div>
+      </div>
+      <div class="tseries live">
+        <div class="t-match">EDM at ANA</div>
+        <div class="t-state">Live · Ducks 3-1, late 2nd</div>
+        <div class="t-note">Edmonton elimination.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- § 02 GAME -->
+  <div class="section-head" id="section-02">
+    <div class="num">§ 02</div>
+    <div class="section-head-text">
+      <h2>Minnesota <em>closes it.</em></h2>
+      <p class="section-lead">The first playoff series win in 11 years didn't come on bounces or breaks. It came on systemic dominance — a 12–4 advantage at 5v5 that Dallas's elite power play could never overcome.</p>
+    </div>
+  </div>
+
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Series 02 · West &nbsp;·&nbsp; <span style="color: var(--goal)">Advanced</span></div>
+      <h3>Dallas <span class="vs">at</span> Minnesota</h3>
+      <div class="colorbar">
+        <span style="background: var(--dal)"></span>
+        <span style="background: var(--min)"></span>
+      </div>
+      <div class="series-stand">
+        <div class="ss-label">Series Final</div>
+        <div class="ss-score">Wild 4 — Stars 2</div>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Minnesota 5, Dallas 2. <strong>Quinn Hughes scored twice including the third-period game-winner</strong> after Dallas had tied it. Boldy added two empty-netters to seal it (his fifth and sixth of the series). Tarasenko scored his 50th career playoff goal. <em>The Wild win their first playoff series since 2015.</em></li>
+        <li>The trade that decided this series: <strong>Hughes was the December trade-deadline acquisition from Vancouver</strong> — described at the time as the biggest trade in Wild franchise history. He scored the series-winning goal. <em>Bill Guerin's mid-season bet just paid for itself in full.</em></li>
+        <li>The structural truth nobody can ignore: <strong>Minnesota outscored Dallas 17–5 at even strength in the series, including 12–4 at five-on-five.</strong> Dallas's elite power play (10 PP goals, league high from Johnston in the postseason) couldn't overcome a foundation that broken. <em>That's the Tier 1 collapse the publication flagged Day 10.</em></li>
+        <li>Wallstedt finished the series with another calm 22-save performance. <strong>The rookie goalie was Minnesota's swing performer all six games</strong> — never spectacular, never broken. Exactly the kind of goaltending that wins playoff series for teams without star firepower.</li>
+        <li>Boldy ends Round 1 with six goals — second only to Brandon Hagel's playoff lead from Tampa. <strong>His Game 4 OT winner, Game 5 PP go-ahead, and Game 6 doubles cemented him as Minnesota's clutch factor.</strong> Same story all series: when the moment narrowed, Boldy delivered.</li>
+        <li>Dallas's exit raises the obvious question: <strong>were they ever Tier 1, or did their profile mask their flaws?</strong> Robertson scored in 5 of 6 games. Johnston led the league in PP goals. Heiskanen produced. <em>None of it mattered because Dallas got outscored 12–4 at 5v5.</em> The publication had Dallas in Tier 1 (under pressure) Day 9 and slid them to Tier 2 Day 10. <em>Day 12 confirms they didn't belong in either.</em></li>
+      </ul>
+      <div class="pullquote">
+        Minnesota outscored Dallas 17–5 at even strength in the series, including 12–4 at five-on-five.
+        <span class="attribution">— Associated Press</span>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">What This Was</div>
+        <div class="content">A team that hadn't won a series in over a decade beating a three-time Western Conference Finalist on structural superiority. <strong>Minnesota didn't get hot. They didn't get lucky.</strong> They controlled 5v5 hockey for six games against a team that was supposed to control them. <em>That's not an upset — that's a tier reveal.</em></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">What This Says</div>
+        <div class="content">The Hughes trade was a contender move, not a competitive one. <strong>Bill Guerin saw a window and bought into it.</strong> Hughes, Tarasenko, Zuccarello — three veterans who add the kind of situational maturity a young team needs. <em>The Wild were built to do exactly this, and Day 10's Tier 1 disruptor read was the right one.</em></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Round 2 Awaits</div>
+        <div class="content">Minnesota gets Colorado — the Presidents Trophy winner with 8+ days of rest. <strong>Tier 1 vs Tier 1.</strong> Both teams won Round 1 by controlling 5v5 play. The difference: Colorado swept; Minnesota took six games. The Avalanche have rest. The Wild have momentum. <em>That's the most interesting Round 2 matchup in the West, and possibly the entire bracket.</em></div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Round 1 Verdict</div>
+        <div class="otext">The Wild are real. <strong>They controlled a series against a Tier 1 profile team and never got knocked off their structure.</strong> Hughes was the difference-maker the trade promised. Wallstedt held when needed. Boldy delivered at every key moment. <em>Three teams have advanced through Round 1 by playing the same kind of hockey: Carolina, Colorado, Philadelphia. Minnesota just made it four.</em></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- § 03 ROUND 2 BRACKET -->
+  <div class="section-head" id="section-03">
+    <div class="num">§ 03</div>
+    <div class="section-head-text">
+      <h2>The Round 2 <em>shape.</em></h2>
+      <p class="section-lead">Two matchups locked. One half-locked, awaiting Anaheim's closeout tonight. One still pending Friday's slate. The bracket is fast approaching its second-round form.</p>
+    </div>
+  </div>
+
+  <div class="bracket-preview">
+    <div class="bp-label">Round 2 · Conference Semifinals</div>
+    <div class="bp-grid">
+      <div class="bp-cell locked">
+        <div class="bp-side">East · Metropolitan Showdown</div>
+        <div class="bp-match">Carolina <span style="color: var(--muted)">vs</span> Philadelphia</div>
+        <div class="bp-note">Two structurally elite teams — discipline, depth, goaltending. The cleanest matchup the bracket can offer. Carolina has 8+ days of rest. Philly closes Wednesday.</div>
+      </div>
+      <div class="bp-cell locked">
+        <div class="bp-side">West · Central Showdown</div>
+        <div class="bp-match">Colorado <span style="color: var(--muted)">vs</span> Minnesota</div>
+        <div class="bp-note">Tier 1 vs Tier 1 disruptor. Both teams won Round 1 controlling 5v5. Colorado swept. Minnesota took six. <em>Possibly the matchup of Round 2.</em></div>
+      </div>
+      <div class="bp-cell tbd">
+        <div class="bp-side">East · Atlantic</div>
+        <div class="bp-match"><span class="pending-team">BUF/BOS winner</span> <span style="color: var(--muted)">vs</span> <span class="pending-team">TBL/MTL winner</span></div>
+        <div class="bp-note">Both series 3–2 with Game 6s Friday. Either way, the matchup is between two Tier 2 teams looking for a third tier-defining win.</div>
+      </div>
+      <div class="bp-cell partial">
+        <div class="bp-side">West · Pacific</div>
+        <div class="bp-match"><span class="pending-team">EDM/ANA winner</span> <span style="color: var(--muted)">vs</span> <span class="pending-team">UTA/VGK winner</span></div>
+        <div class="bp-note">Anaheim leads 3–1 late in the second tonight. Vegas has Game 6 Friday in Salt Lake. <em>If both close, this is ANA vs VGK — two Tier 2 teams that play very different hockey.</em></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- § 04 PATTERNS -->
+  <div class="section-head" id="section-04">
+    <div class="num">§ 04</div>
+    <div class="section-head-text">
+      <h2>The patterns <em>that held.</em></h2>
+      <p class="section-lead">Round 1 is teaching one consistent lesson, and the four teams advancing have all demonstrated it in different ways.</p>
+    </div>
+  </div>
+
+  <section class="trends">
+    <div class="trend">
+      <div class="ticker">PATTERN / 01</div>
+      <h4>Structure beats profile.</h4>
+      <ul class="bullets compact">
+        <li>Carolina swept Ottawa never trailing once — system before stars</li>
+        <li>Colorado swept LA controlling pace — pace before talent</li>
+        <li>Philly closed Pittsburgh in 1–0 OT — discipline before chaos</li>
+        <li>Minnesota dominated Dallas at 5v5 — foundation before flash</li>
+        <li><strong>Four teams. Same template. Different rosters.</strong></li>
+      </ul>
+    </div>
+    <div class="trend">
+      <div class="ticker">PATTERN / 02</div>
+      <h4>Depth wins what stars can't.</h4>
+      <ul class="bullets compact">
+        <li>Vegas: Howden's two SHGs (depth player decides games)</li>
+        <li>Carolina: Aho, Necas, Jarvis all contributing past Aho line</li>
+        <li>Minnesota: Hughes/Boldy/Tarasenko/Zuccarello — four-deep impact</li>
+        <li>Philly: Konecny driving but Sanheim and Couturier sealing</li>
+        <li><strong>The teams that didn't have to ride one player are the ones still playing.</strong></li>
+      </ul>
+    </div>
+    <div class="trend">
+      <div class="ticker">PATTERN / 03</div>
+      <h4>Goaltending stability is the floor.</h4>
+      <ul class="bullets compact">
+        <li>Wallstedt: rookie, calm, 6 games of stability</li>
+        <li>Vladar: held Pittsburgh to 0 goals in clinching Game 6</li>
+        <li>Andersen/Kochetkov: Carolina's two-headed shutdown</li>
+        <li>Blackwood: Colorado's 4-game lockdown</li>
+        <li><strong>Every advancing team has a goalie who stops the right shots. None of them are riding a hot streak.</strong></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CLOSING -->
+  <section class="closing">
+    <div class="overline">The Take</div>
+    <blockquote>
+      Round 1 is two games from over, and the lesson is by now repetitive. <em>The four teams advancing — Carolina, Colorado, Philly, Minnesota — won the same way.</em> They controlled 5v5 play, got steady goaltending, scored from depth, and closed when the moment narrowed. None of them needed a Cup-winning star to carry them. All of them needed the structure to absorb everything that came at them. <em>Round 2 is going to be a test of which structural team is actually contender material — and based on Round 1, that question has at least four serious candidates.</em>
+    </blockquote>
+    <div class="sig">— Round 1 · Day 12 · Filed after Minnesota validated the Tier 1 read · Edmonton/Anaheim live</div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>Rink Report · NHL Playoff Coverage</div>
+    <div>Round 1 of 4 · 4 advanced · 3 closeout games coming Friday</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
