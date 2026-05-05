@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Round 2, Day 4 — The Composure | NHL Playoffs Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0b0d12;
+    --ink-2: #13161f;
+    --ink-3: #1c1f2b;
+    --paper: #f2ebdc;
+    --paper-dim: #d6cdba;
+    --muted: #8a8374;
+    --ice: #7fb4d8;
+    --ice-deep: #3d6d93;
+    --goal: #d74e3a;
+    --gold: #d4a842;
+    --hairline: rgba(242, 235, 220, 0.14);
+    --hairline-strong: rgba(242, 235, 220, 0.28);
+    --car: #cc0000;
+    --ott: #c8102e;
+    --min: #154734;
+    --dal: #006847;
+    --phi: #f74902;
+    --pit: #ffb81c;
+    --col: #6F263D;
+    --lak: #A2AAAD;
+    --mtl: #AF1E2D;
+    --tbl: #002868;
+    --buf: #002654;
+    --bos: #FCB514;
+    --vgk: #B4975A;
+    --uta: #6CACE4;
+    --edm: #FF4C00;
+    --ana: #B9975B;
+    --close: #E88B3D;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  ul.bullets { list-style: none; padding: 0; margin: 0; }
+  ul.bullets li {
+    position: relative;
+    padding-left: 26px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+  ul.bullets li:last-child { margin-bottom: 0; }
+  ul.bullets li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 11px;
+    width: 14px; height: 1px;
+    background: var(--goal);
+  }
+  ul.bullets li strong { color: var(--paper); font-weight: 500; }
+  ul.bullets.compact li {
+    padding-left: 20px;
+    margin-bottom: 9px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  ul.bullets.compact li::before { width: 10px; top: 10px; }
+
+  .round-banner {
+    background: linear-gradient(90deg, rgba(215, 78, 58, 0.08) 0%, transparent 100%);
+    border-bottom: 1px solid var(--hairline);
+    padding: 16px 0;
+    text-align: left;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--goal);
+    font-weight: 600;
+  }
+  .round-banner span { color: var(--paper); }
+
+  .masthead {
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .masthead .brand { color: var(--paper); font-weight: 600; }
+  .masthead .brand span { color: var(--goal); }
+  .masthead .brand-link {
+    text-decoration: none;
+    transition: opacity 0.3s;
+    display: inline-block;
+  }
+  .masthead .brand-link:hover { opacity: 0.7; }
+  .masthead .nav-link {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    border-bottom: 1px solid transparent;
+  }
+  .masthead .nav-link:hover { color: var(--paper); border-bottom-color: var(--hairline-strong); }
+
+  .hero {
+    padding: 80px 0 72px;
+    border-bottom: 1px solid var(--hairline);
+    position: relative;
+  }
+  .overline {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .overline::before {
+    content: "";
+    width: 32px; height: 1px;
+    background: var(--goal);
+  }
+  h1.headline {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(56px, 9vw, 136px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    margin-bottom: 40px;
+  }
+  h1.headline em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+  .dek {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: normal;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.5;
+    color: var(--paper);
+    max-width: 760px;
+    font-weight: 500;
+  }
+  .byline {
+    margin-top: 48px;
+    display: flex;
+    gap: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .byline strong { color: var(--paper); font-weight: 600; }
+
+  .scores {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .score {
+    padding: 32px 28px;
+    border-right: 1px solid var(--hairline);
+    transition: background 0.3s;
+  }
+  .score:last-child { border-right: none; }
+  .score:hover { background: var(--ink-2); }
+  .score .tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 14px;
+  }
+  .score .matchup {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: 26px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .score .winner { color: var(--paper); font-weight: 600; }
+  .score .loser { color: var(--muted); }
+  .score .final {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--paper-dim);
+    margin-top: 10px;
+  }
+
+  .lede { padding: 88px 0 64px; max-width: 820px; }
+  .lede p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 23px;
+    line-height: 1.58;
+    color: var(--paper);
+    font-weight: 400;
+  }
+  .lede p::first-letter {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 5.2em;
+    float: left;
+    line-height: 0.82;
+    padding: 10px 14px 0 0;
+    color: var(--goal);
+  }
+
+  .section-head {
+    padding: 56px 0 40px;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 40px;
+    align-items: baseline;
+    border-top: 1px solid var(--hairline);
+    scroll-margin-top: 24px;
+  }
+  .section-head .num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--goal);
+    letter-spacing: 0.1em;
+  }
+  .section-head-text { align-self: baseline; }
+  .section-lead {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.45;
+    letter-spacing: 0;
+    color: var(--goal);
+    margin-top: 20px;
+    max-width: 780px;
+  }
+  .section-head h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(38px, 5vw, 68px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+  }
+  .section-head h2 em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+
+  .game {
+    padding: 64px 0;
+    border-top: 1px solid var(--hairline-strong);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 56px;
+  }
+  .game-title { position: sticky; top: 40px; align-self: start; }
+  .game-title .series-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .game-title h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 54px;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .game-title .vs {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--muted);
+    display: block;
+    font-size: 0.6em;
+    margin: 4px 0;
+  }
+  .colorbar { height: 6px; width: 100%; display: flex; margin-top: 20px; }
+  .colorbar span { flex: 1; }
+  .series-stand {
+    margin-top: 24px;
+    padding: 18px 20px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--goal);
+  }
+  .series-stand .ss-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 6px;
+  }
+  .series-stand .ss-score {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--paper);
+    letter-spacing: -0.01em;
+  }
+  .game-body { font-size: 17px; line-height: 1.65; }
+  .game-body > ul.bullets { margin-bottom: 8px; }
+  .game-body > ul.bullets li { font-size: 16px; }
+  .pullquote {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    color: var(--paper);
+    padding: 28px 0 28px 28px;
+    border-left: 2px solid var(--goal);
+    margin: 28px 0;
+  }
+  .pullquote .attribution {
+    display: block;
+    margin-top: 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-style: normal;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .breakdown-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 24px;
+    padding: 18px 0;
+    border-top: 1px solid var(--hairline);
+    align-items: start;
+  }
+  .breakdown-row:last-child { border-bottom: 1px solid var(--hairline); }
+  .breakdown-row .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding-top: 4px;
+  }
+  .breakdown-row .content { color: var(--paper-dim); font-size: 16px; }
+  .breakdown-row .content strong { color: var(--paper); font-weight: 500; }
+  .outlook-box {
+    margin-top: 28px;
+    padding: 24px 28px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--ice);
+  }
+  .outlook-box .olabel {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ice);
+    margin-bottom: 10px;
+  }
+  .outlook-box .otext {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--paper);
+    letter-spacing: 0;
+  }
+
+  .statblock {
+    margin: 32px 0;
+    background: var(--ink-2);
+    border: 1px solid var(--hairline);
+    padding: 28px 32px;
+  }
+  .statblock-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .statblock-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .stat .num {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 38px;
+    color: var(--goal);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .stat .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+
+  /* CONTROVERSY CALLOUT */
+  .controversy {
+    margin: 32px 0;
+    background: var(--ink-2);
+    border-left: 3px solid var(--gold);
+    padding: 28px 32px;
+  }
+  .controversy-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .controversy h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 14px;
+  }
+
+  .closing { padding: 72px 0 48px; border-top: 1px solid var(--hairline-strong); }
+  .closing .overline { color: var(--gold); }
+  .closing .overline::before { background: var(--gold); }
+  .closing blockquote {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    max-width: 980px;
+  }
+  .closing blockquote em { font-style: italic; color: var(--goal); font-weight: 400; }
+  .closing .sig {
+    margin-top: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .toc { padding: 40px 0 48px; border-bottom: 1px solid var(--hairline); }
+  .toc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .toc-label::before {
+    content: "";
+    width: 24px; height: 1px;
+    background: var(--muted);
+  }
+  .toc-list {
+    list-style: none;
+    padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .toc-list li { background: var(--ink); }
+  .toc-list a {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px 26px;
+    text-decoration: none;
+    color: var(--paper);
+    transition: background 0.3s;
+    height: 100%;
+  }
+  .toc-list a:hover { background: var(--ink-2); }
+  .toc-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--goal);
+  }
+  .toc-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+    color: var(--paper);
+    transition: color 0.3s;
+  }
+  .toc-list a:hover .toc-title { color: var(--ice); }
+
+  footer {
+    padding: 36px 0;
+    border-top: 1px solid var(--hairline);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 820px) {
+    .wrap { padding: 0 20px; }
+    .scores { grid-template-columns: 1fr; }
+    .score { border-right: none; border-bottom: 1px solid var(--hairline); }
+    .score:last-child { border-bottom: none; }
+    .section-head { grid-template-columns: 1fr; gap: 12px; padding: 44px 0 28px; }
+    .game { grid-template-columns: 1fr; gap: 28px; padding: 48px 0; }
+    .game-title { position: static; }
+    .game-title h3 { font-size: 42px; }
+    .breakdown-row { grid-template-columns: 1fr; gap: 8px; }
+    .statblock-grid { grid-template-columns: repeat(2, 1fr); }
+    .lede { padding: 56px 0 40px; }
+    .lede p { font-size: 20px; }
+    .byline { flex-direction: column; gap: 12px; }
+    .toc-list { grid-template-columns: 1fr; }
+    .toc { padding: 28px 0 32px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="round-banner">
+    Round Two &nbsp;·&nbsp; <span>Conference Semifinals</span> &nbsp;·&nbsp; All four series now underway
+  </div>
+
+  <div class="masthead">
+    <a href="index.html" class="brand-link"><div class="brand">Rink<span>&middot;</span>Report</div></a>
+    <div>
+      <a href="round2-day3-analysis.html" class="nav-link">← Day 3</a>
+      &nbsp;&nbsp;Vol. I &nbsp;/&nbsp; Round 02 &nbsp;/&nbsp; Day 4
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="overline">Two more wins for Tier 1 &nbsp;·&nbsp; Two series at 2–0</div>
+    <h1 class="headline">The <em>Composure.</em></h1>
+    <p class="dek">
+      Carolina fell behind 2–0 in the first period — their first deficit all postseason —
+      and won 3–2 in OT on a Taylor Hall net-front rebound. Vegas neutralized Anaheim's
+      50% Round 1 power play (0-for-4) and won 3–1 on a controversial missed-icing sequence.
+      <strong>Two Tier 1 teams won by being calmer, not better.</strong> <em>Carolina at 6–0.
+      Vegas leading. Tonight: Colorado-Minnesota Game 2.</em>
+    </p>
+    <div class="byline">
+      <div><strong>Round 2</strong> · Day 4 Analysis</div>
+      <div><strong>Filed</strong> · May 5, 2026</div>
+      <div><strong>Read</strong> · 12 minutes</div>
+    </div>
+  </header>
+
+  <section class="scores">
+    <div class="score">
+      <div class="tag">Game 2 · Series 01 · East &nbsp;·&nbsp; The Recovery</div>
+      <div class="matchup">
+        <span class="winner">Carolina</span> def. <span class="loser">Philadelphia</span>, 3–2 (OT)
+      </div>
+      <div class="final">Canes lead 2–0 &nbsp;·&nbsp; Hall OT winner, Andersen 34 saves, Carolina 6–0 in playoffs</div>
+    </div>
+    <div class="score">
+      <div class="tag">Game 1 · Series 04 · West &nbsp;·&nbsp; The PK Battle</div>
+      <div class="matchup">
+        <span class="winner">Vegas</span> def. <span class="loser">Anaheim</span>, 3–1
+      </div>
+      <div class="final">Knights lead 1–0 &nbsp;·&nbsp; Hart 33 saves, Marner 2pts, Anaheim PP 0-for-4</div>
+    </div>
+  </section>
+
+  <nav class="toc" aria-label="Table of contents">
+    <div class="toc-label">Contents</div>
+    <ol class="toc-list">
+      <li><a href="#section-01">
+        <span class="toc-num">§ 01</span>
+        <span class="toc-title">Carolina's Recovery</span>
+      </a></li>
+      <li><a href="#section-02">
+        <span class="toc-num">§ 02</span>
+        <span class="toc-title">Vegas neutralizes</span>
+      </a></li>
+      <li><a href="#section-03">
+        <span class="toc-num">§ 03</span>
+        <span class="toc-title">Tonight: COL-MIN G2</span>
+      </a></li>
+    </ol>
+  </nav>
+
+  <section class="lede">
+    <p>
+      Two Tier 1 teams won Game 1s of their respective storylines on Monday night. Neither
+      did it by dominating. <strong>Carolina fell behind 2–0 inside the first six minutes —
+      their first time trailing all postseason — and won in overtime on a Taylor Hall net-front
+      rebound.</strong> Vegas played a tight, controlled, low-event game against an Anaheim
+      team built around chaos, killed off four power plays from a unit that had converted at
+      50% in Round 1, and won 3–1 on a sequence that started with a missed icing call.
+      <em>The trait both winners shared wasn't superiority. It was composure.</em> Carolina
+      didn't panic when down two. Vegas didn't open up when Anaheim wanted them to. <strong>Both
+      teams got their goalie performance, their late-game execution, and their two-game
+      series leads.</strong>
+    </p>
+  </section>
+
+  <!-- § 01 CAROLINA -->
+  <div class="section-head" id="section-01">
+    <div class="num">§ 01</div>
+    <div class="section-head-text">
+      <h2>Carolina <em>didn't break.</em></h2>
+      <p class="section-lead">For the first time all postseason, the Hurricanes trailed. The first time all postseason, they faced sustained pressure they didn't generate. They responded by being calm. That's a different kind of Tier 1 trait than Game 1's domination — and arguably more meaningful.</p>
+    </div>
+  </div>
+
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Round 2 · Series 01 · East &nbsp;·&nbsp; <span style="color: var(--goal)">Recovery</span></div>
+      <h3>Philadelphia <span class="vs">at</span> Carolina</h3>
+      <div class="colorbar">
+        <span style="background: var(--phi)"></span>
+        <span style="background: var(--car)"></span>
+      </div>
+      <div class="series-stand">
+        <div class="ss-label">Series Standing</div>
+        <div class="ss-score">Hurricanes 2 — Flyers 0</div>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Carolina 3, Philadelphia 2 in OT. <strong>Taylor Hall scored at 18:54 of overtime</strong> on a net-front rebound — fed by Sean Walker, knocked to his knees near the crease, hopped up, won the loose puck battle, beat Vladar. <em>"When you score in overtime, parts of your memory kind of go," Hall said. "I was in another time zone there for a second."</em></li>
+        <li>Philadelphia made the exact tactical adjustment they needed: <strong>Drysdale and Couturier scored 39 seconds apart in the first period</strong> for a 2–0 Flyers lead inside the first 6 minutes. Tippett still out (undisclosed injury) and Philly's PP finally clicked — Drysdale's marker came on their first PP opportunity. <em>The Flyers competed exactly the way Tocchet wanted; the result didn't follow.</em></li>
+        <li>Andersen was the difference. <strong>34 saves, including a stretch in the first that prevented the 2–0 deficit from becoming 3–0 or 4–0.</strong> The publication has been tracking Andersen as an elite stabilizer since Round 1; tonight was the first time Carolina's structure slipped meaningfully and he had to bail them out. <em>He did.</em></li>
+        <li>Ehlers got Carolina on the board with a first-period PP one-timer. Jarvis tied it 2–2 midway through the third on an Ehlers feed. <strong>Then it was overtime — and Philly, Tocchet noted afterward, "outshot Carolina 15–8 in the OT in a much more assertive showing."</strong> The Flyers played the better period. They didn't win it.</li>
+        <li>The taking-it-back-shift-by-shift pattern: <strong>after the first period, Carolina out-shot Philly across the rest of regulation</strong>, broke their forecheck more cleanly, and re-imposed the cycle game that defined Game 1. <em>Down 2–0 to leading the chance count by the third — that's what controlled recovery looks like.</em></li>
+        <li>The series-defining stat: <strong>Carolina is now 6–0 in the postseason.</strong> No team has lost a single game to them yet. Eight days off didn't slow them down (Game 1). Trailing 2–0 didn't break them (Game 2). <em>Carolina has now demonstrated they can win in three different game scripts — domination, chaos absorption, and recovery.</em></li>
+      </ul>
+
+      <div class="statblock">
+        <div class="statblock-label">Carolina's Recovery · By the Numbers</div>
+        <div class="statblock-grid">
+          <div class="stat">
+            <div class="num">6–0</div>
+            <div class="label">Carolina's<br/>postseason record</div>
+          </div>
+          <div class="stat">
+            <div class="num">34</div>
+            <div class="label">Andersen saves<br/>(40 saves Vladar)</div>
+          </div>
+          <div class="stat">
+            <div class="num">2–13</div>
+            <div class="label">Combined PP<br/>fragmented 5v5</div>
+          </div>
+          <div class="stat">
+            <div class="num">15–8</div>
+            <div class="label">Philly OT shots<br/>still lost</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pullquote">
+        I was in another time zone there for a second.
+        <span class="attribution">— Taylor Hall, on his OT winner</span>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">What This Was</div>
+        <div class="content">A Tier 1 team facing genuine playoff adversity for the first time and responding with composure. <strong>Carolina has now won by domination (Game 1) and by recovery (Game 2).</strong> Both required different versions of the same identity — discipline, depth, structure, goaltending. <em>Game 2 was the more meaningful proof.</em></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Hall's Renaissance</div>
+        <div class="content">Edmonton's 2010 #1 overall pick. New Jersey's 2018 Hart Trophy winner. Multiple stops, multiple injuries, multiple teams since. Now 34 in Carolina, posting <strong>9 points through 6 games — already a personal playoff career-high.</strong> His previous best was 8 points in 7 games with Boston in 2022–23. <em>Hall is playing on the Stankoven-Blake-Hall line, the most productive line in the playoffs. The career arc story is genuine — he's right at home in Brind'Amour's system.</em></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Philly's Reality</div>
+        <div class="content"><strong>The Flyers played their best 60 minutes of the playoffs and lost in OT.</strong> Drysdale and Couturier responding with quick goals, Vladar making 40 saves, Tocchet's adjustments visible across every shift. <em>None of it was enough to overcome Carolina's structural superiority and Andersen's swing performance.</em> Down 2–0 going home for Game 3, the Flyers need to win four of five against a team that hasn't lost a playoff game yet. The path is real but very narrow.</div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook · Updated</div>
+        <div class="otext">Hurricanes in 5, very strong lean. <strong>Two of Carolina's three Tier 1 traits — they can dominate, they can absorb pressure — have been demonstrated in the same series.</strong> The third (closing late games on the road) gets tested in Game 3 Thursday in Philadelphia. <em>If Carolina wins Game 3 in Philly, this series is close to over. If Philly wins Game 3, the road they need to walk gets visible. Either way, Carolina is now operating at a level that makes a six-game series a strong outcome for the Flyers.</em></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- § 02 VEGAS -->
+  <div class="section-head" id="section-02">
+    <div class="num">§ 02</div>
+    <div class="section-head-text">
+      <h2>Vegas <em>killed Anaheim's identity.</em></h2>
+      <p class="section-lead">Anaheim's power play (50% in Round 1) went 0-for-4. Anaheim's chaos game got slowed into structural margins. Anaheim's coach was incensed about a missed icing — but the bigger story is what happened before that call mattered.</p>
+    </div>
+  </div>
+
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Round 2 · Series 04 · West &nbsp;·&nbsp; <span style="color: var(--goal)">PK Battle</span></div>
+      <h3>Anaheim <span class="vs">at</span> Vegas</h3>
+      <div class="colorbar">
+        <span style="background: var(--ana)"></span>
+        <span style="background: var(--vgk)"></span>
+      </div>
+      <div class="series-stand">
+        <div class="ss-label">Series Standing</div>
+        <div class="ss-score">Knights 1 — Ducks 0</div>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Vegas 3, Anaheim 1. <strong>Brett Howden continued his hot streak with the opening goal</strong> off a Marner thread-the-needle pass through traffic. Howden has now scored in four straight games. The chemistry with Marner is becoming a series-level factor — same Marner who scored the closeout goal vs Utah Friday.</li>
+        <li>Carter Hart was elite again. <strong>33 saves, controlled rebounds, kept the game manageable.</strong> Vegas's chaos-absorbing identity from Round 1 carried straight into Round 2 — Anaheim wanted broken plays and second chances; Hart didn't give them.</li>
+        <li>The structural neutralization was the night's bigger story: <strong>Anaheim's power play went 0-for-4 after converting on 50% (8-of-16) in Round 1 against Edmonton.</strong> The Ducks had registered at least one PP goal in all six games against the Oilers. Vegas's PK shut it down completely — the same PK that out-scored Utah's PP shorthanded in Round 1. <em>If Anaheim's PP doesn't fire, their structural identity collapses.</em></li>
+        <li>Marner now has <strong>game-winners or primary points in three straight series-deciding situations</strong> — Round 1 closeout vs Utah (game-winner), Round 1 closeout assist on the Howden 2OT SHG (Game 5), and tonight's threading pass to Howden. <em>Vegas's star is taking over at exactly the right time.</em></li>
+        <li>The series-deciding identity question is now answered: <strong>Vegas can force the kind of game they want.</strong> Round 1 saw Anaheim transition from chaos to structure mid-series. Tonight Vegas wouldn't let them do either fully — game stayed tight, low-event, decided in margins. <em>Anaheim's chaos identity got muted; their structural one wasn't yet developed enough.</em></li>
+      </ul>
+
+      <div class="controversy">
+        <div class="controversy-label">The Missed Icing</div>
+        <h4>Vegas's go-ahead goal began with a non-call most analysts called wrong.</h4>
+        <p style="font-family: 'Source Serif 4', Georgia, serif; font-size: 17px; line-height: 1.6; color: var(--paper-dim); margin-bottom: 16px;">
+          With the game tied 1–1 late in the third, <strong style="color: var(--paper);">Barbashev flipped the puck from before center ice into Anaheim's zone</strong> — what looked like icing. The officials waved it off, citing Eichel's foot race against LaCombe. Replay analysis (including ESPN's own rule analyst) suggested the defender had the edge and the call should have been icing. The play continued, Vegas extended possession, and Dorofeyev fed Barbashev net-front for the go-ahead goal less than a minute later.
+        </p>
+        <p style="font-family: 'Source Serif 4', Georgia, serif; font-size: 17px; line-height: 1.6; color: var(--paper-dim);">
+          <strong style="color: var(--paper);">Quenneville was incensed:</strong> <em>"Clearly, I disagreed with the call. And it was clearly icing. Their guy stopped skating, which really made me annoyed. We just scored, it was a huge call and it was an easy call."</em>
+        </p>
+      </div>
+
+      <div class="breakdown-row">
+        <div class="label">The Honest Read</div>
+        <div class="content">The call was probably wrong. <strong>It also wasn't the reason Vegas won.</strong> Going into that third period, Vegas had already controlled pace, killed Anaheim's PP four times, and forced the kind of low-event game Anaheim isn't built for. <em>The icing call accelerated the outcome. It didn't create it.</em> Anaheim was losing a structural game, not a fortunate one.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">What This Says About Vegas</div>
+        <div class="content"><strong>Vegas can dictate game environment, which is the most valuable Tier 1 trait of all.</strong> Round 1 against Utah they won chaos in OT and they won structure in the closeout. Tonight they imposed structure on a chaos team that had just torched Edmonton with chaos. <em>Their veterans, Hart's calm, Marner's playmaking — it all adds up to a team that decides what kind of hockey gets played.</em></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">What This Says About Anaheim</div>
+        <div class="content">Anaheim's Round 1 evolution from chaos to structure was real. <strong>Their Round 2 transition into "team that can also play tight games" hasn't happened yet.</strong> Tonight they were caught between identities — too disciplined to create chaos, not structured enough to win margins. <em>Their PP being neutralized is the bigger structural problem. If their special teams advantage disappears for the rest of this series, they're playing without their most reliable weapon.</em></div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook</div>
+        <div class="otext">Knights in 5 or 6, lean. <strong>The structural matchup favors Vegas if the games stay tight.</strong> Anaheim needs to find a way to crack open the kind of game Vegas wants — and to do that, their power play needs to rediscover Round 1 form. <em>Game 2 Wednesday in Vegas is the test. If the Ducks lose Game 2, this series will look a lot like the Utah series did to Vegas — chaos team running into a structural wall they can't break.</em></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- § 03 TONIGHT -->
+  <div class="section-head" id="section-03">
+    <div class="num">§ 03</div>
+    <div class="section-head-text">
+      <h2>Tonight: <em>Colorado-Minnesota G2.</em></h2>
+      <p class="section-lead">After Sunday's 9–6 track meet, the question is whether Game 2 looks anything like it. Both coaches will want a structural reset. The question is whether either can dictate one.</p>
+    </div>
+  </div>
+
+  <section style="padding: 8px 0 56px;">
+    <ul class="bullets" style="max-width: 820px;">
+      <li><strong>The structural reset</strong> — Both teams entered Round 2 as defensive standouts. Game 1 was the opposite. <em>Game 2 Tuesday in Denver is where Bednar and Hynes try to reimpose what they actually do.</em> Whoever can dictate tempo first probably gets the structural game both teams prefer.</li>
+      <li><strong>Eriksson Ek still out</strong> — Minnesota's two-way center misses Game 2 as well, per pre-Round 2 reports. Without him, the Wild's checking line is meaningfully diminished against Colorado's top-six. <em>That's part of why Game 1 collapsed defensively for Minnesota.</em></li>
+      <li><strong>The Wild need Wallstedt to steal one</strong> — He stopped 34 shots Sunday and lost 9–6. He's not the problem. But <strong>they need him to be the difference</strong>, the way Andersen was for Carolina tonight. A 25-save shutout doesn't help when the team gives up 9. He needs the team to give him a chance.</li>
+      <li><strong>Makar's status</strong> — He left briefly Sunday after the Foligno hit, returned, scored twice. <em>If he plays Game 2, the Norris confrontation continues.</em> The publication's Day 2 preview held that whoever's defenseman dictates Round 2 dictates the West. Through Game 1, that's Makar by a meaningful margin.</li>
+    </ul>
+  </section>
+
+  <section class="closing">
+    <div class="overline">The Take</div>
+    <blockquote>
+      Round 2's first wave of games is teaching one lesson: <em>the teams that win when their identity is challenged are the ones who win the round.</em> Carolina got pushed and didn't break. Vegas got challenged and didn't open up. Both responded with composure rather than dominance. Both took 1–0 series leads tonight. <em>Round 1's lesson was about identity. Round 2's is about what happens when identity isn't enough — and the team has to find something else.</em>
+    </blockquote>
+    <div class="sig">— Round 2 · Day 4 · Filed after Carolina's recovery and Vegas's Game 1 · Colorado-Minnesota G2 tonight</div>
+  </section>
+
+  <footer>
+    <div>Rink Report · NHL Playoff Coverage</div>
+    <div>Round 2 of 4 · 3 series 1–0 or 2–0 · Colorado-Minnesota G2 tonight · Buffalo-Montreal G1 Wednesday</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
