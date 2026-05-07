@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Round 2, Day 6 — The Inversion | NHL Playoffs Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0b0d12;
+    --ink-2: #13161f;
+    --ink-3: #1c1f2b;
+    --paper: #f2ebdc;
+    --paper-dim: #d6cdba;
+    --muted: #8a8374;
+    --ice: #7fb4d8;
+    --ice-deep: #3d6d93;
+    --goal: #d74e3a;
+    --gold: #d4a842;
+    --hairline: rgba(242, 235, 220, 0.14);
+    --hairline-strong: rgba(242, 235, 220, 0.28);
+    --car: #cc0000;
+    --ott: #c8102e;
+    --min: #154734;
+    --dal: #006847;
+    --phi: #f74902;
+    --pit: #ffb81c;
+    --col: #6F263D;
+    --lak: #A2AAAD;
+    --mtl: #AF1E2D;
+    --tbl: #002868;
+    --buf: #002654;
+    --bos: #FCB514;
+    --vgk: #B4975A;
+    --uta: #6CACE4;
+    --edm: #FF4C00;
+    --ana: #B9975B;
+    --close: #E88B3D;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  ul.bullets { list-style: none; padding: 0; margin: 0; }
+  ul.bullets li {
+    position: relative;
+    padding-left: 26px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+  ul.bullets li:last-child { margin-bottom: 0; }
+  ul.bullets li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 11px;
+    width: 14px; height: 1px;
+    background: var(--goal);
+  }
+  ul.bullets li strong { color: var(--paper); font-weight: 500; }
+
+  .round-banner {
+    background: linear-gradient(90deg, rgba(215, 78, 58, 0.08) 0%, transparent 100%);
+    border-bottom: 1px solid var(--hairline);
+    padding: 16px 0;
+    text-align: left;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--goal);
+    font-weight: 600;
+  }
+  .round-banner span { color: var(--paper); }
+
+  .masthead {
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .masthead .brand { color: var(--paper); font-weight: 600; }
+  .masthead .brand span { color: var(--goal); }
+  .masthead .brand-link {
+    text-decoration: none;
+    transition: opacity 0.3s;
+    display: inline-block;
+  }
+  .masthead .brand-link:hover { opacity: 0.7; }
+  .masthead .nav-link {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    border-bottom: 1px solid transparent;
+  }
+  .masthead .nav-link:hover { color: var(--paper); border-bottom-color: var(--hairline-strong); }
+
+  .hero {
+    padding: 80px 0 72px;
+    border-bottom: 1px solid var(--hairline);
+    position: relative;
+  }
+  .overline {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .overline::before {
+    content: "";
+    width: 32px; height: 1px;
+    background: var(--goal);
+  }
+  h1.headline {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(56px, 9vw, 136px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    margin-bottom: 40px;
+  }
+  h1.headline em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+  .dek {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: normal;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.5;
+    color: var(--paper);
+    max-width: 760px;
+    font-weight: 500;
+  }
+  .byline {
+    margin-top: 48px;
+    display: flex;
+    gap: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .byline strong { color: var(--paper); font-weight: 600; }
+
+  .scores {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .score {
+    padding: 32px 28px;
+    border-right: 1px solid var(--hairline);
+    transition: background 0.3s;
+  }
+  .score:last-child { border-right: none; }
+  .score:hover { background: var(--ink-2); }
+  .score .tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 14px;
+  }
+  .score .matchup {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: 26px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .score .winner { color: var(--paper); font-weight: 600; }
+  .score .loser { color: var(--muted); }
+  .score .final {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--paper-dim);
+    margin-top: 10px;
+  }
+
+  .lede { padding: 88px 0 64px; max-width: 820px; }
+  .lede p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 23px;
+    line-height: 1.58;
+    color: var(--paper);
+    font-weight: 400;
+  }
+  .lede p::first-letter {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 5.2em;
+    float: left;
+    line-height: 0.82;
+    padding: 10px 14px 0 0;
+    color: var(--goal);
+  }
+
+  .section-head {
+    padding: 56px 0 40px;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 40px;
+    align-items: baseline;
+    border-top: 1px solid var(--hairline);
+    scroll-margin-top: 24px;
+  }
+  .section-head .num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--goal);
+    letter-spacing: 0.1em;
+  }
+  .section-head-text { align-self: baseline; }
+  .section-lead {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.45;
+    letter-spacing: 0;
+    color: var(--goal);
+    margin-top: 20px;
+    max-width: 780px;
+  }
+  .section-head h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(38px, 5vw, 68px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+  }
+  .section-head h2 em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+
+  .game {
+    padding: 64px 0;
+    border-top: 1px solid var(--hairline-strong);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 56px;
+  }
+  .game-title { position: sticky; top: 40px; align-self: start; }
+  .game-title .series-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .game-title h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 54px;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .game-title .vs {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--muted);
+    display: block;
+    font-size: 0.6em;
+    margin: 4px 0;
+  }
+  .colorbar { height: 6px; width: 100%; display: flex; margin-top: 20px; }
+  .colorbar span { flex: 1; }
+  .series-stand {
+    margin-top: 24px;
+    padding: 18px 20px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--goal);
+  }
+  .series-stand .ss-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 6px;
+  }
+  .series-stand .ss-score {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--paper);
+    letter-spacing: -0.01em;
+  }
+  .game-body { font-size: 17px; line-height: 1.65; }
+  .game-body > ul.bullets { margin-bottom: 8px; }
+  .game-body > ul.bullets li { font-size: 16px; }
+  .pullquote {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    color: var(--paper);
+    padding: 28px 0 28px 28px;
+    border-left: 2px solid var(--goal);
+    margin: 28px 0;
+  }
+  .pullquote .attribution {
+    display: block;
+    margin-top: 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-style: normal;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .breakdown-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 24px;
+    padding: 18px 0;
+    border-top: 1px solid var(--hairline);
+    align-items: start;
+  }
+  .breakdown-row:last-child { border-bottom: 1px solid var(--hairline); }
+  .breakdown-row .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding-top: 4px;
+  }
+  .breakdown-row .content { color: var(--paper-dim); font-size: 16px; }
+  .breakdown-row .content strong { color: var(--paper); font-weight: 500; }
+  .outlook-box {
+    margin-top: 28px;
+    padding: 24px 28px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--ice);
+  }
+  .outlook-box .olabel {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ice);
+    margin-bottom: 10px;
+  }
+  .outlook-box .otext {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--paper);
+    letter-spacing: 0;
+  }
+
+  .statblock {
+    margin: 32px 0;
+    background: var(--ink-2);
+    border: 1px solid var(--hairline);
+    padding: 28px 32px;
+  }
+  .statblock-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .statblock-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .stat .num {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 38px;
+    color: var(--goal);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .stat .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+
+  .closing { padding: 72px 0 48px; border-top: 1px solid var(--hairline-strong); }
+  .closing .overline { color: var(--gold); }
+  .closing .overline::before { background: var(--gold); }
+  .closing blockquote {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    max-width: 980px;
+  }
+  .closing blockquote em { font-style: italic; color: var(--goal); font-weight: 400; }
+  .closing .sig {
+    margin-top: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .toc { padding: 40px 0 48px; border-bottom: 1px solid var(--hairline); }
+  .toc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .toc-label::before {
+    content: "";
+    width: 24px; height: 1px;
+    background: var(--muted);
+  }
+  .toc-list {
+    list-style: none;
+    padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .toc-list li { background: var(--ink); }
+  .toc-list a {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px 26px;
+    text-decoration: none;
+    color: var(--paper);
+    transition: background 0.3s;
+    height: 100%;
+  }
+  .toc-list a:hover { background: var(--ink-2); }
+  .toc-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--goal);
+  }
+  .toc-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+    color: var(--paper);
+    transition: color 0.3s;
+  }
+  .toc-list a:hover .toc-title { color: var(--ice); }
+
+  /* INVERSION CALLOUT */
+  .inversion {
+    margin: 40px 0;
+    background: var(--ink-2);
+    border-left: 3px solid var(--ice);
+    padding: 32px 36px;
+  }
+  .inversion-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ice);
+    margin-bottom: 18px;
+  }
+  .inversion h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 18px;
+  }
+  .inversion h4 em { color: var(--goal); font-style: italic; }
+  .inversion-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--hairline);
+    margin-top: 24px;
+  }
+  .inversion-cell {
+    background: var(--ink);
+    padding: 22px 24px;
+  }
+  .inv-team-name {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .inv-text {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+  .inv-text strong { color: var(--paper); font-weight: 500; }
+
+  footer {
+    padding: 36px 0;
+    border-top: 1px solid var(--hairline);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 820px) {
+    .wrap { padding: 0 20px; }
+    .scores { grid-template-columns: 1fr; }
+    .score { border-right: none; border-bottom: 1px solid var(--hairline); }
+    .score:last-child { border-bottom: none; }
+    .section-head { grid-template-columns: 1fr; gap: 12px; padding: 44px 0 28px; }
+    .game { grid-template-columns: 1fr; gap: 28px; padding: 48px 0; }
+    .game-title { position: static; }
+    .game-title h3 { font-size: 42px; }
+    .breakdown-row { grid-template-columns: 1fr; gap: 8px; }
+    .statblock-grid { grid-template-columns: repeat(2, 1fr); }
+    .inversion-grid { grid-template-columns: 1fr; }
+    .lede { padding: 56px 0 40px; }
+    .lede p { font-size: 20px; }
+    .byline { flex-direction: column; gap: 12px; }
+    .toc-list { grid-template-columns: 1fr; }
+    .toc { padding: 28px 0 32px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="round-banner">
+    Round Two &nbsp;·&nbsp; <span>Conference Semifinals</span> &nbsp;·&nbsp; All four series 1–1 or 2–0
+  </div>
+
+  <div class="masthead">
+    <a href="index.html" class="brand-link"><div class="brand">Rink<span>&middot;</span>Report</div></a>
+    <div>
+      <a href="round2-day5-analysis.html" class="nav-link">← Day 5</a>
+      &nbsp;&nbsp;Vol. I &nbsp;/&nbsp; Round 02 &nbsp;/&nbsp; Day 6
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="overline">Two upsets of expectation &nbsp;·&nbsp; Both Eastern and Western Game 2s flipped</div>
+    <h1 class="headline">The <em>Inversion.</em></h1>
+    <p class="dek">
+      Buffalo beat Montreal 4–2 in a game that looked nothing like Tampa-Montreal.
+      Anaheim beat Vegas 3–1 in a game that looked nothing like Game 1. <strong>In both cases,
+      the team that lost Game 1's environmental control just got their environment dictated to.</strong>
+      Speed dethroned structure twice in one night. <em>Round 1 told us who could survive. Round 2
+      is now teaching us how quickly identity flips.</em>
+    </p>
+    <div class="byline">
+      <div><strong>Round 2</strong> · Day 6 Analysis</div>
+      <div><strong>Filed</strong> · May 7, 2026</div>
+      <div><strong>Read</strong> · 12 minutes</div>
+    </div>
+  </header>
+
+  <section class="scores">
+    <div class="score">
+      <div class="tag">Game 1 · Series 03 · East &nbsp;·&nbsp; Style Shock</div>
+      <div class="matchup">
+        <span class="winner">Buffalo</span> def. <span class="loser">Montreal</span>, 4–2
+      </div>
+      <div class="final">Sabres lead 1–0 &nbsp;·&nbsp; Doan & McLeod 1G+1A each, Lyon 26 saves, neutral-zone shock</div>
+    </div>
+    <div class="score">
+      <div class="tag">Game 2 · Series 04 · West &nbsp;·&nbsp; Counter</div>
+      <div class="matchup">
+        <span class="winner">Anaheim</span> def. <span class="loser">Vegas</span>, 3–1
+      </div>
+      <div class="final">Series 1–1 &nbsp;·&nbsp; Dostal 21/22, Hart 33 saves keeping it close, Anaheim swarmed</div>
+    </div>
+  </section>
+
+  <nav class="toc" aria-label="Table of contents">
+    <div class="toc-label">Contents</div>
+    <ol class="toc-list">
+      <li><a href="#section-01">
+        <span class="toc-num">§ 01</span>
+        <span class="toc-title">Buffalo's style shock</span>
+      </a></li>
+      <li><a href="#section-02">
+        <span class="toc-num">§ 02</span>
+        <span class="toc-title">Anaheim's counter</span>
+      </a></li>
+      <li><a href="#section-03">
+        <span class="toc-num">§ 03</span>
+        <span class="toc-title">The inversion thesis</span>
+      </a></li>
+    </ol>
+  </nav>
+
+  <section class="lede">
+    <p>
+      <strong>Two Game 1s. Two upsets of expectation.</strong> In Buffalo, the Sabres turned a series
+      meant to be a margin-game grinder into open-ice rush hockey, and Montreal — fresh off seven
+      games of survival hockey against Tampa — couldn't recalibrate fast enough. In Las Vegas, the
+      Ducks responded to their Game 1 structural loss by overwhelming Vegas territorially in their
+      own building. <em>Carter Hart was, per The Athletic, "exceptional" just to keep the score 3–1.</em>
+      Both losing teams were the favored or higher-ranked side. Both lost not because they were
+      worse, but because they couldn't stop the other team from playing the game they wanted to play.
+      <strong>That's the same lesson, twice in one night, in two different conferences.</strong>
+    </p>
+  </section>
+
+  <!-- § 01 BUFFALO -->
+  <div class="section-head" id="section-01">
+    <div class="num">§ 01</div>
+    <div class="section-head-text">
+      <h2>Buffalo <em>changed the game.</em></h2>
+      <p class="section-lead">Montreal expected a margin grinder. Buffalo handed them an eight-lane neutral-zone highway. The Habs adjusted to what was in front of them — but not fast enough, and not in the 12-minute window that decided everything.</p>
+    </div>
+  </div>
+
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Round 2 · Series 03 · East &nbsp;·&nbsp; <span style="color: var(--goal)">Style Shock</span></div>
+      <h3>Montreal <span class="vs">at</span> Buffalo</h3>
+      <div class="colorbar">
+        <span style="background: var(--mtl)"></span>
+        <span style="background: var(--buf)"></span>
+      </div>
+      <div class="series-stand">
+        <div class="ss-label">Series Standing</div>
+        <div class="ss-score">Sabres 1 — Canadiens 0</div>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Buffalo 4, Montreal 2. <strong>Doan and McLeod each had 1G+1A.</strong> Zach Benson set up two first-period goals. Lyon — Buffalo's swap goalie from Round 1 — made 26 saves and looked composed. <em>The Sabres jumped to 2–0 inside 13½ minutes and were never seriously threatened.</em></li>
+        <li>The defining structural truth: <strong>this game looked nothing like Tampa-Montreal.</strong> Danault, postgame: <em>"Way different, less physical, more hockey plays. Possession was huge, even bigger. We chased a little more than we did against Tampa."</em> The Habs spent two weeks learning how to win 1-goal grinders. They got an open-ice rush game tonight.</li>
+        <li>Buffalo's three-D threat is the matchup problem: <strong>Dahlin, Byram, and Power.</strong> Three top-flight puck-moving defensemen all activating into the rush, all creating second-wave attacks. Carrier, on the Greenway goal he conceded: <em>"They love jumping the plays. The biggest difference is the rush game."</em> Montreal hasn't seen this style in two weeks. They had no muscle memory for it.</li>
+        <li>The window that decided the game: <strong>Montreal trailed 2–1 entering the second period and trailed 4–1 by midway through it.</strong> St. Louis named it directly: <em>"There's 10, 12 minutes in the second I feel like we got hurt. You're not going to dominate Buffalo the whole game. It's a game of momentum. Don't get hurt too bad when that happens."</em> Buffalo doesn't need 60 minutes of dominance — they need 12 minutes of bursts.</li>
+        <li>The interesting wrinkle: <strong>Montreal actually had more offensive zone time and space than they had against Tampa</strong> — by St. Louis's own framing. The top three (Suzuki, Caufield, Demidov) had room they hadn't seen for two weeks. Dach scored an acrobatic goal from his knees off a rebound. <em>The Habs liked the space. They didn't punish it. Demidov was held off the score sheet despite the freedom.</em></li>
+        <li>The Suzuki morning quote that didn't age well: <strong>"The team that defends the best will have the best shot."</strong> Then the game became a track meet, and Buffalo's defense corps was the offensive engine.</li>
+      </ul>
+
+      <div class="statblock">
+        <div class="statblock-label">Buffalo's Style Shock · By the Numbers</div>
+        <div class="statblock-grid">
+          <div class="stat">
+            <div class="num">2–0</div>
+            <div class="label">Buffalo lead<br/>inside 13.5 min</div>
+          </div>
+          <div class="stat">
+            <div class="num">4–1</div>
+            <div class="label">Score after<br/>"the 12-min window"</div>
+          </div>
+          <div class="stat">
+            <div class="num">3</div>
+            <div class="label">Buffalo D<br/>activating: Dahlin, Byram, Power</div>
+          </div>
+          <div class="stat">
+            <div class="num">26</div>
+            <div class="label">Lyon saves<br/>composed Game 1</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pullquote">
+        Way different. Less physical, more hockey plays. Possession was huge, even bigger. We chased a little more than we did against Tampa.
+        <span class="attribution">— Phillip Danault, Canadiens center</span>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">What This Was</div>
+        <div class="content">A complete style shock for Montreal. <strong>The Habs went from survival hockey against Tampa straight into speed hockey against Buffalo overnight.</strong> The structural identity that won them Round 1 didn't translate against this opponent, in this environment, at this pace. <em>That's not a knock on Montreal — it's an acknowledgment of how dramatically the matchup changed in 48 hours.</em></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">What Buffalo Showed</div>
+        <div class="content"><strong>Buffalo can dictate environment</strong> — the trait the publication's been tracking as the marker of Tier 1 teams since Round 1. They didn't just out-skate Montreal; they turned the game into the kind of game Montreal can't win. <em>Speed + puck-moving D + layered attack + bursts of pressure. That's a championship blueprint when it works against a team built around different traits.</em></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">What Montreal Has To Do</div>
+        <div class="content">Slow the neutral zone. Take away Buffalo's defensive activations. Punish the space they're given instead of just enjoying it. <strong>St. Louis: "I'm confident that we can play any style. I'm confident that we can play the game that's in front of us."</strong> <em>Game 2 Friday is the test. The Habs need to either force Buffalo into structural hockey, or learn to win the rush game over four periods. Neither adjustment is small.</em></div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook · Updated</div>
+        <div class="otext">Sabres in 6, slight lean. <strong>Buffalo controls the environment.</strong> Montreal showed in Round 1 they can survive, but the stylistic gap is real and Buffalo's defense corps is a problem they haven't solved. <em>The Wild Card: if Game 2 stays tight and Dobeš gets a chance to be the difference, Montreal's margin-game identity reasserts. If Buffalo drops a 4–1 again, this series is uphill from here.</em></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- § 02 ANAHEIM -->
+  <div class="section-head" id="section-02">
+    <div class="num">§ 02</div>
+    <div class="section-head-text">
+      <h2>Anaheim <em>took it back.</em></h2>
+      <p class="section-lead">Game 1 was Vegas controlling structure. Game 2 was Anaheim controlling territory. The 3–1 score wasn't the actual gap — Hart's brilliance kept it that close. The Athletic flagged it directly: "the scoreline wasn't indicative of how lopsided the contest was."</p>
+    </div>
+  </div>
+
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Round 2 · Series 04 · West &nbsp;·&nbsp; <span style="color: var(--goal)">Counter</span></div>
+      <h3>Anaheim <span class="vs">at</span> Vegas</h3>
+      <div class="colorbar">
+        <span style="background: var(--ana)"></span>
+        <span style="background: var(--vgk)"></span>
+      </div>
+      <div class="series-stand">
+        <div class="ss-label">Series Standing</div>
+        <div class="ss-score">Knights 1 — Ducks 1</div>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Anaheim 3, Vegas 1. <strong>Sennecke opened scoring midway through the second on a one-timer from the doorstep</strong> — Viel feed from below the goal line, Poehling sealing the wall. Carlsson made it 2–0 on a Terry backdoor feed early third. Harkins empty-netter sealed it; Stone scored a meaningless goal in closing seconds.</li>
+        <li>The truth the score doesn't show: <strong>Hart kept Vegas in this game.</strong> 33 saves on 35 shots through 60 minutes. The Athletic's framing was direct — <em>"Carter Hart was exceptional just to keep the score close. Anaheim's speedy offensive attack swarmed the Golden Knights from start to finish."</em> Without Hart, this is 5–1 or 6–1.</li>
+        <li>Dostal answered with his best playoff performance: <strong>21-of-22, including a sliding lateral save on Karlsson's slot one-timer in the third</strong> on Vegas's strongest sequence of the game. Both goalies were excellent. Only one had to be elite to keep his team in it. <em>That's the territorial gap right there.</em></li>
+        <li>Anaheim's identity reasserted: <strong>quicker to loose pucks, stronger along the boards, sustained zone time across multiple shifts.</strong> The chaos team that became a structural team in Round 1 is now a chaos-and-pressure team that wins both. <em>That's a meaningful evolution — and one the publication's Day 5 rankings probably under-weighted.</em></li>
+        <li>The marathon PP non-event: <strong>Anaheim drew three early penalties including an Eichel double-minor</strong> — six straight minutes of man advantage to start the game. Anaheim got one shot. Vegas's PK held. <em>The Ducks didn't need it. They won 5v5 decisively, which is the bigger evolution from Round 1's PP-dependence.</em></li>
+        <li>Tortorella pulled Hart with 3+ minutes left in a one-goal game. <strong>That's a coach who knew this one was already over structurally.</strong> Vegas couldn't generate a sustained late push because Anaheim wouldn't let them have one.</li>
+      </ul>
+
+      <div class="statblock">
+        <div class="statblock-label">Anaheim's Counter · By the Numbers</div>
+        <div class="statblock-grid">
+          <div class="stat">
+            <div class="num">33</div>
+            <div class="label">Hart saves<br/>kept it 3–1</div>
+          </div>
+          <div class="stat">
+            <div class="num">21/22</div>
+            <div class="label">Dostal saves<br/>best playoff start</div>
+          </div>
+          <div class="stat">
+            <div class="num">0/4</div>
+            <div class="label">Anaheim PP<br/>didn't need it</div>
+          </div>
+          <div class="stat">
+            <div class="num">1–1</div>
+            <div class="label">Series tied<br/>home ice flipped</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pullquote">
+        The scoreline wasn't indicative of how lopsided the contest was. Vegas netminder Carter Hart was exceptional to keep it as close as he did, as the Ducks' speedy offensive attack swarmed the Golden Knights from start to finish.
+        <span class="attribution">— Jesse Granger and Eric Stephens, The Athletic</span>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">What This Was</div>
+        <div class="content"><strong>The structural counter Vegas didn't have an answer for.</strong> Game 1, Vegas slowed Anaheim into a chaos-team-on-the-back-foot. Game 2, Anaheim accelerated Vegas into a structure-team-on-the-back-foot. <em>Same trick, different direction.</em> Both teams now know they can take environmental control on any given night.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">What This Says About Anaheim</div>
+        <div class="content"><strong>Anaheim's evolution is real and accelerating.</strong> Round 1 against Edmonton: chaos-to-structure. Game 2 of Round 2: chaos-and-pressure that out-territories a structural opponent. <em>The publication's Day 5 ranking of Anaheim at #6 looks under-calibrated tonight. They're not yet at Tier 1, but the trajectory is steeper than the rankings reflected — a fair correction worth naming.</em></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">What This Says About Vegas</div>
+        <div class="content">The "Vegas controls environments" thesis from Round 1 just got challenged in Vegas's own building. <strong>That doesn't break the thesis — Vegas was demonstrably better in Game 1 — but it caveats it.</strong> <em>Vegas controls environments against most teams. Against opponents who are also identity-fluid (like Anaheim now is), the structural advantage isn't permanent. The Knights need a Game 3 response in Anaheim.</em></div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook · Updated</div>
+        <div class="otext">Series in 6 or 7, even read. <strong>This is now genuinely a coin-flip series with momentum tilted toward Anaheim.</strong> Home ice flipped — the Ducks took it. Game 3 Friday at Honda Center is the most leveraged game of the series so far. <em>If Anaheim wins Game 3, they're 2–1 with the structural read. If Vegas steals it on the road, the series gets fascinatingly tight again. Either coach could write the next chapter.</em></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- § 03 INVERSION -->
+  <div class="section-head" id="section-03">
+    <div class="num">§ 03</div>
+    <div class="section-head-text">
+      <h2>The <em>inversion thesis.</em></h2>
+      <p class="section-lead">Two games. Two losing teams that lost their environmental control. Two winning teams that took it. The structural pattern matters more than either result on its own.</p>
+    </div>
+  </div>
+
+  <section style="padding: 8px 0 56px;">
+
+    <div class="inversion">
+      <div class="inversion-label">The Pattern</div>
+      <h4>Same lesson, two conferences, one night: <em>environmental control isn't permanent.</em></h4>
+      <p style="font-family: 'Source Serif 4', Georgia, serif; font-size: 17px; line-height: 1.65; color: var(--paper-dim); margin-bottom: 16px;">
+        Round 1 taught us that the teams advancing were the ones with structural identity — Carolina's forecheck, Colorado's pace, Vegas's veterans, Montreal's resilience. Round 2's first wave reinforced it: dominance and recovery and composure all wins. <strong style="color: var(--paper); font-weight: 500;">Tonight broke the pattern.</strong> Buffalo's identity overrode Montreal's. Anaheim's identity overrode Vegas's. The team that imposes pace decides the game — and pace can flip overnight.
+      </p>
+      <div class="inversion-grid">
+        <div class="inversion-cell">
+          <div class="inv-team-name">East · Buffalo over Montreal 4–2</div>
+          <p class="inv-text">Montreal won Round 1 by surviving Tampa's structural pressure. <strong>Buffalo took away the structural environment entirely.</strong> No grinding, no margins, no low-event hockey. Just speed, neutral zone, defensemen jumping the rush. The Habs spent two weeks getting good at one kind of game and walked into a different one.</p>
+        </div>
+        <div class="inversion-cell">
+          <div class="inv-team-name">West · Anaheim over Vegas 3–1</div>
+          <p class="inv-text">Vegas won Game 1 by slowing Anaheim into structure. <strong>Anaheim took back territorial control in Vegas's building.</strong> Sustained zone time, board work, multi-shift pressure. Hart was elite just to keep it 3–1. The "Vegas dictates" thesis just got its first credible challenge of the postseason.</p>
+        </div>
+      </div>
+    </div>
+
+    <ul class="bullets" style="max-width: 820px;">
+      <li><strong>The two undefeated teams remain undefeated.</strong> Carolina (6–0) plays Game 3 in Philly Thursday. Colorado (6–0) plays Game 3 in St. Paul Saturday. <em>Tonight's two losing teams (Vegas, Montreal) were the second tier of dictating teams. The two undefeateds haven't been pushed out of their environments yet.</em></li>
+      <li><strong>The Day 5 rankings look correct on the top three but soft on Anaheim.</strong> Colorado #1, Carolina #2, Vegas #3 still holds — but Anaheim at #6 looks too low after tonight. They've now demonstrated environmental flexibility (chaos in Round 1, structure adjustments mid-series, territorial pressure tonight). <em>Honest revision: they're closer to #4-5 than #6.</em></li>
+      <li><strong>The Eastern bracket converged tonight.</strong> Buffalo is now positioned to win the East-Atlantic. Combined with Carolina's 2–0 lead, the East could see two teams meeting in the Conference Final neither expected to be there in February. <em>Both built around speed, depth, and defensive activations rather than star power.</em></li>
+      <li><strong>Game 2s and 3s are now the most leveraged games of Round 2.</strong> Carolina-Philly Game 3 Thursday in Philly. Buffalo-Montreal Game 2 Friday. Anaheim-Vegas Game 3 Friday. Colorado-Minnesota Game 3 Saturday. <em>Four games over three nights that could break the bracket open or compress it tight.</em></li>
+    </ul>
+
+  </section>
+
+  <section class="closing">
+    <div class="overline">The Take</div>
+    <blockquote>
+      Identity is what gets you here. <em>Adaptation is what keeps you here.</em> Tonight Vegas and Montreal were better at their own thing than Anaheim and Buffalo were at theirs — and they lost anyway, because the other teams refused to play the game they were prepared for. Round 2 isn't about who has the strongest identity. It's about who can flip identity faster than the other side can react. <em>The two undefeated teams remain the two teams who've shown they can do both. The chase pack just got a lesson in how quickly a "settled" series gets unsettled.</em>
+    </blockquote>
+    <div class="sig">— Round 2 · Day 6 · Filed after Buffalo's style shock and Anaheim's counter · Carolina-Philly G3 tomorrow</div>
+  </section>
+
+  <footer>
+    <div>Rink Report · NHL Playoff Coverage</div>
+    <div>Round 2 of 4 · 2 series 2–0 · 2 series 1–1 · Carolina-Philly G3 Thursday in Philadelphia</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
