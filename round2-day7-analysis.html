@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Round 2, Day 7 — The Standard | NHL Playoffs Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0b0d12;
+    --ink-2: #13161f;
+    --ink-3: #1c1f2b;
+    --paper: #f2ebdc;
+    --paper-dim: #d6cdba;
+    --muted: #8a8374;
+    --ice: #7fb4d8;
+    --ice-deep: #3d6d93;
+    --goal: #d74e3a;
+    --gold: #d4a842;
+    --hairline: rgba(242, 235, 220, 0.14);
+    --hairline-strong: rgba(242, 235, 220, 0.28);
+    --car: #cc0000;
+    --ott: #c8102e;
+    --min: #154734;
+    --dal: #006847;
+    --phi: #f74902;
+    --pit: #ffb81c;
+    --col: #6F263D;
+    --lak: #A2AAAD;
+    --mtl: #AF1E2D;
+    --tbl: #002868;
+    --buf: #002654;
+    --bos: #FCB514;
+    --vgk: #B4975A;
+    --uta: #6CACE4;
+    --edm: #FF4C00;
+    --ana: #B9975B;
+    --close: #E88B3D;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  ul.bullets { list-style: none; padding: 0; margin: 0; }
+  ul.bullets li {
+    position: relative;
+    padding-left: 26px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+  ul.bullets li:last-child { margin-bottom: 0; }
+  ul.bullets li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 11px;
+    width: 14px; height: 1px;
+    background: var(--goal);
+  }
+  ul.bullets li strong { color: var(--paper); font-weight: 500; }
+
+  .round-banner {
+    background: linear-gradient(90deg, rgba(215, 78, 58, 0.08) 0%, transparent 100%);
+    border-bottom: 1px solid var(--hairline);
+    padding: 16px 0;
+    text-align: left;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--goal);
+    font-weight: 600;
+  }
+  .round-banner span { color: var(--paper); }
+
+  .masthead {
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .masthead .brand { color: var(--paper); font-weight: 600; }
+  .masthead .brand span { color: var(--goal); }
+  .masthead .brand-link {
+    text-decoration: none;
+    transition: opacity 0.3s;
+    display: inline-block;
+  }
+  .masthead .brand-link:hover { opacity: 0.7; }
+  .masthead .nav-link {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    border-bottom: 1px solid transparent;
+  }
+  .masthead .nav-link:hover { color: var(--paper); border-bottom-color: var(--hairline-strong); }
+
+  .hero {
+    padding: 80px 0 72px;
+    border-bottom: 1px solid var(--hairline);
+    position: relative;
+  }
+  .overline {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .overline::before {
+    content: "";
+    width: 32px; height: 1px;
+    background: var(--goal);
+  }
+  h1.headline {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(56px, 9vw, 136px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    margin-bottom: 40px;
+  }
+  h1.headline em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+  .dek {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: normal;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.5;
+    color: var(--paper);
+    max-width: 760px;
+    font-weight: 500;
+  }
+  .byline {
+    margin-top: 48px;
+    display: flex;
+    gap: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .byline strong { color: var(--paper); font-weight: 600; }
+
+  .scores {
+    display: grid;
+    grid-template-columns: 1fr;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .score {
+    padding: 32px 28px;
+  }
+  .score .tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 14px;
+  }
+  .score .matchup {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: 32px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .score .winner { color: var(--paper); font-weight: 600; }
+  .score .loser { color: var(--muted); }
+  .score .final {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--paper-dim);
+    margin-top: 10px;
+  }
+
+  .lede { padding: 88px 0 64px; max-width: 820px; }
+  .lede p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 23px;
+    line-height: 1.58;
+    color: var(--paper);
+    font-weight: 400;
+  }
+  .lede p::first-letter {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 5.2em;
+    float: left;
+    line-height: 0.82;
+    padding: 10px 14px 0 0;
+    color: var(--goal);
+  }
+
+  .section-head {
+    padding: 56px 0 40px;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 40px;
+    align-items: baseline;
+    border-top: 1px solid var(--hairline);
+    scroll-margin-top: 24px;
+  }
+  .section-head .num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--goal);
+    letter-spacing: 0.1em;
+  }
+  .section-head-text { align-self: baseline; }
+  .section-lead {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.45;
+    letter-spacing: 0;
+    color: var(--goal);
+    margin-top: 20px;
+    max-width: 780px;
+  }
+  .section-head h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(38px, 5vw, 68px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+  }
+  .section-head h2 em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+
+  .game {
+    padding: 64px 0;
+    border-top: 1px solid var(--hairline-strong);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 56px;
+  }
+  .game-title { position: sticky; top: 40px; align-self: start; }
+  .game-title .series-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .game-title h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 54px;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .game-title .vs {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--muted);
+    display: block;
+    font-size: 0.6em;
+    margin: 4px 0;
+  }
+  .colorbar { height: 6px; width: 100%; display: flex; margin-top: 20px; }
+  .colorbar span { flex: 1; }
+  .series-stand {
+    margin-top: 24px;
+    padding: 18px 20px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--goal);
+  }
+  .series-stand .ss-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 6px;
+  }
+  .series-stand .ss-score {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--paper);
+    letter-spacing: -0.01em;
+  }
+  .game-body { font-size: 17px; line-height: 1.65; }
+  .game-body > ul.bullets { margin-bottom: 8px; }
+  .game-body > ul.bullets li { font-size: 16px; }
+  .pullquote {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    color: var(--paper);
+    padding: 28px 0 28px 28px;
+    border-left: 2px solid var(--goal);
+    margin: 28px 0;
+  }
+  .pullquote .attribution {
+    display: block;
+    margin-top: 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-style: normal;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .breakdown-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 24px;
+    padding: 18px 0;
+    border-top: 1px solid var(--hairline);
+    align-items: start;
+  }
+  .breakdown-row:last-child { border-bottom: 1px solid var(--hairline); }
+  .breakdown-row .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding-top: 4px;
+  }
+  .breakdown-row .content { color: var(--paper-dim); font-size: 16px; }
+  .breakdown-row .content strong { color: var(--paper); font-weight: 500; }
+  .outlook-box {
+    margin-top: 28px;
+    padding: 24px 28px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--ice);
+  }
+  .outlook-box .olabel {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ice);
+    margin-bottom: 10px;
+  }
+  .outlook-box .otext {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--paper);
+    letter-spacing: 0;
+  }
+
+  .statblock {
+    margin: 32px 0;
+    background: var(--ink-2);
+    border: 1px solid var(--hairline);
+    padding: 28px 32px;
+  }
+  .statblock-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .statblock-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .stat .num {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 38px;
+    color: var(--goal);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .stat .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+
+  /* HISTORICAL CONTEXT CALLOUT */
+  .historical {
+    margin: 40px 0;
+    background: linear-gradient(135deg, var(--ink-2) 0%, var(--ink) 100%);
+    border: 1px solid var(--hairline-strong);
+    padding: 36px 40px;
+    position: relative;
+  }
+  .historical::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 4px;
+    background: var(--goal);
+  }
+  .hist-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 18px;
+  }
+  .historical h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 16px;
+  }
+  .historical h4 em { color: var(--goal); font-style: italic; }
+  .hist-body {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+  }
+  .hist-body strong { color: var(--paper); font-weight: 500; }
+
+  .closing { padding: 72px 0 48px; border-top: 1px solid var(--hairline-strong); }
+  .closing .overline { color: var(--gold); }
+  .closing .overline::before { background: var(--gold); }
+  .closing blockquote {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    max-width: 980px;
+  }
+  .closing blockquote em { font-style: italic; color: var(--goal); font-weight: 400; }
+  .closing .sig {
+    margin-top: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .toc { padding: 40px 0 48px; border-bottom: 1px solid var(--hairline); }
+  .toc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .toc-label::before {
+    content: "";
+    width: 24px; height: 1px;
+    background: var(--muted);
+  }
+  .toc-list {
+    list-style: none;
+    padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .toc-list li { background: var(--ink); }
+  .toc-list a {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px 26px;
+    text-decoration: none;
+    color: var(--paper);
+    transition: background 0.3s;
+    height: 100%;
+  }
+  .toc-list a:hover { background: var(--ink-2); }
+  .toc-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--goal);
+  }
+  .toc-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+    color: var(--paper);
+    transition: color 0.3s;
+  }
+  .toc-list a:hover .toc-title { color: var(--ice); }
+
+  footer {
+    padding: 36px 0;
+    border-top: 1px solid var(--hairline);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 820px) {
+    .wrap { padding: 0 20px; }
+    .section-head { grid-template-columns: 1fr; gap: 12px; padding: 44px 0 28px; }
+    .game { grid-template-columns: 1fr; gap: 28px; padding: 48px 0; }
+    .game-title { position: static; }
+    .game-title h3 { font-size: 42px; }
+    .breakdown-row { grid-template-columns: 1fr; gap: 8px; }
+    .statblock-grid { grid-template-columns: repeat(2, 1fr); }
+    .historical { padding: 24px 28px; }
+    .historical h4 { font-size: 24px; }
+    .lede { padding: 56px 0 40px; }
+    .lede p { font-size: 20px; }
+    .byline { flex-direction: column; gap: 12px; }
+    .toc-list { grid-template-columns: 1fr; }
+    .toc { padding: 28px 0 32px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="round-banner">
+    Round Two &nbsp;·&nbsp; <span>Conference Semifinals</span> &nbsp;·&nbsp; Carolina one win from sweep
+  </div>
+
+  <div class="masthead">
+    <a href="index.html" class="brand-link"><div class="brand">Rink<span>&middot;</span>Report</div></a>
+    <div>
+      <a href="round2-day6-analysis.html" class="nav-link">← Day 6</a>
+      &nbsp;&nbsp;Vol. I &nbsp;/&nbsp; Round 02 &nbsp;/&nbsp; Day 7
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="overline">Carolina 7–0 in postseason &nbsp;·&nbsp; 3rd team in 30 years</div>
+    <h1 class="headline">The <em>Standard.</em></h1>
+    <p class="dek">
+      Carolina beat Philadelphia 4–1 in Game 3 to take a 3–0 series lead. <strong>The Hurricanes
+      are now 7–0 in the postseason — only the third NHL team in 30 years to start a playoff run
+      with seven straight wins.</strong> Three goals on special teams, depth scoring activated,
+      Andersen and Slavin doing their jobs, PK now 30-for-32. <em>Round 1 made Carolina the
+      structural standard. Round 2 is making them the historical one.</em>
+    </p>
+    <div class="byline">
+      <div><strong>Round 2</strong> · Day 7 Analysis</div>
+      <div><strong>Filed</strong> · May 8, 2026</div>
+      <div><strong>Read</strong> · 11 minutes</div>
+    </div>
+  </header>
+
+  <section class="scores">
+    <div class="score">
+      <div class="tag">Game 3 · Series 01 · East &nbsp;·&nbsp; Stranglehold</div>
+      <div class="matchup">
+        <span class="winner">Carolina</span> def. <span class="loser">Philadelphia</span>, 4–1
+      </div>
+      <div class="final">Hurricanes lead 3–0 &nbsp;·&nbsp; Carolina 7–0 postseason, sweep possible Saturday in Philly</div>
+    </div>
+  </section>
+
+  <nav class="toc" aria-label="Table of contents">
+    <div class="toc-label">Contents</div>
+    <ol class="toc-list">
+      <li><a href="#section-01">
+        <span class="toc-num">§ 01</span>
+        <span class="toc-title">Game 3 in Philly</span>
+      </a></li>
+      <li><a href="#section-02">
+        <span class="toc-num">§ 02</span>
+        <span class="toc-title">The 7–0 club</span>
+      </a></li>
+      <li><a href="#section-03">
+        <span class="toc-num">§ 03</span>
+        <span class="toc-title">Tonight: BUF-MTL G2</span>
+      </a></li>
+    </ol>
+  </nav>
+
+  <section class="lede">
+    <p>
+      The Carolina Hurricanes are 7–0 in the Stanley Cup Playoffs. <strong>That fact alone tells you
+      most of what you need to know about Round 2.</strong> Tonight's Game 3 in Philadelphia was
+      Carolina's fourth different version of a playoff win — power play, penalty kill, even strength,
+      and goaltending all contributed in roughly equal measure. <em>Andersen made the saves. Slavin
+      made the stick play that prevented a multi-goal Philly first period. Chatfield scored the
+      shorthanded GWG. Svechnikov scored his first of the playoffs. Three guys who had zero goals
+      in their first six games combined for three tonight.</em> Carolina has now demonstrated that
+      every part of their roster can decide a game when needed. <strong>That's a championship trait.
+      And the bracket has only one other team showing it.</strong>
+    </p>
+  </section>
+
+  <!-- § 01 GAME 3 -->
+  <div class="section-head" id="section-01">
+    <div class="num">§ 01</div>
+    <div class="section-head-text">
+      <h2>Carolina <em>activated depth.</em></h2>
+      <p class="section-lead">The Stankoven-Blake-Hall line had carried 4 of 6 goals through Game 2. Tonight, Staal, Svechnikov, and Chatfield — none of whom had scored in the first six playoff games — combined for three. That's a sweep in the making.</p>
+    </div>
+  </div>
+
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Round 2 · Series 01 · East &nbsp;·&nbsp; <span style="color: var(--goal)">Stranglehold</span></div>
+      <h3>Carolina <span class="vs">at</span> Philadelphia</h3>
+      <div class="colorbar">
+        <span style="background: var(--car)"></span>
+        <span style="background: var(--phi)"></span>
+      </div>
+      <div class="series-stand">
+        <div class="ss-label">Series Standing</div>
+        <div class="ss-score">Hurricanes 3 — Flyers 0</div>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Carolina 4, Philadelphia 1. <strong>Goals from Staal (PP), Svechnikov (PP), Chatfield (SHG), and Ehlers (5v5).</strong> Three on special teams, one at even strength — a model balanced scoresheet. <em>Carolina was 2-for-9 on the power play; Philly was 0-for-5.</em> Special teams decided everything.</li>
+        <li>The turning point came late in the second with the score 1–1: <strong>Hall took a boarding minor (initially called a major), Philly went on the power play with a chance to seize their first lead</strong> — and gave up the Chatfield SHG instead. Martinook poked the puck past Drysdale at the point, sprung the Staal-Chatfield 2-on-1, Staal threaded a pass through Zegras, Chatfield buried it. <em>The defining sequence of the game came on Philly's power play.</em></li>
+        <li>The Brind'Amour bench minor that should have killed Carolina: <strong>after Chatfield's SHG, Brind'Amour barked at officials and earned an unsportsmanlike conduct call.</strong> That gave Philly a 5-on-3 for 1:15 in a 2–1 game with momentum. <em>Philly didn't convert. They didn't really threaten.</em> The Flyers' PP is now 3-for-33 in the playoffs and went 0-for-5 tonight.</li>
+        <li>Andersen continued to be the structural anchor. <strong>Multiple key first-period saves on Konecny and Bump kept the score 0–0.</strong> The Athletic flagged Carolina's all-situations shot share at 29–12 and high-danger chances 6–4 — but Philly was *fractions of an inch* from a multi-goal first period without those saves. <em>And Slavin's stick save off the goal line with 1:34 left in the first prevented an actual goal.</em></li>
+        <li>Svechnikov got his first goal of the playoffs in the third on a perfect Aho seam pass. <strong>That's one of Carolina's stars finally arriving — and the publication's note from Day 4: when Svechnikov fully activates, Carolina becomes a different team.</strong> <em>He'd been quiet in Round 1 and the first two games of this series. Tonight changed that.</em></li>
+        <li>The depth-scoring story is the most concerning thing for the rest of the bracket: <strong>Staal, Svechnikov, Chatfield were a combined 0 goals in 6 games entering tonight.</strong> Tonight: 3. Martinook, postgame: <em>"Those three guys [Stankoven-Blake-Hall] have been carrying the load. It's nice when other guys can step up. We are a four-line, six-defensemen, two-goalie hockey team. For us to have success, everybody's gonna be around it."</em></li>
+      </ul>
+
+      <div class="statblock">
+        <div class="statblock-label">Carolina's Stranglehold · By the Numbers</div>
+        <div class="statblock-grid">
+          <div class="stat">
+            <div class="num">7–0</div>
+            <div class="label">Carolina<br/>postseason</div>
+          </div>
+          <div class="stat">
+            <div class="num">30/32</div>
+            <div class="label">Carolina PK<br/>93.75%</div>
+          </div>
+          <div class="stat">
+            <div class="num">3/33</div>
+            <div class="label">Philly PP<br/>postseason</div>
+          </div>
+          <div class="stat">
+            <div class="num">~70%</div>
+            <div class="label">Carolina<br/>xG share</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pullquote">
+        We're all gonna say the right things as coaches and try to get them prepared. But they gotta come ready to go, and they've been able to do that all year.
+        <span class="attribution">— Rod Brind'Amour, Hurricanes head coach</span>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">What This Was</div>
+        <div class="content">A masterclass in roster depth. <strong>Carolina won by getting goals from places Philly didn't expect them.</strong> Staal, Svechnikov, and Chatfield combining for three goals after a combined zero in the first six games tells you everything about how Carolina constructs a playoff run. <em>The top line carries when needed. The depth activates when it's their turn. The PK does its job. Andersen does his.</em> Every wheel turning.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">The PK That Won The Series</div>
+        <div class="content"><strong>30-for-32 across the postseason. 93.75% kill rate.</strong> Carolina killed off a 5-on-3 with momentum and a 1-goal lead in Game 3. They generated a SHG on Philly's power play. <em>That's the kind of structural advantage that wins championships, and Carolina is now demonstrating it consistently across two series and seven games.</em> Philly's PP isn't bad luck — they're 3-for-33 in the playoffs because Carolina's PK is operating at an elite level.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Philly's Reality</div>
+        <div class="content"><strong>The Flyers had legitimate chances and got nothing.</strong> Bump had a glorious point-blank look at 1–1 in the second; pulled wide. Martone's line had pop. Zegras got his first point in five games. <em>None of it was enough because Philly couldn't convert on the power play and Carolina's structure didn't break.</em> Tocchet, on the PP: "When the pressure hits, the reads were not there. You can tell guys are nervous." Down 3–0 facing a sweep, the Flyers' season is one game from over.</div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook · Updated</div>
+        <div class="otext">Hurricanes win in 4. <strong>Carolina has been the better team in every game of this series — and three of the games haven't been close on the underlying numbers.</strong> Game 4 Saturday in Philadelphia is the closeout opportunity. <em>The Flyers will play hard. They competed in Game 2 (an OT loss). They competed for stretches tonight. None of it has produced a win, and there's no reason to think Game 4 changes that. Carolina is operating at a different level entirely.</em></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- § 02 HISTORICAL -->
+  <div class="section-head" id="section-02">
+    <div class="num">§ 02</div>
+    <div class="section-head-text">
+      <h2>The <em>7–0 club.</em></h2>
+      <p class="section-lead">Only the third NHL team in 30 years to start a playoff run on a seven-game winning streak. The list is short. The company is decorated.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="historical">
+      <div class="hist-label">Historical Context</div>
+      <h4>Carolina is the third NHL team in 30 years to begin a postseason <em>7–0.</em></h4>
+      <p class="hist-body">
+        The Athletic surfaced this stat after Game 3, and it's the most meaningful structural data point of the postseason so far. <strong>Starting a playoff run with seven straight wins is so rare it's happened only twice in three decades.</strong> Carolina is now the third. The history of teams that win their first 7+ playoff games doesn't guarantee a Stanley Cup — but it places the team firmly in championship company. <em>The bracket has 8 teams left. Carolina has more wins than any of them. They've also given up fewer goals per game, won by larger margins, and now demonstrated 4 different ways to win a playoff game.</em>
+      </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--hairline-strong); border: 1px solid var(--hairline-strong); margin-top: 32px;">
+      <div style="background: var(--ink); padding: 24px;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px;">Round 1 · Game 1</div>
+        <div style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 22px; color: var(--paper); margin-bottom: 4px;">Sweep template</div>
+        <div style="font-family: 'Source Serif 4', Georgia, serif; font-style: italic; font-size: 14px; line-height: 1.5; color: var(--paper-dim);">CAR 5, OTT 1. Forecheck and structure. The model.</div>
+      </div>
+      <div style="background: var(--ink); padding: 24px;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px;">Round 2 · Game 1</div>
+        <div style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 22px; color: var(--paper); margin-bottom: 4px;">Domination</div>
+        <div style="font-family: 'Source Serif 4', Georgia, serif; font-style: italic; font-size: 14px; line-height: 1.5; color: var(--paper-dim);">CAR 3, PHI 0. Andersen shutout. 74% xG.</div>
+      </div>
+      <div style="background: var(--ink); padding: 24px;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px;">Round 2 · Game 2</div>
+        <div style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 22px; color: var(--paper); margin-bottom: 4px;">Recovery</div>
+        <div style="font-family: 'Source Serif 4', Georgia, serif; font-style: italic; font-size: 14px; line-height: 1.5; color: var(--paper-dim);">CAR 3, PHI 2 OT. Down 2–0. Hall winner.</div>
+      </div>
+      <div style="background: var(--ink); padding: 24px;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px;">Round 2 · Game 3</div>
+        <div style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 22px; color: var(--paper); margin-bottom: 4px;">Special teams</div>
+        <div style="font-family: 'Source Serif 4', Georgia, serif; font-style: italic; font-size: 14px; line-height: 1.5; color: var(--paper-dim);">CAR 4, PHI 1. SHG, two PPGs, depth scoring.</div>
+      </div>
+      <div style="background: var(--ink); padding: 24px;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px;">The Pattern</div>
+        <div style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 22px; color: var(--paper); margin-bottom: 4px;">Multi-mode</div>
+        <div style="font-family: 'Source Serif 4', Georgia, serif; font-style: italic; font-size: 14px; line-height: 1.5; color: var(--paper-dim);">Four series wins. Four different game scripts. Same team.</div>
+      </div>
+      <div style="background: var(--ink); padding: 24px;">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px;">The Other 7–0</div>
+        <div style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 22px; color: var(--paper); margin-bottom: 4px;">Colorado</div>
+        <div style="font-family: 'Source Serif 4', Georgia, serif; font-style: italic; font-size: 14px; line-height: 1.5; color: var(--paper-dim);">6–0 entering Saturday's Game 3 in Minnesota. The other unbeaten.</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- § 03 TONIGHT -->
+  <div class="section-head" id="section-03">
+    <div class="num">§ 03</div>
+    <div class="section-head-text">
+      <h2>Tonight: <em>Buffalo-Montreal G2.</em></h2>
+      <p class="section-lead">Montreal needs a response. Buffalo wants a stranglehold. The series most likely to redefine its identity tonight.</p>
+    </div>
+  </div>
+
+  <section style="padding: 8px 0 56px;">
+    <ul class="bullets" style="max-width: 820px;">
+      <li><strong>Game 2 is the publication's most leveraged series game tonight.</strong> Carolina-Philly is essentially decided. Colorado-Minnesota is on pause until Saturday. Anaheim-Vegas is on pause until Friday. <em>Buffalo-Montreal is where Round 2 narrative gets shaped tonight.</em></li>
+      <li><strong>Montreal's adjustment thesis</strong> — Slow the neutral zone. Take away Buffalo's defensive activations. Punish the space they're given. <em>St. Louis: "I'm confident that we can play any style. I'm confident that we can play the game that's in front of us."</em> Tonight is the test.</li>
+      <li><strong>Buffalo's Game 1 won't repeat in Game 2.</strong> Open ice doesn't last in playoff series — coaches adjust. The Sabres need to decide whether to push the same identity (and force Montreal to adjust) or absorb tighter hockey (and trust Lyon). <em>The team that imposes pace wins. The publication's Day 6 thesis applied directly.</em></li>
+      <li><strong>Dobeš and Lyon both swing performers.</strong> Dobeš was Montreal's best player for stretches of Round 1. Lyon won Buffalo Round 1. Whichever has the better Game 2 likely tilts the series.</li>
+      <li><strong>The bracket implication</strong> — if Buffalo wins, they're 2–0 with home ice and the structural read. If Montreal wins, the series resets to Bell Centre tied at 1, and the "Habs can play any style" claim earns proof. <em>Either result reshapes the East-Atlantic narrative significantly.</em></li>
+    </ul>
+  </section>
+
+  <section class="closing">
+    <div class="overline">The Take</div>
+    <blockquote>
+      Carolina hasn't lost a playoff game. <em>That fact alone now defines Round 2.</em> Other teams are still learning how to dictate environments and adjust to opponents. Carolina has been doing both for seven straight games — across two opponents, four different game scripts, and now an exclusive 30-year historical club. Round 1 made them the structural standard. Round 2 is making them the team everyone else is being measured against. <em>The bracket has eight teams left. One of them has more wins than the rest combined are away from elimination.</em>
+    </blockquote>
+    <div class="sig">— Round 2 · Day 7 · Filed after Carolina's 7–0 streak · Buffalo-Montreal G2 tonight</div>
+  </section>
+
+  <footer>
+    <div>Rink Report · NHL Playoff Coverage</div>
+    <div>Round 2 of 4 · Carolina 3–0 vs Philly · Carolina 7–0 in playoffs · Buffalo-Montreal G2 tonight</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
