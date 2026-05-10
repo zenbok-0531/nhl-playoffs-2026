@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Round 2, Day 10 — The Series | NHL Playoffs Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0b0d12;
+    --ink-2: #13161f;
+    --ink-3: #1c1f2b;
+    --paper: #f2ebdc;
+    --paper-dim: #d6cdba;
+    --muted: #8a8374;
+    --ice: #7fb4d8;
+    --ice-deep: #3d6d93;
+    --goal: #d74e3a;
+    --gold: #d4a842;
+    --hairline: rgba(242, 235, 220, 0.14);
+    --hairline-strong: rgba(242, 235, 220, 0.28);
+    --car: #cc0000;
+    --ott: #c8102e;
+    --min: #154734;
+    --dal: #006847;
+    --phi: #f74902;
+    --pit: #ffb81c;
+    --col: #6F263D;
+    --lak: #A2AAAD;
+    --mtl: #AF1E2D;
+    --tbl: #002868;
+    --buf: #002654;
+    --bos: #FCB514;
+    --vgk: #B4975A;
+    --uta: #6CACE4;
+    --edm: #FF4C00;
+    --ana: #B9975B;
+    --close: #E88B3D;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  ul.bullets { list-style: none; padding: 0; margin: 0; }
+  ul.bullets li {
+    position: relative;
+    padding-left: 26px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+  ul.bullets li:last-child { margin-bottom: 0; }
+  ul.bullets li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 11px;
+    width: 14px; height: 1px;
+    background: var(--goal);
+  }
+  ul.bullets li strong { color: var(--paper); font-weight: 500; }
+
+  .round-banner {
+    background: linear-gradient(90deg, rgba(215, 78, 58, 0.08) 0%, transparent 100%);
+    border-bottom: 1px solid var(--hairline);
+    padding: 16px 0;
+    text-align: left;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--goal);
+    font-weight: 600;
+  }
+  .round-banner span { color: var(--paper); }
+
+  .masthead {
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .masthead .brand { color: var(--paper); font-weight: 600; }
+  .masthead .brand span { color: var(--goal); }
+  .masthead .brand-link {
+    text-decoration: none;
+    transition: opacity 0.3s;
+    display: inline-block;
+  }
+  .masthead .brand-link:hover { opacity: 0.7; }
+  .masthead .nav-link {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    border-bottom: 1px solid transparent;
+  }
+  .masthead .nav-link:hover { color: var(--paper); border-bottom-color: var(--hairline-strong); }
+
+  .hero {
+    padding: 80px 0 72px;
+    border-bottom: 1px solid var(--hairline);
+    position: relative;
+  }
+  .overline {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .overline::before {
+    content: "";
+    width: 32px; height: 1px;
+    background: var(--goal);
+  }
+  h1.headline {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(56px, 9vw, 136px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    margin-bottom: 40px;
+  }
+  h1.headline em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+  .dek {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: normal;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.5;
+    color: var(--paper);
+    max-width: 760px;
+    font-weight: 500;
+  }
+  .byline {
+    margin-top: 48px;
+    display: flex;
+    gap: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .byline strong { color: var(--paper); font-weight: 600; }
+
+  .scores {
+    display: grid;
+    grid-template-columns: 1fr;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .score {
+    padding: 32px 28px;
+  }
+  .score .tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 14px;
+  }
+  .score .matchup {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: 32px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .score .winner { color: var(--paper); font-weight: 600; }
+  .score .loser { color: var(--muted); }
+  .score .final {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--paper-dim);
+    margin-top: 10px;
+  }
+
+  .lede { padding: 88px 0 64px; max-width: 820px; }
+  .lede p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 23px;
+    line-height: 1.58;
+    color: var(--paper);
+    font-weight: 400;
+  }
+  .lede p::first-letter {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 5.2em;
+    float: left;
+    line-height: 0.82;
+    padding: 10px 14px 0 0;
+    color: var(--goal);
+  }
+
+  .section-head {
+    padding: 56px 0 40px;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 40px;
+    align-items: baseline;
+    border-top: 1px solid var(--hairline);
+    scroll-margin-top: 24px;
+  }
+  .section-head .num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--goal);
+    letter-spacing: 0.1em;
+  }
+  .section-head-text { align-self: baseline; }
+  .section-lead {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.45;
+    letter-spacing: 0;
+    color: var(--goal);
+    margin-top: 20px;
+    max-width: 780px;
+  }
+  .section-head h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(38px, 5vw, 68px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+  }
+  .section-head h2 em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+
+  .game {
+    padding: 64px 0;
+    border-top: 1px solid var(--hairline-strong);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 56px;
+  }
+  .game-title { position: sticky; top: 40px; align-self: start; }
+  .game-title .series-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .game-title h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 54px;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .game-title .vs {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--muted);
+    display: block;
+    font-size: 0.6em;
+    margin: 4px 0;
+  }
+  .colorbar { height: 6px; width: 100%; display: flex; margin-top: 20px; }
+  .colorbar span { flex: 1; }
+  .series-stand {
+    margin-top: 24px;
+    padding: 18px 20px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--goal);
+  }
+  .series-stand .ss-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 6px;
+  }
+  .series-stand .ss-score {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--paper);
+    letter-spacing: -0.01em;
+  }
+  .game-body { font-size: 17px; line-height: 1.65; }
+  .game-body > ul.bullets { margin-bottom: 8px; }
+  .game-body > ul.bullets li { font-size: 16px; }
+  .pullquote {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    color: var(--paper);
+    padding: 28px 0 28px 28px;
+    border-left: 2px solid var(--goal);
+    margin: 28px 0;
+  }
+  .pullquote .attribution {
+    display: block;
+    margin-top: 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-style: normal;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .breakdown-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 24px;
+    padding: 18px 0;
+    border-top: 1px solid var(--hairline);
+    align-items: start;
+  }
+  .breakdown-row:last-child { border-bottom: 1px solid var(--hairline); }
+  .breakdown-row .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding-top: 4px;
+  }
+  .breakdown-row .content { color: var(--paper-dim); font-size: 16px; }
+  .breakdown-row .content strong { color: var(--paper); font-weight: 500; }
+  .outlook-box {
+    margin-top: 28px;
+    padding: 24px 28px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--ice);
+  }
+  .outlook-box .olabel {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ice);
+    margin-bottom: 10px;
+  }
+  .outlook-box .otext {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--paper);
+    letter-spacing: 0;
+  }
+
+  .statblock {
+    margin: 32px 0;
+    background: var(--ink-2);
+    border: 1px solid var(--hairline);
+    padding: 28px 32px;
+  }
+  .statblock-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .statblock-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .stat .num {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 38px;
+    color: var(--goal);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .stat .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+
+  /* SCORING LEADERS PANEL */
+  .leaders {
+    margin: 32px 0;
+    background: var(--ink-2);
+    border-left: 3px solid var(--gold);
+    padding: 28px 32px;
+  }
+  .leaders-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .leaders h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 18px;
+  }
+  .leaders-grid {
+    display: grid;
+    grid-template-columns: 70px 1fr 80px;
+    gap: 16px;
+    align-items: center;
+    padding: 12px 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .leaders-grid:first-of-type { border-top: none; padding-top: 4px; }
+  .leaders-rank {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--goal);
+    letter-spacing: -0.02em;
+  }
+  .leaders-name {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.4;
+    color: var(--paper);
+  }
+  .leaders-name .team-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-left: 8px;
+  }
+  .leaders-pts {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--paper);
+    text-align: right;
+    letter-spacing: 0.04em;
+  }
+
+  .closing { padding: 72px 0 48px; border-top: 1px solid var(--hairline-strong); }
+  .closing .overline { color: var(--gold); }
+  .closing .overline::before { background: var(--gold); }
+  .closing blockquote {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    max-width: 980px;
+  }
+  .closing blockquote em { font-style: italic; color: var(--goal); font-weight: 400; }
+  .closing .sig {
+    margin-top: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .toc { padding: 40px 0 48px; border-bottom: 1px solid var(--hairline); }
+  .toc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .toc-label::before {
+    content: "";
+    width: 24px; height: 1px;
+    background: var(--muted);
+  }
+  .toc-list {
+    list-style: none;
+    padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .toc-list li { background: var(--ink); }
+  .toc-list a {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px 26px;
+    text-decoration: none;
+    color: var(--paper);
+    transition: background 0.3s;
+    height: 100%;
+  }
+  .toc-list a:hover { background: var(--ink-2); }
+  .toc-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--goal);
+  }
+  .toc-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+    color: var(--paper);
+    transition: color 0.3s;
+  }
+  .toc-list a:hover .toc-title { color: var(--ice); }
+
+  footer {
+    padding: 36px 0;
+    border-top: 1px solid var(--hairline);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 820px) {
+    .wrap { padding: 0 20px; }
+    .section-head { grid-template-columns: 1fr; gap: 12px; padding: 44px 0 28px; }
+    .game { grid-template-columns: 1fr; gap: 28px; padding: 48px 0; }
+    .game-title { position: static; }
+    .game-title h3 { font-size: 42px; }
+    .breakdown-row { grid-template-columns: 1fr; gap: 8px; }
+    .statblock-grid { grid-template-columns: repeat(2, 1fr); }
+    .leaders-grid { grid-template-columns: 50px 1fr 70px; gap: 12px; }
+    .lede { padding: 56px 0 40px; }
+    .lede p { font-size: 20px; }
+    .byline { flex-direction: column; gap: 12px; }
+    .toc-list { grid-template-columns: 1fr; }
+    .toc { padding: 28px 0 32px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="round-banner">
+    Round Two &nbsp;·&nbsp; <span>Conference Semifinals</span> &nbsp;·&nbsp; Carolina alone at the top
+  </div>
+
+  <div class="masthead">
+    <a href="index.html" class="brand-link"><div class="brand">Rink<span>&middot;</span>Report</div></a>
+    <div>
+      <a href="round2-day9-analysis.html" class="nav-link">← Day 9</a>
+      &nbsp;&nbsp;Vol. I &nbsp;/&nbsp; Round 02 &nbsp;/&nbsp; Day 10
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="overline">Wild end Avs streak &nbsp;·&nbsp; Kaprizov takes NHL playoff scoring lead</div>
+    <h1 class="headline">The <em>Series.</em></h1>
+    <p class="dek">
+      Minnesota beat Colorado 5–1 in Game 3 to end the Avalanche's 6-game playoff streak and
+      cut the series lead to 2–1. <strong>Kaprizov: goal + 2 assists, now NHL playoff scoring
+      leader at 14 points. Hughes and Faber both scored — both have 4 goals, tied for most by
+      a Wild defenseman in any postseason.</strong> Wallstedt 34 saves on his return.
+      <em>Carolina's 8–0 streak now stands alone. Colorado just got dragged into a real series
+      by a team riding the worst PK ever to reach Round 2.</em>
+    </p>
+    <div class="byline">
+      <div><strong>Round 2</strong> · Day 10 Analysis</div>
+      <div><strong>Filed</strong> · May 9, 2026</div>
+      <div><strong>Read</strong> · 11 minutes</div>
+    </div>
+  </header>
+
+  <section class="scores">
+    <div class="score">
+      <div class="tag">Game 3 · Series 02 · West &nbsp;·&nbsp; The Series</div>
+      <div class="matchup">
+        <span class="winner">Minnesota</span> def. <span class="loser">Colorado</span>, 5–1
+      </div>
+      <div class="final">Avalanche lead 2–1 &nbsp;·&nbsp; Kaprizov 3pts (NHL lead, 14), Wedgewood pulled, COL streak ends</div>
+    </div>
+  </section>
+
+  <nav class="toc" aria-label="Table of contents">
+    <div class="toc-label">Contents</div>
+    <ol class="toc-list">
+      <li><a href="#section-01">
+        <span class="toc-num">§ 01</span>
+        <span class="toc-title">Wild get back in</span>
+      </a></li>
+      <li><a href="#section-02">
+        <span class="toc-num">§ 02</span>
+        <span class="toc-title">Scoring leaders</span>
+      </a></li>
+      <li><a href="#section-03">
+        <span class="toc-num">§ 03</span>
+        <span class="toc-title">Sunday's slate</span>
+      </a></li>
+    </ol>
+  </nav>
+
+  <section class="lede">
+    <p>
+      Earlier today Carolina swept Philadelphia and became the first team through to the
+      Conference Final at 8–0. <em>Tonight Colorado was supposed to win Game 3 in St. Paul,
+      take a 3–0 series stranglehold, and join Carolina in the rarest 30-year company.</em>
+      <strong>Instead Minnesota beat them 5–1 in their most quintessential effort of the
+      series</strong> — and the parallel undefeated story died at exactly the moment Carolina's
+      kept growing. Kaprizov went off for a goal and two assists to take the NHL playoff
+      scoring lead. Hughes and Faber both scored, both have 4 goals — tied for most by any
+      Wild defenseman in any postseason. Wallstedt made 34 saves on his return after sitting
+      Game 2. <em>Carolina's 8–0 streak now stands alone. The other seven teams in the bracket
+      are all playing real series. The two-undefeated narrative the publication has been
+      tracking since Day 4 just collapsed into one.</em>
+    </p>
+  </section>
+
+  <!-- § 01 GAME 3 -->
+  <div class="section-head" id="section-01">
+    <div class="num">§ 01</div>
+    <div class="section-head-text">
+      <h2>The Wild <em>imposed.</em></h2>
+      <p class="section-lead">Minnesota outhit Colorado 39–25, drove the game from the opening shift, and finally got their special teams to win a night. The team that came in with the worst PK in 30+ years just made the team that came in undefeated look ordinary.</p>
+    </div>
+  </div>
+
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Round 2 · Series 02 · West &nbsp;·&nbsp; <span style="color: var(--goal)">The Series</span></div>
+      <h3>Colorado <span class="vs">at</span> Minnesota</h3>
+      <div class="colorbar">
+        <span style="background: var(--col)"></span>
+        <span style="background: var(--min)"></span>
+      </div>
+      <div class="series-stand">
+        <div class="ss-label">Series Standing</div>
+        <div class="ss-score">Avalanche 2 — Wild 1</div>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Minnesota 5, Colorado 1. <strong>Wild scorers: Kaprizov, Hughes, Hartman (PP), Faber, Boldy (EN).</strong> The Wild out-shot a Hartman one-timer through Wedgewood early in the second period to chase the goalie. <em>The Avalanche's first loss in seven playoff games.</em></li>
+        <li>The 4-on-4 sequence that opened the game: <strong>Kaprizov scored 17 seconds into a 4-on-4 at the end of the first.</strong> Faber up the ice, handed off to Kaprizov, who took it through the middle. <em>1:33 later, Toews hooked Boldy to make it 4-on-3, and Hughes toe-dragged to the middle and wristed inside the far post for 2–0.</em> Colorado got beaten at structural defending in their own kind of game.</li>
+        <li>Hartman's PP goal early second made it 3–0 and chased Wedgewood. <strong>Wedgewood: 3 goals on 12 shots, pulled.</strong> The 6–0 historical streak that the publication tracked through Day 5 has now turned into "pulled in Game 3." <em>Mackenzie Blackwood — first action since April 14 — finished the game in net.</em></li>
+        <li>The PK that won the game was historically improbable: <strong>Wild entered with a 59.1% kill rate — the worst by any team that advanced past Round 1 since the league began charting in 1978.</strong> Tonight: 2-for-3, including 2-for-2 in the first period with Wallstedt making 4 saves. <em>The MacKinnon PP goal in the second came on contested goalie interference (Daemon Hunt pushing Landeskog into Wallstedt). The Wild didn't challenge.</em></li>
+        <li>The instant momentum reclaim: <strong>20 seconds after MacKinnon's PP goal cut it 3–1, Faber's deflection (off a Tarasenko shot during a delayed penalty) made it 4–1.</strong> The Wild didn't let Colorado's only goal become anything. <em>Same trait Carolina demonstrated against Philly today.</em></li>
+        <li>The Wild's 39–25 hits advantage was the structural truth of the night — the Foligno brothers combined for 11. <strong>Minnesota was the more physical team, the harder team to play against, and (for one night) the more dangerous team.</strong> <em>The Athletic's framing: "Looking much more like themselves and playing with a Game 7 mentality."</em></li>
+        <li>Wallstedt 34 saves after sitting Game 2 — including a critical glove save on a Parker Kelly partial breakaway with the game still 0-0. <strong>The puck hit the post and went wide.</strong> If that goes in, the entire Wild emotional map of this night looks different. <em>Hynes pre-game: "He played six unbelievable games. That (9-6) game was a one-off. Six great ones to one that wasn't on him."</em> Tonight: 7 great ones, one bad one.</li>
+        <li>The historical parallel worth knowing: <strong>The Wild's lone series win when trailing 2-0 came in 2014 — against Colorado, in seven games.</strong> Same matchup. Same situation. 12 years apart. <em>That's not destiny; that's editorial coincidence. But it's a clean callback.</em></li>
+      </ul>
+
+      <div class="statblock">
+        <div class="statblock-label">The Series · By the Numbers</div>
+        <div class="statblock-grid">
+          <div class="stat">
+            <div class="num">39–25</div>
+            <div class="label">Wild hits<br/>edge</div>
+          </div>
+          <div class="stat">
+            <div class="num">2/3</div>
+            <div class="label">Wild PK<br/>worst-ever in R2</div>
+          </div>
+          <div class="stat">
+            <div class="num">34</div>
+            <div class="label">Wallstedt<br/>saves</div>
+          </div>
+          <div class="stat">
+            <div class="num">3/12</div>
+            <div class="label">Wedgewood<br/>pulled</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pullquote">
+        He played six unbelievable games. That (9–6) game was a one-off. To me, it's not so much "How does he bounce back off a tough game?" Let's take it this way: six great ones to one that wasn't on him. So there's a confidence built up in there.
+        <span class="attribution">— John Hynes, on starting Wallstedt for Game 3</span>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">What This Was</div>
+        <div class="content"><strong>The Wild finally playing the game they're built for.</strong> Heavy. Physical. Forecheck pressure. Wallstedt comfortable. Special teams winning. <em>Their Round 1 identity from the Dallas series finally made it to Round 2.</em> Two games of getting overwhelmed by Colorado's pace turned into a game where Minnesota imposed pace instead. <strong>The Wild are now what they always were — a structural Tier 2 team capable of a Tier 1 game on the right night.</strong></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">What Colorado Faces</div>
+        <div class="content">For the first time all postseason, Colorado has a real problem. <strong>Wedgewood's structural reliability is now a question; Bednar may turn to Blackwood for Game 4.</strong> The 6-0 streak that put them in 30-year company is over. Manson is still out. Landeskog moved up to the top line, didn't finish. <em>Colorado is still the better team in this series. They're now a meaningfully more vulnerable better team.</em></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">The Norris Confrontation</div>
+        <div class="content">Day 2's preview framing was Makar vs Hughes — whichever defenseman dictated would dictate the series. <strong>Through Game 1, Makar dominated (2G+1A on a leg-injury return). Through Game 2, Makar stayed productive. Tonight, Hughes scored on the 4-on-3 PP and quarterbacked Minnesota's transition game.</strong> <em>The confrontation has now seen both Norris-tier defensemen produce series-deciding moments — which is exactly the matchup the publication previewed Sunday.</em></div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook · Updated</div>
+        <div class="otext">Series goes 6 or 7 now, real read. <strong>Minnesota proved they can play a Colorado-level game.</strong> Whether they can repeat that effort on Monday is the question — Game 3 was their season-on-the-line response, and emotional games are hard to replicate. <em>If Eriksson Ek returns Monday, the matchup math improves further. If Wedgewood gets swapped for Blackwood, Colorado's structural anchor changes. The series the publication wrote off two days ago is now the most analytically interesting in the bracket.</em></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- § 02 SCORING LEADERS -->
+  <div class="section-head" id="section-02">
+    <div class="num">§ 02</div>
+    <div class="section-head-text">
+      <h2>NHL playoff <em>scoring lead.</em></h2>
+      <p class="section-lead">24 hours ago Marner had a hat trick to take the lead. Tonight Kaprizov took it back. The two of them are now 1-2 with 14 and 13 points respectively — and the bracket's depth at the top is starting to show.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="leaders">
+      <div class="leaders-label">NHL Playoff Scoring · Through Day 10</div>
+      <h4>Two storylines fighting for the lead.</h4>
+
+      <div class="leaders-grid">
+        <div class="leaders-rank">01</div>
+        <div class="leaders-name">Kirill Kaprizov<span class="team-tag">MIN</span></div>
+        <div class="leaders-pts">14 pts</div>
+      </div>
+      <div class="leaders-grid">
+        <div class="leaders-rank">02</div>
+        <div class="leaders-name">Mitch Marner<span class="team-tag">VGK</span></div>
+        <div class="leaders-pts">13 pts</div>
+      </div>
+      <div class="leaders-grid">
+        <div class="leaders-rank" style="font-size: 18px;">tie</div>
+        <div class="leaders-name">Logan Stankoven<span class="team-tag">CAR</span> · 7 G</div>
+        <div class="leaders-pts">playoff goals</div>
+      </div>
+      <div class="leaders-grid">
+        <div class="leaders-rank" style="font-size: 18px;">def</div>
+        <div class="leaders-name">Hughes (MIN), Faber (MIN)<span class="team-tag">tied for most ever by Wild D in a postseason</span></div>
+        <div class="leaders-pts">4 G each</div>
+      </div>
+
+      <p style="font-family: 'Source Serif 4', Georgia, serif; font-size: 16px; line-height: 1.6; color: var(--paper-dim); margin-top: 22px;">
+        <strong style="color: var(--paper); font-weight: 500;">Kaprizov's 14 is tied with Zach Parise (2014) for second-most in Wild history in a single postseason.</strong> The publication's been tracking Marner's career-arc redemption since Day 8; tonight Kaprizov reasserted himself as the bracket's other elite individual story. <em>Two Cinderella-adjacent players — Marner the redemption arc, Kaprizov the franchise face — are 1-2 in NHL playoff scoring through 9 games each.</em>
+      </p>
+    </div>
+
+  </section>
+
+  <!-- § 03 SUNDAY -->
+  <div class="section-head" id="section-03">
+    <div class="num">§ 03</div>
+    <div class="section-head-text">
+      <h2>Sunday's <em>slate.</em></h2>
+      <p class="section-lead">Buffalo at Montreal Game 3 (4 PM ET). Vegas at Anaheim Game 4 (9:30 PM ET). Two series at critical pivots after the Day 8 inversions.</p>
+    </div>
+  </div>
+
+  <section style="padding: 8px 0 56px;">
+    <ul class="bullets" style="max-width: 820px;">
+      <li><strong>BUF @ MTL Game 3 — 4 PM ET, Bell Centre.</strong> Series tied 1–1 after Montreal's Day 8 5–1 statement. <em>Bell Centre delivered Montreal three home wins against Tampa in Round 1.</em> If the alternating-wins pattern continues, Buffalo wins Sunday and the structural read tilts back. If Montreal wins on home ice, the series lean shifts and Buffalo's Game 1 dictation becomes a memory.</li>
+      <li><strong>VGK @ ANA Game 4 — 9:30 PM ET, Honda Center.</strong> Vegas leads 2–1 after Marner's hat trick. <em>The Stone injury status is the wildcard the publication flagged Day 8 — if he plays Sunday and produces, Vegas pushes for a 3–1 lead heading home. If he sits and Anaheim's PP finally cracks Vegas's PK, the series resets at 2–2.</em> Anaheim's PP is 0-for-11 in the series; that has to change.</li>
+      <li><strong>The bracket reality after Sunday:</strong> By Sunday night, three series will have at least 4 games played. <em>Carolina's already through. Two of the remaining three series could break open tomorrow — or stay genuinely contested through Game 7.</em></li>
+      <li><strong>Colorado-Minnesota Game 4 is Monday in St. Paul.</strong> If Bednar starts Blackwood, that's the Wedgewood story closing. If he starts Wedgewood, that's Bednar betting on the regular-season Jennings winner over the rookie Wallstedt. <em>Either choice is a meaningful structural read on where Colorado thinks the series is.</em></li>
+    </ul>
+  </section>
+
+  <section class="closing">
+    <div class="overline">The Take</div>
+    <blockquote>
+      One day, two streaks. <em>One survived; one didn't.</em> Carolina swept Philadelphia at 3 PM Eastern and became the first team through to a Conference Final at 8–0 — the second team to start a postseason that way in 30 years. Six hours later, Colorado's matching 6–0 streak ended at the hands of a Wild team that came in with the worst PK in 30+ years to advance past Round 1. <em>The "two undefeated teams" framing the publication has been tracking since Day 4 just collapsed into one. Carolina is now alone at the top.</em> The other seven teams have real problems: Colorado has a goaltending question, Vegas has a Stone injury, Anaheim has a 0-for-11 power play, Buffalo has a Lyon question, Montreal has a top-line drought, Minnesota has a still-thin margin, and Philadelphia is going home. <strong>This is what Round 2 was supposed to be: every team except one playing real hockey.</strong>
+    </blockquote>
+    <div class="sig">— Round 2 · Day 10 · Filed after Wild's 5–1 win · Carolina alone at 8–0 · Sunday slate ahead</div>
+  </section>
+
+  <footer>
+    <div>Rink Report · NHL Playoff Coverage</div>
+    <div>Round 2 of 4 · CAR to ECF · 1 series 2–1 · 1 series 2–1 · 1 series 1–1 · Sunday: 2 critical games</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
