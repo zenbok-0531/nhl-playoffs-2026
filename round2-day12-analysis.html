@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Round 2, Day 12 — Composure | NHL Playoffs Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0b0d12;
+    --ink-2: #13161f;
+    --ink-3: #1c1f2b;
+    --paper: #f2ebdc;
+    --paper-dim: #d6cdba;
+    --muted: #8a8374;
+    --ice: #7fb4d8;
+    --ice-deep: #3d6d93;
+    --goal: #d74e3a;
+    --gold: #d4a842;
+    --hairline: rgba(242, 235, 220, 0.14);
+    --hairline-strong: rgba(242, 235, 220, 0.28);
+    --car: #cc0000;
+    --col: #6F263D;
+    --min: #154734;
+    --mtl: #AF1E2D;
+    --buf: #002654;
+    --vgk: #B4975A;
+    --ana: #B9975B;
+    --phi: #f74902;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  ul.bullets { list-style: none; padding: 0; margin: 0; }
+  ul.bullets li {
+    position: relative;
+    padding-left: 26px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+  ul.bullets li:last-child { margin-bottom: 0; }
+  ul.bullets li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 11px;
+    width: 14px; height: 1px;
+    background: var(--goal);
+  }
+  ul.bullets li strong { color: var(--paper); font-weight: 500; }
+
+  .round-banner {
+    background: linear-gradient(90deg, rgba(0, 38, 84, 0.20) 0%, rgba(180, 151, 90, 0.16) 50%, transparent 100%);
+    border-bottom: 1px solid var(--hairline);
+    padding: 16px 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--goal);
+    font-weight: 600;
+  }
+  .round-banner span { color: var(--paper); }
+
+  .masthead {
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .masthead .brand { color: var(--paper); font-weight: 600; }
+  .masthead .brand span { color: var(--goal); }
+  .masthead .brand-link {
+    text-decoration: none;
+    transition: opacity 0.3s;
+    display: inline-block;
+  }
+  .masthead .brand-link:hover { opacity: 0.7; }
+  .masthead .nav-link {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    border-bottom: 1px solid transparent;
+  }
+  .masthead .nav-link:hover { color: var(--paper); border-bottom-color: var(--hairline-strong); }
+
+  .hero {
+    padding: 80px 0 72px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .overline {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .overline::before {
+    content: "";
+    width: 32px; height: 1px;
+    background: var(--goal);
+  }
+  h1.headline {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(56px, 9vw, 136px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    margin-bottom: 40px;
+  }
+  h1.headline em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+  .dek {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.5;
+    color: var(--paper);
+    max-width: 760px;
+    font-weight: 500;
+  }
+  .byline {
+    margin-top: 48px;
+    display: flex;
+    gap: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .byline strong { color: var(--paper); font-weight: 600; }
+
+  .scores {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .score {
+    padding: 32px 28px;
+    border-right: 1px solid var(--hairline);
+    transition: background 0.3s;
+  }
+  .score:last-child { border-right: none; }
+  .score:hover { background: var(--ink-2); }
+  .score .tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 14px;
+  }
+  .score .matchup {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: 26px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .score .winner { color: var(--paper); font-weight: 600; }
+  .score .loser { color: var(--muted); }
+  .score .final {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--paper-dim);
+    margin-top: 10px;
+  }
+
+  .lede { padding: 88px 0 64px; max-width: 820px; }
+  .lede p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 23px;
+    line-height: 1.58;
+    color: var(--paper);
+    font-weight: 400;
+  }
+  .lede p::first-letter {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 5.2em;
+    float: left;
+    line-height: 0.82;
+    padding: 10px 14px 0 0;
+    color: var(--goal);
+  }
+
+  .section-head {
+    padding: 56px 0 40px;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 40px;
+    align-items: baseline;
+    border-top: 1px solid var(--hairline);
+    scroll-margin-top: 24px;
+  }
+  .section-head .num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--goal);
+    letter-spacing: 0.1em;
+  }
+  .section-head-text { align-self: baseline; }
+  .section-lead {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.45;
+    color: var(--goal);
+    margin-top: 20px;
+    max-width: 780px;
+  }
+  .section-head h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(38px, 5vw, 68px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+  }
+  .section-head h2 em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+
+  .game {
+    padding: 64px 0;
+    border-top: 1px solid var(--hairline-strong);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 56px;
+  }
+  .game-title { position: sticky; top: 40px; align-self: start; }
+  .game-title .series-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .game-title h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 54px;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .game-title .vs {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--muted);
+    display: block;
+    font-size: 0.6em;
+    margin: 4px 0;
+  }
+  .colorbar { height: 6px; width: 100%; display: flex; margin-top: 20px; }
+  .colorbar span { flex: 1; }
+  .series-stand {
+    margin-top: 24px;
+    padding: 18px 20px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--goal);
+  }
+  .series-stand .ss-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 6px;
+  }
+  .series-stand .ss-score {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--paper);
+    letter-spacing: -0.01em;
+  }
+  .game-body { font-size: 17px; line-height: 1.65; }
+  .game-body > ul.bullets { margin-bottom: 8px; }
+  .game-body > ul.bullets li { font-size: 16px; }
+  .pullquote {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 1.4;
+    color: var(--paper);
+    padding: 28px 0 28px 28px;
+    border-left: 2px solid var(--goal);
+    margin: 28px 0;
+  }
+  .pullquote .attribution {
+    display: block;
+    margin-top: 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .breakdown-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 24px;
+    padding: 18px 0;
+    border-top: 1px solid var(--hairline);
+    align-items: start;
+  }
+  .breakdown-row:last-child { border-bottom: 1px solid var(--hairline); }
+  .breakdown-row .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding-top: 4px;
+  }
+  .breakdown-row .content { color: var(--paper-dim); font-size: 16px; }
+  .breakdown-row .content strong { color: var(--paper); font-weight: 500; }
+  .outlook-box {
+    margin-top: 28px;
+    padding: 24px 28px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--ice);
+  }
+  .outlook-box .olabel {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ice);
+    margin-bottom: 10px;
+  }
+  .outlook-box .otext {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--paper);
+  }
+
+  .statblock {
+    margin: 32px 0;
+    background: var(--ink-2);
+    border: 1px solid var(--hairline);
+    padding: 28px 32px;
+  }
+  .statblock-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .statblock-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .stat .num {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 38px;
+    color: var(--goal);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .stat .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+
+  /* CONTROVERSY CALLOUT */
+  .controversy {
+    margin: 40px 0;
+    background: linear-gradient(135deg, rgba(212, 168, 66, 0.08) 0%, var(--ink-2) 70%, var(--ink) 100%);
+    border: 1px solid var(--hairline-strong);
+    padding: 36px 40px;
+    position: relative;
+  }
+  .controversy::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 4px;
+    background: var(--gold);
+  }
+  .controversy-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .controversy h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 16px;
+  }
+  .controversy h4 em { color: var(--gold); font-style: italic; }
+  .controversy-body {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+  }
+  .controversy-body strong { color: var(--paper); font-weight: 500; }
+
+  /* SCORING LEADERS */
+  .leaders {
+    margin: 32px 0;
+    background: var(--ink-2);
+    border-left: 3px solid var(--gold);
+    padding: 28px 32px;
+  }
+  .leaders-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .leaders h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 18px;
+  }
+  .leaders-grid {
+    display: grid;
+    grid-template-columns: 70px 1fr 80px;
+    gap: 16px;
+    align-items: center;
+    padding: 12px 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .leaders-grid:first-of-type { border-top: none; padding-top: 4px; }
+  .leaders-rank {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--goal);
+    letter-spacing: -0.02em;
+  }
+  .leaders-name {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.4;
+    color: var(--paper);
+  }
+  .leaders-name .team-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-left: 8px;
+  }
+  .leaders-pts {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--paper);
+    text-align: right;
+    letter-spacing: 0.04em;
+  }
+
+  /* BRACKET STATUS */
+  .bracket-status {
+    margin: 40px 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .bracket-cell {
+    background: var(--ink);
+    padding: 24px 22px;
+  }
+  .bracket-cell .bc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .bracket-cell .bc-matchup {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--paper);
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+  .bracket-cell .bc-status {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+  .bracket-cell.advanced .bc-label { color: var(--car); }
+  .bracket-cell.brink .bc-label { color: var(--goal); }
+
+  .closing { padding: 72px 0 48px; border-top: 1px solid var(--hairline-strong); }
+  .closing .overline { color: var(--gold); }
+  .closing .overline::before { background: var(--gold); }
+  .closing blockquote {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    max-width: 980px;
+  }
+  .closing blockquote em { font-style: italic; color: var(--goal); font-weight: 400; }
+  .closing .sig {
+    margin-top: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .toc { padding: 40px 0 48px; border-bottom: 1px solid var(--hairline); }
+  .toc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .toc-label::before {
+    content: "";
+    width: 24px; height: 1px;
+    background: var(--muted);
+  }
+  .toc-list {
+    list-style: none;
+    padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .toc-list li { background: var(--ink); }
+  .toc-list a {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px 26px;
+    text-decoration: none;
+    color: var(--paper);
+    transition: background 0.3s;
+    height: 100%;
+  }
+  .toc-list a:hover { background: var(--ink-2); }
+  .toc-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--goal);
+  }
+  .toc-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+    color: var(--paper);
+    transition: color 0.3s;
+  }
+  .toc-list a:hover .toc-title { color: var(--ice); }
+
+  footer {
+    padding: 36px 0;
+    border-top: 1px solid var(--hairline);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 820px) {
+    .wrap { padding: 0 20px; }
+    .scores { grid-template-columns: 1fr; }
+    .score { border-right: none; border-bottom: 1px solid var(--hairline); }
+    .score:last-child { border-bottom: none; }
+    .section-head { grid-template-columns: 1fr; gap: 12px; padding: 44px 0 28px; }
+    .game { grid-template-columns: 1fr; gap: 28px; padding: 48px 0; }
+    .game-title { position: static; }
+    .game-title h3 { font-size: 42px; }
+    .breakdown-row { grid-template-columns: 1fr; gap: 8px; }
+    .statblock-grid { grid-template-columns: repeat(2, 1fr); }
+    .bracket-status { grid-template-columns: 1fr; }
+    .controversy { padding: 24px 28px; }
+    .controversy h4 { font-size: 22px; }
+    .leaders-grid { grid-template-columns: 50px 1fr 70px; gap: 12px; }
+    .lede { padding: 56px 0 40px; }
+    .lede p { font-size: 20px; }
+    .byline { flex-direction: column; gap: 12px; }
+    .toc-list { grid-template-columns: 1fr; }
+    .toc { padding: 28px 0 32px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="round-banner">
+    Round Two &nbsp;·&nbsp; <span>Conference Semifinals</span> &nbsp;·&nbsp; Both East and West favorites answer
+  </div>
+
+  <div class="masthead">
+    <a href="index.html" class="brand-link"><div class="brand">Rink<span>&middot;</span>Report</div></a>
+    <div>
+      <a href="round2-day11-analysis.html" class="nav-link">← Day 11</a>
+      &nbsp;&nbsp;Vol. I &nbsp;/&nbsp; Round 02 &nbsp;/&nbsp; Day 12
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="overline">BUF stabilizes at Bell Centre · VGK survives McNabb ejection · Both win 3–2</div>
+    <h1 class="headline"><em>Composure.</em></h1>
+    <p class="dek">
+      Tuesday was a study in playing under pressure. <strong>Buffalo went into Bell Centre and won 3–2,
+      tying the series 2–2 by surviving an overturned goal, a 1-for-7 Habs PP, and Montreal's home crowd.
+      Vegas beat Anaheim 3–2 in OT to take a 3–2 series lead — playing 51 minutes without McNabb after
+      his 5-minute major and game misconduct, and surviving a 17–6 Anaheim shot edge in the 2nd.</strong>
+      Sennecke joined Matthews, Backstrom, and Couture as 4-game playoff goal-streak rookies.
+      <em>The favorites that lost ground over the weekend just won it back the way contenders do — by
+      surviving chaos.</em>
+    </p>
+    <div class="byline">
+      <div><strong>Round 2</strong> · Day 12 Analysis</div>
+      <div><strong>Filed</strong> · May 12, 2026</div>
+      <div><strong>Read</strong> · 13 minutes</div>
+    </div>
+  </header>
+
+  <section class="scores">
+    <div class="score">
+      <div class="tag">Game 4 · Series 02 · East &nbsp;·&nbsp; Series Tied</div>
+      <div class="matchup">
+        <span class="winner">Buffalo</span> def. <span class="loser">Montreal</span>, 3–2
+      </div>
+      <div class="final">Series tied 2–2 &nbsp;·&nbsp; Benson PP GWG · Luukkonen in net · BUF reclaims HIA</div>
+    </div>
+    <div class="score">
+      <div class="tag">Game 5 · Series 04 · West &nbsp;·&nbsp; VGK Takes Lead</div>
+      <div class="matchup">
+        <span class="winner">Vegas</span> def. <span class="loser">Anaheim</span>, 3–2 (OT)
+      </div>
+      <div class="final">Vegas leads 3–2 &nbsp;·&nbsp; Dorofeyev OT G7 · McNabb ejected · Hart elite</div>
+    </div>
+  </section>
+
+  <nav class="toc" aria-label="Table of contents">
+    <div class="toc-label">Contents</div>
+    <ol class="toc-list">
+      <li><a href="#section-01">
+        <span class="toc-num">§ 01</span>
+        <span class="toc-title">Buffalo stabilizes</span>
+      </a></li>
+      <li><a href="#section-02">
+        <span class="toc-num">§ 02</span>
+        <span class="toc-title">Vegas survives</span>
+      </a></li>
+      <li><a href="#section-03">
+        <span class="toc-num">§ 03</span>
+        <span class="toc-title">Leaders & status</span>
+      </a></li>
+    </ol>
+  </nav>
+
+  <section class="lede">
+    <p>
+      Day 10 was about the field hitting back. Day 11 was about Colorado responding the way champions do.
+      <strong>Day 12 is about composure — the publication's earliest Round 2 framing (Day 4, Carolina's
+      OT recovery), now applied to two different teams winning two different games on the same night.</strong>
+      Buffalo lost a 2-0 lead to a controversial goalie-interference overturn, watched Montreal go up 2–1
+      on a Caufield PP goal, and then quietly stabilized — got a fluky Thompson bounce off the Bell Centre
+      Zamboni door corner, killed a 4-minute Byram double minor, watched Luukkonen stop Caufield twice
+      cross-ice, and won 3–2 on a Benson PP goal less than 5 minutes into the third on his 21st birthday.
+      Vegas lost McNabb after 3 minutes to a 5-minute major and game misconduct for interference,
+      played the next 51 minutes shorthanded on their blueline, got outshot 17–6 in the second period,
+      watched Anaheim tie it at 2–2 with 3:05 left on a Zellweger seam-pass laser, and won 3–2 in OT
+      on Dorofeyev batting a puck out of mid-air past Dostal. <em>Two teams. Two cities. Two structures
+      of chaos. Two wins by the team that absorbed the chaos best.</em>
+    </p>
+  </section>
+
+  <!-- § 01 BUFFALO -->
+  <div class="section-head" id="section-01">
+    <div class="num">§ 01</div>
+    <div class="section-head-text">
+      <h2>Buffalo <em>stabilized.</em></h2>
+      <p class="section-lead">Three Ruff lineup changes — Luukkonen in net, Helenius's playoff debut, Schenn for Stanley — all worked. The Habs PP went 1-for-7. A Zamboni-door bounce tied it 2–2. Benson scored the GWG on his 21st birthday. "It looked like our team again."</p>
+    </div>
+  </div>
+
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Round 2 · Series 02 · East &nbsp;·&nbsp; <span style="color: var(--goal); font-weight: 600;">Series Tied 2–2</span></div>
+      <h3>Buffalo <span class="vs">at</span> Montreal</h3>
+      <div class="colorbar">
+        <span style="background: var(--buf)"></span>
+        <span style="background: var(--mtl)"></span>
+      </div>
+      <div class="series-stand">
+        <div class="ss-label">Series Standing</div>
+        <div class="ss-score">Sabres 2 — Canadiens 2</div>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Buffalo 3, Montreal 2. <strong>Sabres scorers: Samuelsson (off Doan→Norris setup), Thompson (Zamboni-door bounce), Benson (PP GWG, on his 21st birthday).</strong> Habs: Newhook (his 6th goal in 6 games), Caufield (PP). <em>Series tied 2–2. Game 5 Thursday in Buffalo. Sabres reclaim home-ice advantage.</em></li>
+        <li>The Sabres came out exactly the way Ruff needed them to. <strong>By the first TV timeout, Buffalo led shots 8–1.</strong> Cleaner puck management, better neutral-zone structure, less trading chances. <em>Per Ruff postgame: "I thought tonight we tightened things up. We finally got to the place where we need to be. It looked like our team again."</em></li>
+        <li>Three Ruff lineup changes, three structural wins:
+          <ul style="list-style: none; padding-left: 24px; margin-top: 8px;">
+            <li style="position: relative; padding-left: 18px; margin-bottom: 4px;"><span style="position: absolute; left: 0; top: 11px; width: 10px; height: 1px; background: var(--gold); display: inline-block;"></span> <strong>Luukkonen replaces Lyon in net.</strong> Made consecutive cross-ice saves on Caufield to keep it 2–1. Survived 4-minute Byram double-minor kill. Thompson postgame: <em>"He was our best killer tonight."</em></li>
+            <li style="position: relative; padding-left: 18px; margin-bottom: 4px;"><span style="position: absolute; left: 0; top: 11px; width: 10px; height: 1px; background: var(--gold); display: inline-block;"></span> <strong>Konsta Helenius makes his playoff debut</strong> on the third line. 4-for-4 in faceoffs. Would have had an assist on the overturned goal.</li>
+            <li style="position: relative; padding-left: 18px;"><span style="position: absolute; left: 0; top: 11px; width: 10px; height: 1px; background: var(--gold); display: inline-block;"></span> <strong>Luke Schenn replaces Logan Stanley</strong> on the third pair. Limited but steady, including ~3 minutes of SH time.</li>
+          </ul>
+        </li>
+        <li>The Habs PP failed structurally: <strong>1-for-7. Squandered a 4-minute Byram double minor at 18:31 of the 2nd with the score tied 2–2.</strong> <em>Caufield's brutal one-word answer when asked what the PP could have done better: "Score."</em> The Athletic's framing: "The Sabres seemed intent on giving the game to the Canadiens. The Canadiens were simply unable to accept the gift."</li>
+        <li>The Thompson tying goal was a Bell Centre special. <strong>On the PP, Thompson ripped the puck from center ice into the corner. It bounced off the Zamboni door, came directly out front, hit Dobes, went in.</strong> <em>St Louis postgame: "We do talk about it. We got caught because he came out of his net once, so now he doesn't come out anymore when the puck is in that corner. And if he had come out this time, I don't think it would have gone in. What are you going to do?"</em> Hockey gods rebalancing Luukkonen's bounce-goal against Boston in Round 1.</li>
+        <li>Newhook scored again — his 6th goal in 6 games. <strong>The Mr. May framing from Day 10 is now permanent.</strong> <em>The problem isn't Newhook; it's the rest of the supporting cast going cold around him.</em></li>
+        <li>Sabres discipline still a problem. <strong>Buffalo gave Montreal 7 PP opportunities. Thompson, Dahlin (×2), Zucker, and Byram (×2, including the double minor) all took penalties.</strong> <em>Ruff postgame: "We had some self-inflicted pain. We didn't pass the discipline test. Against a better-finishing team that could become fatal."</em></li>
+        <li>The Montreal "missed playoff opportunity" pattern is now a story. <strong>The Athletic: "Now they can add this Game 4 loss to the Sabres to that list of missed playoff opportunities."</strong> <em>Reference to the Tampa series — Habs failed to go up 2-0 on the road, failed to close 3-1 at home, lost Game 6 at home. The pattern: Montreal struggles to seize leverage moments.</em></li>
+      </ul>
+
+      <div class="statblock">
+        <div class="statblock-label">Bell Centre · By the Numbers</div>
+        <div class="statblock-grid">
+          <div class="stat">
+            <div class="num">8–1</div>
+            <div class="label">BUF shot edge<br/>first TV timeout</div>
+          </div>
+          <div class="stat">
+            <div class="num">1/7</div>
+            <div class="label">MTL PP<br/>incl 4-min DM</div>
+          </div>
+          <div class="stat">
+            <div class="num">6</div>
+            <div class="label">Newhook<br/>G in 6 games</div>
+          </div>
+          <div class="stat">
+            <div class="num">3</div>
+            <div class="label">Ruff lineup<br/>changes worked</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="controversy">
+        <div class="controversy-label">Round 2 Controversy · Goal Overturned</div>
+        <h4>Helenius and the <em>interference call.</em></h4>
+        <p class="controversy-body">
+          Late in the first period with Buffalo leading 1–0, <strong>Helenius drove the net and put a backhand attempt off Dobes. Quinn grabbed the rebound and lifted it into Dobes's glove, but the situation room ruled the puck crossed the goal line in the glove for a 2–0 Buffalo lead.</strong> St Louis challenged for goalie interference. The situation room ruled Helenius made contact with Dobes' STICK (which was swinging across the crease), preventing Dobes from making a play. <strong>Goal overturned.</strong>
+          <br/><br/>
+          <strong>Ruff strongly disagreed:</strong> <em>"Which I totally disagree with, just for the fact that Dobes is always swinging his stick and he initiated the contact with Helenius with his stick coming across the crease. Helenius did a great job of trying to avoid the goaltender; their guy ends up hitting the goaltender. I really thought that that was going our way. It's just a tough review on us."</em>
+          <br/><br/>
+          <strong>The structural truth:</strong> Instead of going down 2–0, Montreal got Newhook's tying goal 2 minutes later and Caufield's PP goal late in the period to lead 2–1 after one. <em>The fourth Round 2 controversy after Vegas missed icing (Day 4), McNabb head-first cross-check (Day 10), and Manson butt-end (Day 11).</em>
+        </p>
+      </div>
+
+      <div class="pullquote">
+        It looked like our team again.
+        <span class="attribution">— Lindy Ruff, postgame</span>
+      </div>
+
+      <div class="breakdown-row">
+        <div class="label">What This Was</div>
+        <div class="content"><strong>Buffalo's identity-recovery game.</strong> After Day 10's 6–2 blowout where the publication framed the Sabres as "the team being imposed on," Ruff's structural adjustments restored the pace identity. <em>Luukkonen was the difference between a stabilization and a steal — he made 27 saves and erased multiple high-danger Caufield chances.</em></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Montreal's Pattern</div>
+        <div class="content">The Habs played reasonably well, carried the third period, pushed hard late. <strong>But they couldn't convert 7 PP opportunities into more than 1 goal, and they couldn't capitalize on a tied-game 4-minute double minor.</strong> <em>The Tampa series pattern (failed to seize multiple leverage moments) just got applied to the Buffalo series. This is the question that defines whether Montreal can be a real championship team in the next 2–3 years: can they finish?</em></div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook · Updated</div>
+        <div class="otext">Buffalo reclaims home-ice advantage. <strong>Game 5 Thursday in Buffalo, Game 6 Saturday in Montreal, Game 7 if necessary Monday in Buffalo.</strong> <em>The series is now what the publication suspected before tonight: a real fight. Buffalo's pace identity is back. Montreal's leverage pattern is real. The Hutson Norris thread, the Newhook scoring run, and Buffalo's PK survival are all live narratives going into Game 5.</em></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- § 02 VEGAS -->
+  <div class="section-head" id="section-02">
+    <div class="num">§ 02</div>
+    <div class="section-head-text">
+      <h2>Vegas <em>survived.</em></h2>
+      <p class="section-lead">3 minutes in, McNabb gets a 5-minute major and a game misconduct. Vegas plays the next 51 minutes shorthanded on the blueline. Anaheim outshoots them 17–6 in the second. Hart stops every one. Zellweger ties it with 3:05 left. Dorofeyev wins it in OT by batting a puck out of mid-air. Vegas leads 3–2.</p>
+    </div>
+  </div>
+
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Round 2 · Series 04 · West &nbsp;·&nbsp; <span style="color: var(--goal); font-weight: 600;">VGK Leads 3–2</span></div>
+      <h3>Anaheim <span class="vs">at</span> Vegas</h3>
+      <div class="colorbar">
+        <span style="background: var(--ana)"></span>
+        <span style="background: var(--vgk)"></span>
+      </div>
+      <div class="series-stand">
+        <div class="ss-label">Series Standing</div>
+        <div class="ss-score">Golden Knights 3 — Ducks 2</div>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Vegas 3, Anaheim 2 in overtime. <strong>VGK scorers: Dorofeyev (sniped after stealing Kreider's puck), Hertl (2nd in 2 games after 29-game drought), Dorofeyev (OT GWG, batted out of mid-air).</strong> ANA: Sennecke (PP, 4th straight game), Zellweger (laser wrist shot off Gauthier seam pass, tied it with 3:05 left). <em>VGK leads 3–2. Game 6 Thursday in Anaheim.</em></li>
+        <li>The McNabb ejection is the structural moment of the game. <strong>Midway through the 1st: McNabb landed a late hit on Ryan Poehling in the neutral zone — Poehling lost the puck through his skates just before contact, McNabb crunched him into the boards, Poehling out for the rest of the game.</strong> Five-minute major for interference under Rule 56.4 ("at his discretion, may assess a major based on the degree of violence"). <em>Automatic game misconduct because Poehling was injured on the play.</em> McNabb averages 22+ MPG. He played 3 minutes tonight.</li>
+        <li>Vegas played 51 of 64 minutes without their #2 minute eater on the back end. <strong>Hutton and Coghlan saw elevated minutes and handled them well.</strong> <em>Tortorella postgame: "I'm proud of the team tonight. Getting down, losing one of our top defensemen, finding ways to get things done and get the win. I'm really proud of the hockey club."</em></li>
+        <li>The Anaheim second period was their best stretch of the series. <strong>Outshot Vegas 17–6.</strong> Hart stopped all 17. <em>That's the structural separator the Athletic flagged: "Vegas may not always control games, but they almost always control the critical moments." Hart erasing a 17–6 territorial period is exactly that.</em></li>
+        <li>The Anaheim PP fix continued. <strong>Sennecke scored on the PP for the third straight game. Ducks now have PP goals in three consecutive games after starting the series 0-for-11.</strong> <em>The 0-for-11 structural problem the publication flagged Day 8 is fully solved.</em></li>
+        <li>Sennecke joined exclusive rookie company tonight. <strong>Four-game playoff goal streak puts him alongside Auston Matthews (2017), Logan Couture (2011), and Nicklas Backstrom (2008) as the only rookies with 4-game playoff goal streaks in the last 25 years.</strong> <em>His five goals in this postseason tie Bobby Ryan's 2008-09 record for most by a Ducks rookie in a single postseason.</em></li>
+        <li>Dorofeyev had the most eventful night of any player in the playoffs. <strong>Opened scoring with a brilliant individual goal (stole Kreider's puck, skated through the slot, sniped past Dostal). Blocked a slap shot off his knee in the 2nd and was helped down the tunnel by teammates. Returned, was effective, scored the OT winner by batting the puck out of mid-air past Dostal.</strong> <em>Dorofeyev postgame: "To be honest, I can't even tell you what happened there. I just saw the puck with my stick on it, and thankfully it got into the net."</em> His 7th goal of the playoffs.</li>
+        <li>Hertl scored his 2nd goal in 2 games after a 29-game goal drought entering Game 4. <strong>Postgame: "It was a pretty hard two months for me, because everyone expects that I score goals. It's always nice to get a couple, and hopefully moving forward I can help with more goals."</strong> <em>Vegas now has Eichel driving play, Marner creating, and the third-line center finally producing.</em></li>
+        <li>Zellweger keeps delivering. <strong>Day 10 playoff debut (secondary assist on Moore's goal). Game 5: his first career playoff goal — a laser off a Gauthier seam pass — tied it with 3:05 left in regulation.</strong> <em>Per Zellweger: "When I'm watching from above, I'm trying to see the situations I'd be in." Quenneville's mobility-and-puck-movement bet on his blueline is paying.</em></li>
+        <li>Historical context for Vegas: <strong>3–0 in OT this postseason. 5–0 in franchise history when winning Game 5 of a 2–2 series, and have closed all five out in Game 6.</strong> <em>That includes their Round 1 win over Utah. Brutal historical math for Anaheim heading to Game 6.</em></li>
+      </ul>
+
+      <div class="statblock">
+        <div class="statblock-label">T-Mobile Arena · By the Numbers</div>
+        <div class="statblock-grid">
+          <div class="stat">
+            <div class="num">51</div>
+            <div class="label">VGK minutes<br/>without McNabb</div>
+          </div>
+          <div class="stat">
+            <div class="num">17–6</div>
+            <div class="label">ANA shots<br/>in 2nd period</div>
+          </div>
+          <div class="stat">
+            <div class="num">3–0</div>
+            <div class="label">Vegas OT<br/>this postseason</div>
+          </div>
+          <div class="stat">
+            <div class="num">5–0</div>
+            <div class="label">VGK G5 wins<br/>in 2–2 series</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pullquote">
+        Vegas may not always control games, but they almost always control the critical moments.
+        <span class="attribution">— Postgame Game 5 analytical read</span>
+      </div>
+
+      <div class="breakdown-row">
+        <div class="label">What This Was</div>
+        <div class="content"><strong>Vegas's elite-veteran composure on full display.</strong> Lost a top defenseman 3 minutes in to a 5-minute major and game misconduct. Got outshot 17–6 in the 2nd. Watched Anaheim tie it with 3:05 left in regulation. <em>None of that mattered.</em> Hart was elite. Dorofeyev was the player of the night. The Vegas structure held through every disruption. <strong>This is the closest thing the bracket has had to a "championship moment" game outside of Carolina's Day 4 and Day 9 OT wins.</strong></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Anaheim's Problem</div>
+        <div class="content">The Ducks have now pushed Vegas through 5 games, played them essentially even territorially, and lost three of them in critical late moments. <strong>The Athletic: "That can become emotionally exhausting. Especially for a younger team."</strong> <em>Anaheim is genuinely faster and more dynamic; Vegas is more composed and more efficient. In playoff hockey, the second profile wins more often than the first.</em></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">The Sennecke Storyline</div>
+        <div class="content">Four-game playoff goal streak puts him in 25-year company with Matthews, Backstrom, and Couture. <strong>Five goals total ties Bobby Ryan's record for most by a Ducks rookie in any single postseason.</strong> <em>The publication has been tracking Sennecke since Day 10 as "becoming a star inside the postseason." Day 12 confirms — and adds the franchise-record context that makes him a generational Ducks player even if Anaheim loses Game 6.</em></div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook · Updated</div>
+        <div class="otext">Game 6 Thursday in Anaheim. <strong>Vegas needs one win. Anaheim needs to win two in a row, with one of them at T-Mobile if they force Game 7.</strong> <em>The Stone return timeline is still the biggest variable; he hasn't played since Game 2. The McNabb suspension/discipline review will land before Game 6 — if he's out, Anaheim's matchup math improves dramatically. The Vegas history (5–0 in Game 5 wins of 2–2 series, all closed out in Game 6) is a brutal historical headwind.</em></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- § 03 LEADERS + STATUS -->
+  <div class="section-head" id="section-03">
+    <div class="num">§ 03</div>
+    <div class="section-head-text">
+      <h2>Leaders & <em>status.</em></h2>
+      <p class="section-lead">A four-way tie for the playoff goal lead at 7. Carolina's been resting for three days. Two series in real danger of ending Thursday.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="leaders">
+      <div class="leaders-label">NHL Playoff Scoring · Through Day 12</div>
+      <h4>The goal race is now <em>four-deep.</em></h4>
+
+      <div class="leaders-grid">
+        <div class="leaders-rank">01</div>
+        <div class="leaders-name">Kirill Kaprizov<span class="team-tag">MIN</span></div>
+        <div class="leaders-pts">14 pts</div>
+      </div>
+      <div class="leaders-grid">
+        <div class="leaders-rank">T2</div>
+        <div class="leaders-name">Mitch Marner<span class="team-tag">VGK</span> · Jack Eichel<span class="team-tag">VGK</span></div>
+        <div class="leaders-pts">13 pts</div>
+      </div>
+      <div class="leaders-grid">
+        <div class="leaders-rank" style="font-size: 18px;">G</div>
+        <div class="leaders-name">Stankoven<span class="team-tag">CAR</span> · Boldy<span class="team-tag">MIN</span> · Howden<span class="team-tag">VGK</span> · Dorofeyev<span class="team-tag">VGK</span></div>
+        <div class="leaders-pts">7 G each</div>
+      </div>
+      <div class="leaders-grid">
+        <div class="leaders-rank" style="font-size: 18px;">RK</div>
+        <div class="leaders-name">Beckett Sennecke<span class="team-tag">ANA · 4-game G streak</span></div>
+        <div class="leaders-pts">5 G</div>
+      </div>
+
+      <p style="font-family: 'Source Serif 4', Georgia, serif; font-size: 16px; line-height: 1.6; color: var(--paper-dim); margin-top: 22px;">
+        <strong style="color: var(--paper); font-weight: 500;">Two of the four goal leaders are Vegas wingers.</strong> Howden hit 7 last Friday. Dorofeyev hit 7 tonight (with the OT GWG, no less). <em>Vegas's depth-scoring profile is now structurally clearer than at any point in the postseason — Eichel and Marner driving, Howden producing, Dorofeyev finishing, Hertl breaking his drought. That's a championship offensive structure when it's clicking.</em>
+      </p>
+    </div>
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 48px 0 20px; letter-spacing: -0.01em;">Bracket status · Round 2</h3>
+
+    <div class="bracket-status">
+      <div class="bracket-cell advanced">
+        <div class="bc-label">East · Series 01 · DONE</div>
+        <div class="bc-matchup">CAR over PHI</div>
+        <div class="bc-status">4–0 sweep. 8–0 postseason. Resting since Saturday. Awaits BUF/MTL winner.</div>
+      </div>
+      <div class="bracket-cell">
+        <div class="bc-label">East · Series 02 · Tied 2–2</div>
+        <div class="bc-matchup">BUF & MTL Tied</div>
+        <div class="bc-status">Sabres reclaim HIA. Game 5 Thursday in Buffalo.</div>
+      </div>
+      <div class="bracket-cell brink">
+        <div class="bc-label">West · Series 03 · WED CLOSEOUT</div>
+        <div class="bc-matchup">COL leads MIN, 3–1</div>
+        <div class="bc-status">Game 5 Wednesday in Denver. Wild's only path: 3 straight, twice done in MIN history (both 2003).</div>
+      </div>
+      <div class="bracket-cell brink">
+        <div class="bc-label">West · Series 04 · THU CLOSEOUT</div>
+        <div class="bc-matchup">VGK leads ANA, 3–2</div>
+        <div class="bc-status">Game 6 Thursday in Anaheim. VGK 5–0 historically in such closeouts.</div>
+      </div>
+    </div>
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 48px 0 20px; letter-spacing: -0.01em;">What's next</h3>
+
+    <ul class="bullets" style="max-width: 820px;">
+      <li><strong>Wednesday · Minnesota at Colorado, Game 5 in Denver.</strong> Closeout opportunity for the Avs. <em>If Colorado wins, they're to the Western Conference Final and the bracket is two-thirds determined. If Wild win, they extend their season for one more game in St. Paul. Eriksson Ek's travel status is still "touch and go" per Hynes.</em></li>
+      <li><strong>Thursday · Buffalo at Montreal vacates to KeyBank Center for Game 5.</strong> The most analytically interesting series in the bracket right now. <em>Hutson, Newhook, Caufield, Luukkonen, the Lyon question, the Habs leverage-moment pattern — every thread the publication has been tracking converges Thursday night.</em></li>
+      <li><strong>Thursday · Vegas at Anaheim, Game 6.</strong> Vegas closeout opportunity. <em>The Stone return + the McNabb potential suspension are the two structural variables. If both flip toward Anaheim, Game 7 in Vegas suddenly becomes real.</em></li>
+      <li><strong>The Conference Final picture:</strong> <em>Earliest possible start is Saturday if all series end Wednesday and Thursday. Most likely start is Sunday or Monday. Carolina will have 7–10 days off; their opponent will have 1–3.</em></li>
+    </ul>
+
+  </section>
+
+  <section class="closing">
+    <div class="overline">The Take</div>
+    <blockquote>
+      <em>Composure is what wins playoff hockey.</em> The publication has been naming this since Day 4,
+      when Carolina recovered from a 2–0 deficit in OT to take Game 2 against Philly. Tonight Buffalo
+      and Vegas applied it on the same night. <strong>Buffalo absorbed an overturned goal, a 1-for-7
+      Habs PP, a 4-minute double minor against them, and a Montreal home crowd — and stabilized.
+      Vegas absorbed a 3-minute McNabb ejection, a 17–6 second-period shot deficit, a late tying goal
+      with 3:05 left in regulation, and a Dorofeyev knee scare — and won.</strong> <em>Carolina is alone
+      at 8–0. Colorado is one win from the Conference Final. Vegas is one win from the Conference Final.
+      Montreal and Anaheim are both fighting to extend their seasons.</em> The bracket has compressed
+      to four teams that look like Cup-worthy contenders, plus three teams trying not to leave.
+      <strong>Thursday could send three series to closeout or elimination at once.</strong>
+    </blockquote>
+    <div class="sig">— Round 2 · Day 12 · Filed after Buffalo's stabilization and Vegas's survival · Wednesday and Thursday will define the bracket</div>
+  </section>
+
+  <footer>
+    <div>Rink Report · NHL Playoff Coverage</div>
+    <div>Round 2 of 4 · CAR through · COL 3–1 · BUF-MTL 2–2 · VGK 3–2 · Wed: COL closeout in Denver · Thu: 2 more</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
