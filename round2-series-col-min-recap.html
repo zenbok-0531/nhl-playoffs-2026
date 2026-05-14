@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Series Recap: Colorado over Minnesota | NHL Playoffs Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0b0d12;
+    --ink-2: #13161f;
+    --ink-3: #1c1f2b;
+    --paper: #f2ebdc;
+    --paper-dim: #d6cdba;
+    --muted: #8a8374;
+    --ice: #7fb4d8;
+    --ice-deep: #3d6d93;
+    --goal: #d74e3a;
+    --gold: #d4a842;
+    --hairline: rgba(242, 235, 220, 0.14);
+    --hairline-strong: rgba(242, 235, 220, 0.28);
+    --car: #cc0000;
+    --col: #6F263D;
+    --min: #154734;
+    --mtl: #AF1E2D;
+    --buf: #002654;
+    --vgk: #B4975A;
+    --ana: #B9975B;
+    --phi: #f74902;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  ul.bullets { list-style: none; padding: 0; margin: 0; }
+  ul.bullets li {
+    position: relative;
+    padding-left: 26px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+  ul.bullets li:last-child { margin-bottom: 0; }
+  ul.bullets li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 11px;
+    width: 14px; height: 1px;
+    background: var(--goal);
+  }
+  ul.bullets li strong { color: var(--paper); font-weight: 500; }
+
+  .round-banner {
+    background: linear-gradient(90deg, rgba(111, 38, 61, 0.28) 0%, rgba(215, 78, 58, 0.10) 50%, transparent 100%);
+    border-bottom: 1px solid var(--hairline);
+    padding: 16px 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--goal);
+    font-weight: 600;
+  }
+  .round-banner span { color: var(--paper); }
+
+  .masthead {
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .masthead .brand { color: var(--paper); font-weight: 600; }
+  .masthead .brand span { color: var(--goal); }
+  .masthead .brand-link {
+    text-decoration: none;
+    transition: opacity 0.3s;
+    display: inline-block;
+  }
+  .masthead .brand-link:hover { opacity: 0.7; }
+  .masthead .nav-link {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    border-bottom: 1px solid transparent;
+  }
+  .masthead .nav-link:hover { color: var(--paper); border-bottom-color: var(--hairline-strong); }
+  .masthead .recap-tag {
+    color: var(--col);
+    font-weight: 600;
+    letter-spacing: 0.22em;
+  }
+
+  .hero {
+    padding: 80px 0 72px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .overline {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .overline::before {
+    content: "";
+    width: 32px; height: 1px;
+    background: var(--goal);
+  }
+  h1.headline {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(56px, 9vw, 136px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    margin-bottom: 24px;
+  }
+  h1.headline em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+  .subhead {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: clamp(20px, 2.4vw, 32px);
+    color: var(--muted);
+    margin-bottom: 40px;
+    letter-spacing: -0.01em;
+  }
+  .dek {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.5;
+    color: var(--paper);
+    max-width: 760px;
+    font-weight: 500;
+  }
+  .byline {
+    margin-top: 48px;
+    display: flex;
+    gap: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+  .byline strong { color: var(--paper); font-weight: 600; }
+
+  /* SERIES SCORE GRID - 5 games */
+  .series-scores {
+    border-bottom: 1px solid var(--hairline);
+    background: var(--ink-2);
+  }
+  .series-scores-header {
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--hairline);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--col);
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .series-scores-header .total {
+    color: var(--paper);
+    font-weight: 700;
+  }
+  .series-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--hairline);
+  }
+  .series-game {
+    background: var(--ink-2);
+    padding: 22px 20px;
+    text-align: left;
+    transition: background 0.3s;
+  }
+  .series-game:hover { background: var(--ink); }
+  .series-game .gameno {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .series-game .result {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 1.1;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  .series-game .result .w { color: var(--paper); }
+  .series-game .result .l { color: var(--muted); }
+  .series-game .desc {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--paper-dim);
+  }
+  .series-game.clincher {
+    background: linear-gradient(180deg, rgba(111, 38, 61, 0.22) 0%, var(--ink-2) 100%);
+  }
+  .series-game.clincher .gameno {
+    color: var(--col);
+  }
+
+  .lede { padding: 88px 0 64px; max-width: 820px; }
+  .lede p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 23px;
+    line-height: 1.58;
+    color: var(--paper);
+    font-weight: 400;
+  }
+  .lede p::first-letter {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 5.2em;
+    float: left;
+    line-height: 0.82;
+    padding: 10px 14px 0 0;
+    color: var(--goal);
+  }
+
+  .section-head {
+    padding: 56px 0 40px;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 40px;
+    align-items: baseline;
+    border-top: 1px solid var(--hairline);
+    scroll-margin-top: 24px;
+  }
+  .section-head .num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--goal);
+    letter-spacing: 0.1em;
+  }
+  .section-head-text { align-self: baseline; }
+  .section-lead {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.45;
+    color: var(--goal);
+    margin-top: 20px;
+    max-width: 780px;
+  }
+  .section-head h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(38px, 5vw, 68px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+  }
+  .section-head h2 em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+
+  .game {
+    padding: 64px 0;
+    border-top: 1px solid var(--hairline-strong);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 56px;
+  }
+  .game-title { position: sticky; top: 40px; align-self: start; }
+  .game-title .series-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .game-title h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 54px;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .game-title .vs {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--muted);
+    display: block;
+    font-size: 0.6em;
+    margin: 4px 0;
+  }
+  .colorbar { height: 6px; width: 100%; display: flex; margin-top: 20px; }
+  .colorbar span { flex: 1; }
+  .series-stand {
+    margin-top: 24px;
+    padding: 18px 20px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--goal);
+  }
+  .series-stand .ss-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 6px;
+  }
+  .series-stand .ss-score {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--paper);
+    letter-spacing: -0.01em;
+  }
+  .game-body { font-size: 17px; line-height: 1.65; }
+  .game-body > ul.bullets { margin-bottom: 8px; }
+  .game-body > ul.bullets li { font-size: 16px; }
+  .pullquote {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 1.4;
+    color: var(--paper);
+    padding: 28px 0 28px 28px;
+    border-left: 2px solid var(--goal);
+    margin: 28px 0;
+  }
+  .pullquote .attribution {
+    display: block;
+    margin-top: 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .breakdown-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 24px;
+    padding: 18px 0;
+    border-top: 1px solid var(--hairline);
+    align-items: start;
+  }
+  .breakdown-row:last-child { border-bottom: 1px solid var(--hairline); }
+  .breakdown-row .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding-top: 4px;
+  }
+  .breakdown-row .content { color: var(--paper-dim); font-size: 16px; }
+  .breakdown-row .content strong { color: var(--paper); font-weight: 500; }
+
+  .statblock {
+    margin: 32px 0;
+    background: var(--ink-2);
+    border: 1px solid var(--hairline);
+    padding: 28px 32px;
+  }
+  .statblock-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .statblock-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .stat .num {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 38px;
+    color: var(--goal);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .stat .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+
+  /* ARC PANEL - 5 game series arc */
+  .arc-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+    margin: 32px 0;
+  }
+  .arc-cell {
+    background: var(--ink);
+    padding: 28px 24px;
+  }
+  .arc-cell .arc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .arc-cell .arc-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--paper);
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  .arc-cell .arc-score {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--paper-dim);
+    margin-bottom: 12px;
+    letter-spacing: 0.04em;
+  }
+  .arc-cell .arc-desc {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+
+  /* STORYLINE CARDS */
+  .storylines {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin: 32px 0;
+  }
+  .storyline {
+    padding: 28px 30px;
+    background: var(--ink-2);
+    border: 1px solid var(--hairline);
+    border-left: 3px solid var(--ice);
+  }
+  .storyline .sl-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ice);
+    margin-bottom: 14px;
+  }
+  .storyline h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 14px;
+  }
+  .storyline h4 em { color: var(--ice); font-style: italic; }
+  .storyline p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--paper-dim);
+  }
+  .storyline p strong { color: var(--paper); font-weight: 500; }
+  .storyline p em { color: var(--ice); font-style: italic; }
+
+  /* BRACKET STATUS PANEL */
+  .bracket-status {
+    margin: 40px 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .bracket-cell {
+    background: var(--ink);
+    padding: 24px 22px;
+  }
+  .bracket-cell .bc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .bracket-cell .bc-matchup {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--paper);
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+  .bracket-cell .bc-status {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+  .bracket-cell.advanced .bc-label { color: var(--car); }
+  .bracket-cell.advanced.wcf .bc-label { color: var(--col); }
+  .bracket-cell.brink .bc-label { color: var(--goal); }
+
+  /* ADVANCEMENT BANNER for COL */
+  .advance-banner {
+    margin: 0 0 56px;
+    background: linear-gradient(135deg, rgba(111, 38, 61, 0.22) 0%, var(--ink-2) 60%, var(--ink) 100%);
+    border: 1px solid var(--hairline-strong);
+    padding: 48px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .advance-banner::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 6px;
+    background: var(--col);
+  }
+  .advance-overline {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--col);
+    margin-bottom: 22px;
+    font-weight: 600;
+  }
+  .advance-banner h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    margin-bottom: 22px;
+  }
+  .advance-banner h3 em {
+    font-style: italic;
+    color: var(--goal);
+  }
+  .advance-body {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+    max-width: 820px;
+  }
+  .advance-body strong { color: var(--paper); font-weight: 500; }
+
+  .closing { padding: 72px 0 48px; border-top: 1px solid var(--hairline-strong); }
+  .closing .overline { color: var(--gold); }
+  .closing .overline::before { background: var(--gold); }
+  .closing blockquote {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    max-width: 980px;
+  }
+  .closing blockquote em { font-style: italic; color: var(--goal); font-weight: 400; }
+  .closing .sig {
+    margin-top: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .toc { padding: 40px 0 48px; border-bottom: 1px solid var(--hairline); }
+  .toc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .toc-label::before {
+    content: "";
+    width: 24px; height: 1px;
+    background: var(--muted);
+  }
+  .toc-list {
+    list-style: none;
+    padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .toc-list li { background: var(--ink); }
+  .toc-list a {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px 26px;
+    text-decoration: none;
+    color: var(--paper);
+    transition: background 0.3s;
+    height: 100%;
+  }
+  .toc-list a:hover { background: var(--ink-2); }
+  .toc-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--goal);
+  }
+  .toc-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+    color: var(--paper);
+    transition: color 0.3s;
+  }
+  .toc-list a:hover .toc-title { color: var(--ice); }
+
+  footer {
+    padding: 36px 0;
+    border-top: 1px solid var(--hairline);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 820px) {
+    .wrap { padding: 0 20px; }
+    .series-grid { grid-template-columns: repeat(2, 1fr); }
+    .series-game { padding: 16px 14px; }
+    .series-game .result { font-size: 18px; }
+    .arc-grid { grid-template-columns: 1fr; }
+    .section-head { grid-template-columns: 1fr; gap: 12px; padding: 44px 0 28px; }
+    .game { grid-template-columns: 1fr; gap: 28px; padding: 48px 0; }
+    .game-title { position: static; }
+    .game-title h3 { font-size: 42px; }
+    .breakdown-row { grid-template-columns: 1fr; gap: 8px; }
+    .statblock-grid { grid-template-columns: repeat(2, 1fr); }
+    .storylines { grid-template-columns: 1fr; }
+    .bracket-status { grid-template-columns: 1fr; }
+    .advance-banner { padding: 28px 24px; }
+    .lede { padding: 56px 0 40px; }
+    .lede p { font-size: 20px; }
+    .byline { flex-direction: column; gap: 12px; }
+    .toc-list { grid-template-columns: 1fr; }
+    .toc { padding: 28px 0 32px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="round-banner">
+    Round Two &nbsp;·&nbsp; <span>Series Recap · Western Semifinal</span> &nbsp;·&nbsp; Colorado advances 4–1
+  </div>
+
+  <div class="masthead">
+    <a href="index.html" class="brand-link"><div class="brand">Rink<span>&middot;</span>Report</div></a>
+    <div>
+      <a href="round2-day12-analysis.html" class="nav-link">← Day 12</a>
+      &nbsp;&nbsp;Vol. I &nbsp;/&nbsp; <span class="recap-tag">Series Recap</span> &nbsp;/&nbsp; COL · MIN
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="overline">Colorado over Minnesota · 4–1 · To the Western Conference Final</div>
+    <h1 class="headline">The <em>Climb.</em></h1>
+    <div class="subhead">A series that ended the way Colorado has done everything else this postseason: by absorbing pressure longer than the opponent could apply it.</div>
+    <p class="dek">
+      Colorado climbed back from a 3–0 second-period deficit to win Game 5 4–3 in overtime. <strong>Brett
+      Kulak — first goal since January 19, 2026 — scored the series winner 3:52 into OT on a Necas
+      feed.</strong> Earlier, MacKinnon's tying snipe with 1:23 left and the goalie pulled was the
+      legacy moment. Series 4–1. <em>Colorado has now won every game script playoff hockey offers,
+      across two rounds and a perfect-record fight-back — and is now to the Western Conference Final
+      for the 8th time since 1995.</em>
+    </p>
+    <div class="byline">
+      <div><strong>Round 2</strong> · Series Recap</div>
+      <div><strong>Filed</strong> · May 14, 2026</div>
+      <div><strong>Read</strong> · 16 minutes</div>
+      <div><strong>Status</strong> · Colorado advances</div>
+    </div>
+  </header>
+
+  <!-- SERIES SCORE GRID - 5 games -->
+  <section class="series-scores">
+    <div class="series-scores-header">
+      <span>Series · Best of Seven</span>
+      <span class="total">Colorado wins 4–1</span>
+    </div>
+    <div class="series-grid">
+      <div class="series-game">
+        <div class="gameno">Game 1 · May 4 · COL</div>
+        <div class="result"><span class="w">COL 9</span> · <span class="l">MIN 6</span></div>
+        <div class="desc">Track Meet. 15 combined goals. Makar 2G on injury return.</div>
+      </div>
+      <div class="series-game">
+        <div class="gameno">Game 2 · May 6 · COL</div>
+        <div class="result"><span class="w">COL 5</span> · <span class="l">MIN 2</span></div>
+        <div class="desc">MacKinnon's 3rd straight 3-point game. Wedgewood 6–0 to start playoffs.</div>
+      </div>
+      <div class="series-game">
+        <div class="gameno">Game 3 · May 9 · MIN</div>
+        <div class="result"><span class="l">COL 1</span> · <span class="w">MIN 5</span></div>
+        <div class="desc">Wild get in. Wallstedt return. Kaprizov NHL scoring lead.</div>
+      </div>
+      <div class="series-game">
+        <div class="gameno">Game 4 · May 11 · MIN</div>
+        <div class="result"><span class="w">COL 5</span> · <span class="l">MIN 2</span></div>
+        <div class="desc">The Response. Kelly GWG. MacKinnon & Nelson EN. Manson butt-end.</div>
+      </div>
+      <div class="series-game clincher">
+        <div class="gameno">Game 5 · May 13 · COL · OT</div>
+        <div class="result"><span class="w">COL 4</span> · <span class="l">MIN 3</span></div>
+        <div class="desc">The Climb. Down 3–0. MacKinnon tied late. Kulak OT GWG.</div>
+      </div>
+    </div>
+  </section>
+
+  <nav class="toc" aria-label="Table of contents">
+    <div class="toc-label">Contents</div>
+    <ol class="toc-list">
+      <li><a href="#section-01">
+        <span class="toc-num">§ 01</span>
+        <span class="toc-title">Game 5 · The Climb</span>
+      </a></li>
+      <li><a href="#section-02">
+        <span class="toc-num">§ 02</span>
+        <span class="toc-title">The series arc</span>
+      </a></li>
+      <li><a href="#section-03">
+        <span class="toc-num">§ 03</span>
+        <span class="toc-title">The storylines</span>
+      </a></li>
+      <li><a href="#section-04">
+        <span class="toc-num">§ 04</span>
+        <span class="toc-title">What's next</span>
+      </a></li>
+    </ol>
+  </nav>
+
+  <section class="lede">
+    <p>
+      Carolina's been to the Eastern Conference Final since Saturday. <strong>As of last night, Colorado
+      is to the Western Conference Final.</strong> The Avs eliminated the Minnesota Wild in five games,
+      and they did it the most Colorado way possible: by trailing 3–0 midway through the second period
+      of the closeout game, then climbing back to win 4–3 in overtime on a Brett Kulak goal — his first
+      goal since January 19, when he was still playing for the Pittsburgh Penguins. <em>This was the
+      defining game of Colorado's postseason so far, because it confirmed the structural truth the
+      publication has been tracking since the Day 3 "Track Meet" framing: this team can win in every
+      possible mode. Comeback. Overtime. Elimination. Structural domination. Track meets. Tight defense.
+      Star-led. Depth-led. Goalie-anchored. Wild-open.</em> They've now done all of them in two rounds.
+      <strong>Carolina is alone at 8–0. Colorado is alone in the "complete team" category. The Cup race
+      is now a structurally two-team conversation, with Vegas or Anaheim still trying to make it three.</strong>
+    </p>
+  </section>
+
+  <!-- ADVANCEMENT BANNER -->
+  <section style="padding: 40px 0 0;">
+    <div class="advance-banner">
+      <div class="advance-overline">·  ·  ·   Western Conference Final · Colorado Advances   ·  ·  ·</div>
+      <h3>Colorado <em>climbs.</em></h3>
+      <p class="advance-body">
+        The Avalanche win the Western Conference semifinal 4–1 and become the second team through to a
+        Conference Final this postseason. <strong>They'll face the Vegas-Anaheim winner; Vegas leads
+        that series 3–2 with Game 6 in Anaheim Thursday night.</strong> Colorado moves on to its 8th
+        Conference Final since relocating to Denver in 1995–96. <em>This was the first time the
+        Avalanche won a playoff series on home ice in 18 years — since 2008, against this same
+        Wild franchise, when Joe Sakic and Peter Forsberg still wore the burgundy.</em>
+      </p>
+    </div>
+  </section>
+
+  <!-- § 01 GAME 5 -->
+  <div class="section-head" id="section-01">
+    <div class="num">§ 01</div>
+    <div class="section-head-text">
+      <h2>The <em>climb.</em></h2>
+      <p class="section-lead">Down 3–0 midway through the second period. Goalie pulled in the third. MacKinnon's tying snipe with 1:23 left. Kulak's OT winner on a Necas feed. The third time in 53 tries that Colorado has overcome a 3-goal deficit to win a playoff game since moving to Denver.</p>
+    </div>
+  </div>
+
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Round 2 · Game 5 · Series Clincher</div>
+      <h3>Minnesota <span class="vs">at</span> Colorado</h3>
+      <div class="colorbar">
+        <span style="background: var(--min)"></span>
+        <span style="background: var(--col)"></span>
+      </div>
+      <div class="series-stand">
+        <div class="ss-label">Game · Series Final</div>
+        <div class="ss-score">COL 4 — MIN 3 (OT) · COL wins 4–1</div>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Colorado 4, Minnesota 3 in overtime. <strong>Avs scorers: Drury (3:33 left in regulation), MacKinnon (1:23 left, goalie pulled), and Kulak (3:52 OT GWG).</strong> Wild scorers: Johansson (34 seconds in), Nick Foligno (×2 — gave MIN a 3–0 lead by midway through the second). <em>Avs win series 4–1. To the Western Conference Final.</em></li>
+        <li>The structural truth of the night: <strong>Minnesota played the perfect desperation game early. Goal 34 seconds in. 3–0 lead midway through the game. Home crowd if they'd been in St. Paul, but in Denver they had to absorb it.</strong> <em>And it still wasn't enough. That's devastating psychologically — the Wild executed exactly what an underdog elimination plan demands, and lost.</em></li>
+        <li>The Avalanche overcame a 3-goal deficit to win a playoff game for just the <strong>3rd time in 53 tries</strong> since moving to Denver. The Wild had been <strong>21–0 when leading a playoff game by at least 3 goals</strong> before this elimination loss.</li>
+        <li>Bednar's goalie call again proved decisive. <strong>Mackenzie Blackwood pulled after the first period (3 goals on 7 shots).</strong> Scott Wedgewood entered, made 7 saves, allowed nothing. <em>The Athletic's analytical read: "Pulling Blackwood could have destabilized Colorado. Instead it settled them. Calm. Controlled. No extra goals allowed." Huge coaching move.</em></li>
+        <li>MacKinnon's tying goal with 1:23 left is the legacy moment. <strong>Empty net behind him. Sent the puck from the left side past Wallstedt and into a small space in the top left corner.</strong> <em>Elite execution under maximum pressure. When Colorado needed calm, belief, and skill, MacKinnon delivered the only kind of goal that scenario allows.</em></li>
+        <li>The Kulak OT winner is the depth story. <strong>Necas took the puck, glided behind the net and back out front, found an open Kulak. One-timer past Wallstedt. Kulak's first goal since January 19, 2026 — when he was still with Pittsburgh.</strong> <em>Kulak became the 16th different Avalanche player to score in the Minnesota series. 16 different goal scorers in 5 games. That depth profile is almost impossible to defend over four rounds.</em></li>
+        <li>Kulak's path is its own editorial: <strong>started the season with Edmonton. Traded to Pittsburgh in December. Traded to Colorado on February 24 in the deal that sent Samuel Girard the other way.</strong> <em>Three teams in one regular season. One regular-season goal. The series-clinching OT winner that sent his current team to the Conference Final.</em></li>
+        <li><strong>Cale Makar injury concern.</strong> Collided with Mats Zuccarello late in the game, grabbing his right arm. Went down the tunnel before returning to the ice. <em>No postgame confirmation yet of his status. He's the structural variable for the Conference Final, and the Avs cannot lose him.</em></li>
+        <li>Wallstedt finished with 30 saves but the structure cracked. <strong>The Athletic: "Wallstedt was great again. The structure in front of him wasn't quite enough."</strong> Boldy and Sturm each had 2 assists. <em>The Wild were missing Joel Eriksson Ek and Jonas Brodin for the entire series.</em></li>
+      </ul>
+
+      <div class="statblock">
+        <div class="statblock-label">The Climb · By the Numbers</div>
+        <div class="statblock-grid">
+          <div class="stat">
+            <div class="num">3–0</div>
+            <div class="label">MIN lead<br/>2nd period</div>
+          </div>
+          <div class="stat">
+            <div class="num">16</div>
+            <div class="label">COL goal-scorers<br/>in this series</div>
+          </div>
+          <div class="stat">
+            <div class="num">3/53</div>
+            <div class="label">COL Denver-era<br/>3-goal comebacks</div>
+          </div>
+          <div class="stat">
+            <div class="num">18 yr</div>
+            <div class="label">Since COL won<br/>series at home</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pullquote">
+        You always like to dream about it. The player I am, I'm not the guy everyone's looking down the bench, like, "All right, get out there, go win it for us."
+        <span class="attribution">— Brett Kulak, postgame</span>
+      </div>
+
+      <div class="breakdown-row">
+        <div class="label">What This Was</div>
+        <div class="content"><strong>Colorado's full championship demonstration.</strong> The publication has tracked them as Tier 1 since Day 3. Tonight they showed they can absorb a 3-goal elimination-game deficit, change goalies mid-game without destabilizing, get a legacy snipe from their superstar, and end the series with a depth player who had one regular-season goal. <em>This is what the Athletic analytical breakdown called "championship behavior" — not just elite talent, but elite emotional stability.</em></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">The Suffocation Truth</div>
+        <div class="content">Minnesota started fast, played emotionally, expended huge energy early. Colorado controlled puck, extended shifts, wore them down. <strong>By the late third, Minnesota looked exhausted. That's exactly what elite puck-possession teams do — they apply pressure longer than most teams can survive it.</strong> <em>Eventually mistakes happen, legs go, structure cracks. And Colorado punishes instantly. That's the structural identity of a Cup team.</em></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">The Makar Variable</div>
+        <div class="content">Cale Makar collided with Zuccarello late, grabbing his right arm. Went down the tunnel, returned to play. <strong>The publication's Day 3 framing tracked Makar through a leg-injury return; tonight's collision is a new variable.</strong> <em>If Makar is anything less than 100% for the Conference Final, Colorado's structural ceiling drops noticeably. He's the connective tissue of their breakout game.</em></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- § 02 SERIES ARC -->
+  <div class="section-head" id="section-02">
+    <div class="num">§ 02</div>
+    <div class="section-head-text">
+      <h2>The <em>series arc.</em></h2>
+      <p class="section-lead">Five games. Five different stories. The publication tracked each one in real time. Together they form the most complete portrait of a contender from any series in this postseason.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="arc-grid">
+      <div class="arc-cell">
+        <div class="arc-label">Game 1 · Day 3 · May 4</div>
+        <div class="arc-title">Track Meet</div>
+        <div class="arc-score">COL 9–6 · 15 combined goals</div>
+        <div class="arc-desc">Makar 2G on injury return. MacKinnon dictated pace. The Wild matched scoring but not structure.</div>
+      </div>
+      <div class="arc-cell">
+        <div class="arc-label">Game 2 · Day 5 · May 6</div>
+        <div class="arc-title">Maturity</div>
+        <div class="arc-score">COL 5–2 · MacKinnon's 3rd 3pt</div>
+        <div class="arc-desc">Wedgewood 6–0 to start his postseason. Avs settled into structure. Power rankings shifted decisively COL.</div>
+      </div>
+      <div class="arc-cell">
+        <div class="arc-label">Game 3 · Day 9 · May 9</div>
+        <div class="arc-title">Wild Get In</div>
+        <div class="arc-score">MIN 5–1 · Wallstedt return</div>
+        <div class="arc-desc">Kaprizov to NHL scoring lead. Hughes & Faber both scored. Wedgewood pulled. The streak ends.</div>
+      </div>
+      <div class="arc-cell">
+        <div class="arc-label">Game 4 · Day 11 · May 11</div>
+        <div class="arc-title">Response</div>
+        <div class="arc-score">COL 5–2 · 20–4 shot edge</div>
+        <div class="arc-desc">Bednar started Blackwood. Manson butt-end controversy. Kelly GWG. MacKinnon & Nelson EN.</div>
+      </div>
+      <div class="arc-cell">
+        <div class="arc-label">Game 5 · Today · May 13</div>
+        <div class="arc-title">The Climb</div>
+        <div class="arc-score">COL 4–3 OT · Kulak GWG</div>
+        <div class="arc-desc">Down 3–0. Bednar pulled Blackwood again. MacKinnon tied late. Kulak ended it. 16th different scorer.</div>
+      </div>
+    </div>
+
+    <p style="font-family: 'Source Serif 4', Georgia, serif; font-size: 19px; line-height: 1.6; color: var(--paper-dim); margin-top: 32px; max-width: 820px;">
+      <strong style="color: var(--paper); font-weight: 500;">Five games. Five distinct editorial frames. Colorado won four of them.</strong> The series ran the full spectrum of playoff hockey — track meet, structural blowout, opponent comeback, decisive response, championship-level elimination-game climb. <em>Across two rounds (Kings in 4, Wild in 5), Colorado has played 9 games and won 8 — only one short of Carolina's 8–0 record, with one more series under their belt.</em> The structural through-line: the publication's Day 4 "Composure" framing for Carolina now belongs to Colorado too. Different team, same identity.
+    </p>
+
+  </section>
+
+  <!-- § 03 STORYLINES -->
+  <div class="section-head" id="section-03">
+    <div class="num">§ 03</div>
+    <div class="section-head-text">
+      <h2>The <em>storylines.</em></h2>
+      <p class="section-lead">MacKinnon's playoff legacy moment. Kulak's improbable arc. The 16-scorer depth. The Wallstedt heroic loss. The injuries that defined Minnesota's ceiling. The 18-year drought that just ended.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="storylines">
+      <div class="storyline">
+        <div class="sl-label">Storyline · Superstar</div>
+        <h4>MacKinnon's <em>legacy moment.</em></h4>
+        <p>
+          The tying goal in Game 5 — empty net behind him, 1:23 left, top-left-corner snipe from a tough angle — is the kind of clip that lives in highlight reels for a decade. <strong>This is the playoff moment that turns a star into a champion.</strong> Across the series MacKinnon had 3 straight 3-point games (only the 6th player in 40 years to do that in a single playoff run), drove pace in every game, and delivered the most important regulation goal of Colorado's postseason. <em>The publication's Day 5 framing called him the bracket's most dangerous individual performer. Day 13 confirms it.</em>
+        </p>
+      </div>
+      <div class="storyline">
+        <div class="sl-label">Storyline · Depth</div>
+        <h4>Kulak the <em>16th scorer.</em></h4>
+        <p>
+          Brett Kulak became the 16th different Avalanche player to score in the Minnesota series — and he did it on the OT GWG to clinch it. <strong>His first goal since January 19, when he was still wearing a Pittsburgh sweater.</strong> Three NHL teams this season: Edmonton to start, Pittsburgh by December, Colorado at the trade deadline. <em>"I'm not the guy everyone's looking down the bench like 'go win it for us.'" That's the depth story: when Colorado needs the 16th option to deliver, the 16th option delivers.</em>
+        </p>
+      </div>
+      <div class="storyline">
+        <div class="sl-label">Storyline · Goaltending</div>
+        <h4>Bednar's <em>goalie carousel.</em></h4>
+        <p>
+          The publication tracked Wedgewood's 6–0 start through Day 5. Then he was pulled in Game 3. <strong>Bednar started Blackwood in Game 4 — Blackwood won.</strong> Then Bednar started Blackwood again in Game 5, pulled him after 3 goals on 7 shots, brought Wedgewood in cold to close it. Wedgewood allowed nothing. <em>Across the series Bednar made two structural goalie calls under pressure. Both worked. That's the kind of coaching adaptability championship teams need — and most don't have.</em>
+        </p>
+      </div>
+      <div class="storyline">
+        <div class="sl-label">Storyline · Heroic Loss</div>
+        <h4>Wallstedt <em>kept Minnesota in it.</em></h4>
+        <p>
+          The Wild rookie goaltender allowed 8 goals in Game 1 and got pulled. Bounced back in Game 2 (didn't play). Made his return in Game 3 and stole it with 34 saves to end Colorado's streak. <strong>Across Games 3–5 he stopped 30+ shots per game.</strong> <em>The Athletic's framing in Game 5 was direct: "Wallstedt was great again. The structure in front of him wasn't quite enough." That's the truth of his series — he did his job. His team's roster was missing two of its core pieces. The math caught up.</em>
+        </p>
+      </div>
+      <div class="storyline">
+        <div class="sl-label">Storyline · Roster</div>
+        <h4>Eriksson Ek and <em>Brodin out.</em></h4>
+        <p>
+          Joel Eriksson Ek (the Wild's top defensive center) missed all 5 games with a lower-body injury from Round 1 Game 6. <strong>Jonas Brodin missed all 5 games too.</strong> Two of Minnesota's core defensive players unavailable for the entire Colorado series. <em>The publication flagged Eriksson Ek as the structural matchup variable from Day 3. Without him, Minnesota's checking matchup against MacKinnon never functioned the way Hynes needed. The Wild were brave; the math without their captain was always going to be tight.</em>
+        </p>
+      </div>
+      <div class="storyline">
+        <div class="sl-label">Storyline · Historical</div>
+        <h4>The <em>18-year drought.</em></h4>
+        <p>
+          The last time the Avalanche clinched a playoff series on home ice was 2008 — against this same Wild franchise. <strong>That team had Joe Sakic and Peter Forsberg.</strong> The 8th Conference Final appearance since relocating to Denver in 1995–96. <em>Across 18 years and multiple eras of Colorado hockey, the franchise has won plenty of series — just always finished them on the road. Last night they finally finished one at home. The MacKinnon-Makar era now has its first home series-clinching moment.</em>
+        </p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- § 04 WHAT'S NEXT -->
+  <div class="section-head" id="section-04">
+    <div class="num">§ 04</div>
+    <div class="section-head-text">
+      <h2>What's <em>next.</em></h2>
+      <p class="section-lead">The Western Conference Final awaits the Vegas-Anaheim winner. The Eastern Conference Final awaits the Buffalo-Montreal winner. Carolina has been resting since Saturday. Colorado now joins them on the bracket's top floor.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 0 0 20px; letter-spacing: -0.01em;">Bracket status · End of Round 2 Game 5</h3>
+
+    <div class="bracket-status">
+      <div class="bracket-cell advanced">
+        <div class="bc-label">East Conf Final · CAR</div>
+        <div class="bc-matchup">Carolina</div>
+        <div class="bc-status">Through since May 9. 8–0 postseason. Resting through Friday minimum.</div>
+      </div>
+      <div class="bracket-cell">
+        <div class="bc-label">East Series 02 · Tonight</div>
+        <div class="bc-matchup">BUF vs MTL G5</div>
+        <div class="bc-status">Tied 2–2. Game 5 Thursday at KeyBank Center.</div>
+      </div>
+      <div class="bracket-cell advanced wcf">
+        <div class="bc-label">West Conf Final · COL</div>
+        <div class="bc-matchup">Colorado</div>
+        <div class="bc-status">Through tonight, 4–1 over MIN. 8th WCF since '95. Awaits VGK/ANA winner.</div>
+      </div>
+      <div class="bracket-cell brink">
+        <div class="bc-label">West Series 04 · Tonight</div>
+        <div class="bc-matchup">VGK leads ANA, 3–2</div>
+        <div class="bc-status">Closeout opportunity for Vegas in Anaheim. McNabb suspended 1 game.</div>
+      </div>
+    </div>
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 48px 0 20px; letter-spacing: -0.01em;">The bracket math</h3>
+
+    <ul class="bullets" style="max-width: 820px;">
+      <li><strong>Western Conference Final · Colorado vs the VGK-ANA winner.</strong> <em>If Vegas closes in Anaheim tonight, the WCF is Colorado vs Vegas — the two Tier-1 Western teams the publication has been tracking since Round 1. If Anaheim wins Game 6 and then Game 7, the WCF is Colorado vs Anaheim — the bracket's most surprising team against its most complete.</em></li>
+      <li><strong>Eastern Conference Final · Carolina vs the BUF-MTL winner.</strong> <em>Buffalo and Montreal are tied 2–2 with Game 5 tonight in Buffalo. Carolina has been resting since May 9 — by the time the East Final starts, they'll have had 10+ days off.</em></li>
+      <li><strong>The Cup race is now structurally a two-team conversation.</strong> <em>Carolina at 8–0 is the perfection narrative; Colorado after this series win is the completeness narrative. The publication's Day 5 Round 2 power rankings had Colorado #1 and Carolina #2. After the Day 11 "Response" and tonight's "Climb," both teams sit at the top of the bracket together. The Conference Finals matter for matchup math, but the Cup conversation is now functionally between two teams.</em></li>
+      <li><strong>The Makar status</strong> is the biggest structural variable for Colorado's Cup ceiling. <em>Right-arm injury concern from a late Zuccarello collision in Game 5. He returned to play. No postgame status update. If he's anything less than 100% for the WCF, Colorado's structural ceiling drops noticeably.</em></li>
+      <li><strong>Rest math:</strong> Colorado gets at least 4 days off (assuming Vegas closes Thursday). Carolina gets at least 10 days off. <em>The team that wins each Conference Final will face a much-better-rested opponent in the Cup Final — unless the Eastern series ends quickly enough to compress the schedule.</em></li>
+    </ul>
+
+  </section>
+
+  <section class="closing">
+    <div class="overline">The Take</div>
+    <blockquote>
+      The publication began tracking Colorado as a Tier 1 team on Day 3 of Round 2 — when they won
+      a 9–6 track meet in Game 1 against the Wild. <em>Five games later, they've won every type of
+      playoff game hockey produces.</em> Track meets. Structural blowouts. Comeback wins. OT wins.
+      Goalie-anchored wins. Depth-driven wins. <strong>Last night's elimination-game climb from 3–0
+      down — with a goalie change that worked, a MacKinnon snipe with 1:23 left, and a 16th-scorer
+      OT winner from a player who'd been on three NHL teams this season — was the structural
+      championship demonstration.</strong> The Athletic's analytical read was direct: "Colorado deserves
+      to be considered the clear Stanley Cup favorite right now." <em>The publication's read is slightly
+      more careful — Carolina is 8–0, and perfection beats completeness when the records are this clean.</em>
+      But the Cup race is now structurally a two-team conversation. <strong>Carolina vs Colorado for the
+      Stanley Cup is now the bracket's most likely outcome. Vegas or Anaheim has to prove otherwise
+      starting Thursday.</strong>
+    </blockquote>
+    <div class="sig">— Round 2 · Series Recap · Colorado over Minnesota, 4–1 · Western Conference Final awaits the VGK-ANA winner</div>
+  </section>
+
+  <footer>
+    <div>Rink Report · NHL Playoff Coverage</div>
+    <div>Round 2 of 4 · 2 series done · CAR + COL to Conference Finals · BUF-MTL & VGK-ANA active · 4 series, 4 framings</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
