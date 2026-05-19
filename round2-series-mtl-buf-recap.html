@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Series Recap: Montreal over Buffalo | NHL Playoffs Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0b0d12;
+    --ink-2: #13161f;
+    --ink-3: #1c1f2b;
+    --paper: #f2ebdc;
+    --paper-dim: #d6cdba;
+    --muted: #8a8374;
+    --ice: #7fb4d8;
+    --ice-deep: #3d6d93;
+    --goal: #d74e3a;
+    --gold: #d4a842;
+    --hairline: rgba(242, 235, 220, 0.14);
+    --hairline-strong: rgba(242, 235, 220, 0.28);
+    --car: #cc0000;
+    --col: #6F263D;
+    --min: #154734;
+    --mtl: #AF1E2D;
+    --buf: #002654;
+    --vgk: #B4975A;
+    --ana: #B9975B;
+    --phi: #f74902;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  ul.bullets { list-style: none; padding: 0; margin: 0; }
+  ul.bullets li {
+    position: relative;
+    padding-left: 26px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+  ul.bullets li:last-child { margin-bottom: 0; }
+  ul.bullets li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 11px;
+    width: 14px; height: 1px;
+    background: var(--goal);
+  }
+  ul.bullets li strong { color: var(--paper); font-weight: 500; }
+
+  .round-banner {
+    background: linear-gradient(90deg, rgba(175, 30, 45, 0.28) 0%, rgba(215, 78, 58, 0.10) 50%, transparent 100%);
+    border-bottom: 1px solid var(--hairline);
+    padding: 16px 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--goal);
+    font-weight: 600;
+  }
+  .round-banner span { color: var(--paper); }
+
+  .masthead {
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .masthead .brand { color: var(--paper); font-weight: 600; }
+  .masthead .brand span { color: var(--goal); }
+  .masthead .brand-link {
+    text-decoration: none;
+    transition: opacity 0.3s;
+    display: inline-block;
+  }
+  .masthead .brand-link:hover { opacity: 0.7; }
+  .masthead .nav-link {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    border-bottom: 1px solid transparent;
+  }
+  .masthead .nav-link:hover { color: var(--paper); border-bottom-color: var(--hairline-strong); }
+  .masthead .recap-tag {
+    color: var(--mtl);
+    font-weight: 600;
+    letter-spacing: 0.22em;
+  }
+
+  .hero {
+    padding: 80px 0 72px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .overline {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .overline::before {
+    content: "";
+    width: 32px; height: 1px;
+    background: var(--goal);
+  }
+  h1.headline {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(56px, 9vw, 136px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    margin-bottom: 24px;
+  }
+  h1.headline em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+  .subhead {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: clamp(20px, 2.4vw, 32px);
+    color: var(--muted);
+    margin-bottom: 40px;
+    letter-spacing: -0.01em;
+  }
+  .dek {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.5;
+    color: var(--paper);
+    max-width: 760px;
+    font-weight: 500;
+  }
+  .byline {
+    margin-top: 48px;
+    display: flex;
+    gap: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+  .byline strong { color: var(--paper); font-weight: 600; }
+
+  /* SERIES SCORE GRID - 7 games */
+  .series-scores {
+    border-bottom: 1px solid var(--hairline);
+    background: var(--ink-2);
+  }
+  .series-scores-header {
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--hairline);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--mtl);
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .series-scores-header .total {
+    color: var(--paper);
+    font-weight: 700;
+  }
+  .series-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background: var(--hairline);
+  }
+  .series-game {
+    background: var(--ink-2);
+    padding: 22px 16px;
+    text-align: left;
+    transition: background 0.3s;
+  }
+  .series-game:hover { background: var(--ink); }
+  .series-game .gameno {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .series-game .result {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.1;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  .series-game .result .w { color: var(--paper); }
+  .series-game .result .l { color: var(--muted); }
+  .series-game .desc {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--paper-dim);
+  }
+  .series-game.clincher {
+    background: linear-gradient(180deg, rgba(175, 30, 45, 0.22) 0%, var(--ink-2) 100%);
+  }
+  .series-game.clincher .gameno {
+    color: var(--mtl);
+  }
+
+  .lede { padding: 88px 0 64px; max-width: 820px; }
+  .lede p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 23px;
+    line-height: 1.58;
+    color: var(--paper);
+    font-weight: 400;
+  }
+  .lede p::first-letter {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 5.2em;
+    float: left;
+    line-height: 0.82;
+    padding: 10px 14px 0 0;
+    color: var(--goal);
+  }
+
+  .section-head {
+    padding: 56px 0 40px;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 40px;
+    align-items: baseline;
+    border-top: 1px solid var(--hairline);
+    scroll-margin-top: 24px;
+  }
+  .section-head .num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--goal);
+    letter-spacing: 0.1em;
+  }
+  .section-head-text { align-self: baseline; }
+  .section-lead {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.45;
+    color: var(--goal);
+    margin-top: 20px;
+    max-width: 780px;
+  }
+  .section-head h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(38px, 5vw, 68px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+  }
+  .section-head h2 em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+
+  .game {
+    padding: 64px 0;
+    border-top: 1px solid var(--hairline-strong);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 56px;
+  }
+  .game-title { position: sticky; top: 40px; align-self: start; }
+  .game-title .series-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .game-title h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 54px;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .game-title .vs {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--muted);
+    display: block;
+    font-size: 0.6em;
+    margin: 4px 0;
+  }
+  .colorbar { height: 6px; width: 100%; display: flex; margin-top: 20px; }
+  .colorbar span { flex: 1; }
+  .series-stand {
+    margin-top: 24px;
+    padding: 18px 20px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--goal);
+  }
+  .series-stand .ss-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 6px;
+  }
+  .series-stand .ss-score {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--paper);
+    letter-spacing: -0.01em;
+  }
+  .game-body { font-size: 17px; line-height: 1.65; }
+  .game-body > ul.bullets { margin-bottom: 8px; }
+  .game-body > ul.bullets li { font-size: 16px; }
+  .pullquote {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 1.4;
+    color: var(--paper);
+    padding: 28px 0 28px 28px;
+    border-left: 2px solid var(--goal);
+    margin: 28px 0;
+  }
+  .pullquote .attribution {
+    display: block;
+    margin-top: 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .breakdown-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 24px;
+    padding: 18px 0;
+    border-top: 1px solid var(--hairline);
+    align-items: start;
+  }
+  .breakdown-row:last-child { border-bottom: 1px solid var(--hairline); }
+  .breakdown-row .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding-top: 4px;
+  }
+  .breakdown-row .content { color: var(--paper-dim); font-size: 16px; }
+  .breakdown-row .content strong { color: var(--paper); font-weight: 500; }
+
+  .statblock {
+    margin: 32px 0;
+    background: var(--ink-2);
+    border: 1px solid var(--hairline);
+    padding: 28px 32px;
+  }
+  .statblock-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .statblock-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .stat .num {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 38px;
+    color: var(--goal);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .stat .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+
+  /* ARC PANEL - 7 game series arc */
+  .arc-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+    margin: 32px 0;
+  }
+  .arc-cell {
+    background: var(--ink);
+    padding: 24px 20px;
+  }
+  .arc-cell .arc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .arc-cell .arc-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--paper);
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  .arc-cell .arc-score {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--paper-dim);
+    margin-bottom: 12px;
+    letter-spacing: 0.04em;
+  }
+  .arc-cell .arc-desc {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--paper-dim);
+  }
+
+  /* STORYLINE CARDS */
+  .storylines {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin: 32px 0;
+  }
+  .storyline {
+    padding: 28px 30px;
+    background: var(--ink-2);
+    border: 1px solid var(--hairline);
+    border-left: 3px solid var(--ice);
+  }
+  .storyline .sl-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ice);
+    margin-bottom: 14px;
+  }
+  .storyline h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 14px;
+  }
+  .storyline h4 em { color: var(--ice); font-style: italic; }
+  .storyline p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--paper-dim);
+  }
+  .storyline p strong { color: var(--paper); font-weight: 500; }
+  .storyline p em { color: var(--ice); font-style: italic; }
+
+  /* FINAL FOUR PANEL */
+  .final-four {
+    margin: 40px 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .ff-cell {
+    background: var(--ink-2);
+    padding: 32px 24px;
+  }
+  .ff-cell.car { border-top: 4px solid var(--car); }
+  .ff-cell.mtl { border-top: 4px solid var(--mtl); }
+  .ff-cell.col { border-top: 4px solid var(--col); }
+  .ff-cell.vgk { border-top: 4px solid var(--vgk); }
+  .ff-cell .ff-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .ff-cell.car .ff-label { color: var(--car); }
+  .ff-cell.mtl .ff-label { color: var(--mtl); }
+  .ff-cell.col .ff-label { color: var(--col); }
+  .ff-cell.vgk .ff-label { color: var(--vgk); }
+  .ff-cell h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--paper);
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+  }
+  .ff-cell .ff-identity {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+    margin-bottom: 14px;
+  }
+  .ff-cell .ff-stats {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    border-top: 1px solid var(--hairline);
+    padding-top: 12px;
+    line-height: 1.5;
+  }
+  .ff-cell .ff-stats strong { color: var(--paper); font-weight: 600; }
+
+  /* CONFERENCE FINAL PREVIEW - 2 column */
+  .cf-preview {
+    margin: 36px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .cf-team {
+    background: var(--ink-2);
+    padding: 32px 30px;
+  }
+  .cf-team.car { border-top: 3px solid var(--car); }
+  .cf-team.mtl { border-top: 3px solid var(--mtl); }
+  .cf-team.col { border-top: 3px solid var(--col); }
+  .cf-team.vgk { border-top: 3px solid var(--vgk); }
+  .cf-team .team-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .cf-team h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--paper);
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .cf-team h4 em { font-style: italic; }
+  .cf-team.car h4 em { color: var(--car); }
+  .cf-team.mtl h4 em { color: var(--mtl); }
+  .cf-team.col h4 em { color: var(--col); }
+  .cf-team.vgk h4 em { color: var(--vgk); }
+  .cf-team .identity {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--paper-dim);
+    margin-bottom: 16px;
+  }
+  .cf-team .identity strong { color: var(--paper); font-weight: 500; }
+  .cf-team ul.bullets li { font-size: 14px; margin-bottom: 8px; }
+
+  /* REST DYNAMICS */
+  .rest-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+    margin: 32px 0;
+  }
+  .rest-cell {
+    background: var(--ink-2);
+    padding: 24px 22px;
+    text-align: left;
+  }
+  .rest-cell .rc-team {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .rest-cell.car .rc-team { color: var(--car); }
+  .rest-cell.mtl .rc-team { color: var(--mtl); }
+  .rest-cell.col .rc-team { color: var(--col); }
+  .rest-cell.vgk .rc-team { color: var(--vgk); }
+  .rest-cell .rc-days {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 56px;
+    line-height: 0.85;
+    color: var(--paper);
+    letter-spacing: -0.03em;
+    margin-bottom: 4px;
+  }
+  .rest-cell .rc-label {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--paper-dim);
+    margin-bottom: 12px;
+  }
+  .rest-cell .rc-zone {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .rest-cell.danger .rc-zone { color: var(--goal); }
+  .rest-cell.sweet .rc-zone { color: var(--ice); }
+
+  /* ADVANCEMENT BANNER */
+  .advance-banner {
+    margin: 0 0 56px;
+    background: linear-gradient(135deg, rgba(175, 30, 45, 0.22) 0%, var(--ink-2) 60%, var(--ink) 100%);
+    border: 1px solid var(--hairline-strong);
+    padding: 48px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .advance-banner::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 6px;
+    background: var(--mtl);
+  }
+  .advance-overline {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--mtl);
+    margin-bottom: 22px;
+    font-weight: 600;
+  }
+  .advance-banner h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    margin-bottom: 22px;
+  }
+  .advance-banner h3 em {
+    font-style: italic;
+    color: var(--goal);
+  }
+  .advance-body {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+    max-width: 820px;
+  }
+  .advance-body strong { color: var(--paper); font-weight: 500; }
+
+  .closing { padding: 72px 0 48px; border-top: 1px solid var(--hairline-strong); }
+  .closing .overline { color: var(--gold); }
+  .closing .overline::before { background: var(--gold); }
+  .closing blockquote {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    max-width: 980px;
+  }
+  .closing blockquote em { font-style: italic; color: var(--goal); font-weight: 400; }
+  .closing .sig {
+    margin-top: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .toc { padding: 40px 0 48px; border-bottom: 1px solid var(--hairline); }
+  .toc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .toc-label::before {
+    content: "";
+    width: 24px; height: 1px;
+    background: var(--muted);
+  }
+  .toc-list {
+    list-style: none;
+    padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .toc-list li { background: var(--ink); }
+  .toc-list a {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px 26px;
+    text-decoration: none;
+    color: var(--paper);
+    transition: background 0.3s;
+    height: 100%;
+  }
+  .toc-list a:hover { background: var(--ink-2); }
+  .toc-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--goal);
+  }
+  .toc-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+    color: var(--paper);
+    transition: color 0.3s;
+  }
+  .toc-list a:hover .toc-title { color: var(--ice); }
+
+  footer {
+    padding: 36px 0;
+    border-top: 1px solid var(--hairline);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 820px) {
+    .wrap { padding: 0 20px; }
+    .series-grid { grid-template-columns: repeat(2, 1fr); }
+    .series-game { padding: 14px 12px; }
+    .series-game .result { font-size: 16px; }
+    .arc-grid { grid-template-columns: 1fr; }
+    .section-head { grid-template-columns: 1fr; gap: 12px; padding: 44px 0 28px; }
+    .game { grid-template-columns: 1fr; gap: 28px; padding: 48px 0; }
+    .game-title { position: static; }
+    .game-title h3 { font-size: 42px; }
+    .breakdown-row { grid-template-columns: 1fr; gap: 8px; }
+    .statblock-grid { grid-template-columns: repeat(2, 1fr); }
+    .storylines { grid-template-columns: 1fr; }
+    .final-four { grid-template-columns: 1fr 1fr; }
+    .cf-preview { grid-template-columns: 1fr; }
+    .rest-grid { grid-template-columns: 1fr 1fr; }
+    .rest-cell .rc-days { font-size: 44px; }
+    .advance-banner { padding: 28px 24px; }
+    .lede { padding: 56px 0 40px; }
+    .lede p { font-size: 20px; }
+    .byline { flex-direction: column; gap: 12px; }
+    .toc-list { grid-template-columns: 1fr; }
+    .toc { padding: 28px 0 32px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="round-banner">
+    Round Two &nbsp;·&nbsp; <span>Series Recap · Eastern Semifinal</span> &nbsp;·&nbsp; Montreal advances · Final Four set
+  </div>
+
+  <div class="masthead">
+    <a href="index.html" class="brand-link"><div class="brand">Rink<span>&middot;</span>Report</div></a>
+    <div>
+      <a href="round2-day14-analysis.html" class="nav-link">← Day 14</a>
+      &nbsp;&nbsp;Vol. I &nbsp;/&nbsp; <span class="recap-tag">Series Recap</span> &nbsp;/&nbsp; MTL · BUF
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="overline">Montreal over Buffalo · 4–3 · Newhook OT G7 · Final Four locked</div>
+    <h1 class="headline"><em>Belief.</em></h1>
+    <div class="subhead">A series Montreal won not by territorial control, not by structural dominance, but by emotional resilience and one player who has now made history twice.</div>
+    <p class="dek">
+      Alex Newhook scored 11:22 into overtime to send Montreal to the Eastern Conference Final.
+      <strong>He is now the SECOND player in NHL history to score multiple Game 7 series-clinching
+      goals in a single postseason — joining Nathan Horton in 2011, the year Boston won the Stanley
+      Cup.</strong> The Habs are 6–0 after losses this entire postseason. They are the youngest team
+      to reach a Conference Final since the 1993 Montreal Canadiens — who won the Stanley Cup.
+      <em>The Final Four is locked. Colorado vs Vegas Wednesday at Ball Arena. Carolina vs Montreal
+      Thursday in Raleigh.</em>
+    </p>
+    <div class="byline">
+      <div><strong>Round 2</strong> · Series Recap</div>
+      <div><strong>Filed</strong> · May 18, 2026</div>
+      <div><strong>Read</strong> · 17 minutes</div>
+      <div><strong>Status</strong> · Final Four set</div>
+    </div>
+  </header>
+
+  <!-- SERIES SCORE GRID - 7 games -->
+  <section class="series-scores">
+    <div class="series-scores-header">
+      <span>Series · Best of Seven</span>
+      <span class="total">Montreal wins 4–3</span>
+    </div>
+    <div class="series-grid">
+      <div class="series-game">
+        <div class="gameno">G1 · May 6 · BUF</div>
+        <div class="result"><span class="w">BUF 4</span> · <span class="l">MTL 2</span></div>
+        <div class="desc">Sabres impose pace. Day 6 inversion.</div>
+      </div>
+      <div class="series-game">
+        <div class="gameno">G2 · May 8 · BUF</div>
+        <div class="result"><span class="w">MTL 5</span> · <span class="l">BUF 1</span></div>
+        <div class="desc">Habs reply on the road. Day 8.</div>
+      </div>
+      <div class="series-game">
+        <div class="gameno">G3 · May 10 · MTL</div>
+        <div class="result"><span class="w">MTL 6</span> · <span class="l">BUF 2</span></div>
+        <div class="desc">Habs dictate. Newhook elevates.</div>
+      </div>
+      <div class="series-game">
+        <div class="gameno">G4 · May 12 · MTL</div>
+        <div class="result"><span class="w">BUF 3</span> · <span class="l">MTL 2</span></div>
+        <div class="desc">Habs PP 1/7. Benson birthday GWG.</div>
+      </div>
+      <div class="series-game">
+        <div class="gameno">G5 · May 14 · BUF</div>
+        <div class="result"><span class="w">MTL 6</span> · <span class="l">BUF 3</span></div>
+        <div class="desc">The Trust. Dobes 32 straight saves.</div>
+      </div>
+      <div class="series-game">
+        <div class="gameno">G6 · May 16 · MTL</div>
+        <div class="result"><span class="w">BUF 8</span> · <span class="l">MTL 3</span></div>
+        <div class="desc">The Spoiler. Dahlin 5-pt. Habs PP 1/7.</div>
+      </div>
+      <div class="series-game clincher">
+        <div class="gameno">G7 · TONIGHT · BUF · OT</div>
+        <div class="result"><span class="w">MTL 3</span> · <span class="l">BUF 2</span></div>
+        <div class="desc">Newhook OT GWG. 2nd G7 OT winner of postseason.</div>
+      </div>
+    </div>
+  </section>
+
+  <nav class="toc" aria-label="Table of contents">
+    <div class="toc-label">Contents</div>
+    <ol class="toc-list">
+      <li><a href="#section-01">
+        <span class="toc-num">§ 01</span>
+        <span class="toc-title">Game 7 · The decider</span>
+      </a></li>
+      <li><a href="#section-02">
+        <span class="toc-num">§ 02</span>
+        <span class="toc-title">The 7-game arc</span>
+      </a></li>
+      <li><a href="#section-03">
+        <span class="toc-num">§ 03</span>
+        <span class="toc-title">The storylines</span>
+      </a></li>
+      <li><a href="#section-04">
+        <span class="toc-num">§ 04</span>
+        <span class="toc-title">The Final Four</span>
+      </a></li>
+    </ol>
+  </nav>
+
+  <section class="lede">
+    <p>
+      The Final Four is set. <strong>Carolina (since May 9). Colorado (since May 13). Vegas (since
+      May 14). And tonight in overtime at KeyBank Center: Montreal.</strong> Alex Newhook scored
+      11:22 into OT off a Jake Evans setup, and the Canadiens edged the Sabres 3–2 to win their
+      second straight 7-game series. <em>Newhook is now the second player in NHL history to score
+      multiple Game 7 series-clinching goals in a single postseason — joining Nathan Horton, who
+      did it for Boston in 2011 on their way to the Cup.</em> The Habs are the youngest team to
+      reach a Conference Final since the 1993 Canadiens. <strong>They are 6–0 after losses this
+      postseason. They never lost back-to-back games the entire run.</strong> <em>That's not luck.
+      That's identity. The publication has been tracking that pattern since Day 13. Tonight it
+      paid off at the only level that mattered — getting through.</em>
+    </p>
+  </section>
+
+  <!-- ADVANCEMENT BANNER -->
+  <section style="padding: 40px 0 0;">
+    <div class="advance-banner">
+      <div class="advance-overline">·  ·  ·   Eastern Conference Final · Montreal Advances · Final Four Set   ·  ·  ·</div>
+      <h3>Canada's team <em>survives.</em></h3>
+      <p class="advance-body">
+        Montreal becomes the fourth and final Conference Final team. <strong>They've now played 14
+        playoff games in 30 days, survived two grueling 7-game series (Tampa and Buffalo), and won
+        both Game 7s on the road.</strong> <em>The Final Four is officially locked: Carolina vs
+        Montreal in the East starting Thursday in Raleigh, Colorado vs Vegas in the West starting
+        Wednesday in Denver. The publication's Day 5 Round 2 power rankings predicted exactly this
+        quartet — Colorado #1, Carolina #2, Vegas #3, Montreal #4. Five weeks later, all four
+        prediction teams are alive.</em>
+      </p>
+    </div>
+  </section>
+
+  <!-- § 01 GAME 7 -->
+  <div class="section-head" id="section-01">
+    <div class="num">§ 01</div>
+    <div class="section-head-text">
+      <h2>The <em>decider.</em></h2>
+      <p class="section-lead">Montreal opened 2–0 to take the Buffalo crowd out of it. Buffalo dominated the next 40 minutes — 56-26 shot attempts, 28-17 scoring chances through 2 periods. Dobes made 37 saves to keep his team in. Dahlin tied it 6:27 into the third. Newhook ended it 11:22 into OT.</p>
+    </div>
+  </div>
+
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Round 2 · Game 7 · Series Clincher</div>
+      <h3>Montreal <span class="vs">at</span> Buffalo</h3>
+      <div class="colorbar">
+        <span style="background: var(--mtl)"></span>
+        <span style="background: var(--buf)"></span>
+      </div>
+      <div class="series-stand">
+        <div class="ss-label">Series Final</div>
+        <div class="ss-score">MTL 3 — BUF 2 (OT) · Habs win 4–3</div>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Montreal 3, Buffalo 2 in overtime. <strong>Habs scorers: Danault (off Anderson forecheck and Guhle redirect, 4:30 of the first), Bolduc (PP, midway through 1st), Newhook (OT GWG, 11:22).</strong> Sabres: Greenway (Samuelsson deflection, 2nd period), Dahlin (tying snipe, 6:27 of 3rd). <em>MTL wins series 4–3. To the Eastern Conference Final.</em></li>
+        <li>The Habs scored first for only the second time in the entire series. <strong>Per Guhle pregame: "Try to take the crowd out of it early. It's going to be loud in there, their building's going pretty good. Just keep it simple."</strong> <em>Guhle followed his own advice — threw the puck on net, it bounced off Danault's skate past Luukkonen at 4:30 of the first. Bolduc made it 2-0 on the PP 10 minutes later. KeyBank Center fell into nervous energy.</em></li>
+        <li>Buffalo dominated the middle. <strong>Through 2 periods, the Sabres had a 56-26 advantage in shot attempts at all strengths and a 28-17 advantage in 5v5 scoring chances. In the second period alone, 19-8 chance advantage.</strong> <em>Per Athletic: "If not for a few highlight-reel saves from Dobes, the Sabres could have been leading after two periods."</em></li>
+        <li>The Dobes save on Thompson was the structural pivot of the game. <strong>End of 2nd period. Thompson wrist shot from point-blank range. Dobes denied it. Score stayed 2-1 entering the third.</strong> <em>Earlier in the period: pair of saves on Tuch. The 37-save night that mattered.</em></li>
+        <li>Greenway made it 2-1 in the second on a Samuelsson shot that deflected in off his skate. <strong>Buffalo's possession dominance had to produce a goal somewhere — that was it.</strong></li>
+        <li>Dahlin tied it 6:27 of the third. <strong>Quick-release wrist shot, the kind that makes him one of the league's most dangerous offensive defensemen.</strong> <em>By midway through the 3rd: Buffalo had a 33-12 shot attempt advantage and 15-6 scoring chance advantage during Dahlin's 5v5 minutes alone. He had a 5-point night in Game 6 AND was all over the ice in Game 7. The Sabres captain finally arrived, but his team still lost.</em></li>
+        <li>The Newhook OT winner. <strong>11:22 into overtime. Evans setup. "I wasn't sure if Jake touched it, so I kind of looked at him to see if he was going to celebrate or not. It's a crazy feeling. A lot of emotion, obviously. It was a war all series long."</strong> <em>His goal sent Montreal to the Eastern Conference Final.</em></li>
+        <li>The historic context: <strong>Newhook becomes the SECOND player in NHL history to score multiple Game 7 series-clinching goals in a single postseason.</strong> The first was <strong>Nathan Horton in 2011 — the year Boston won the Stanley Cup.</strong> <em>The Mr. May framing the publication assigned to Newhook on Day 10 just earned its historical anchor.</em></li>
+        <li>Both goaltenders overcame doubt entering Game 7. <strong>Dobes was pulled in Game 6 after 6 goals. Luukkonen was inconsistent all season.</strong> Dobes finished with 37 saves; Luukkonen with 22. <em>Per Athletic: "Dobes was particularly strong during the Sabres' second-period push. Luukkonen stopped both Texier and Anderson on breakaways while making back-to-back saves on Caufield in the first to keep the Canadiens' lead at 2-0."</em></li>
+        <li>The Habs played a "Tampa Game 7" template. <strong>Per Basu: "Once the Canadiens went up 2-0 in the first, they seemed to sit back in a shell, content to defend and try to keep the Sabres to the outside while they possessed the puck in their zone for shift after shift."</strong> <em>They beat Tampa in Game 7 with an NHL record-low 9 shots on goal. Tonight they let Buffalo possess but stayed structurally tight. Different teams, same Habs blueprint.</em></li>
+      </ul>
+
+      <div class="statblock">
+        <div class="statblock-label">The Decider · By the Numbers</div>
+        <div class="statblock-grid">
+          <div class="stat">
+            <div class="num">37</div>
+            <div class="label">Dobes saves<br/>in Game 7</div>
+          </div>
+          <div class="stat">
+            <div class="num">11:22</div>
+            <div class="label">Newhook OT<br/>game winner</div>
+          </div>
+          <div class="stat">
+            <div class="num">2 of 2</div>
+            <div class="label">Newhook G7<br/>OT clinchers</div>
+          </div>
+          <div class="stat">
+            <div class="num">6–0</div>
+            <div class="label">MTL after a loss<br/>this postseason</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pullquote">
+        It was a war all series long, and for it to end up being Game 7 in overtime, sometimes it just takes one shot. Coming across the blue line, I thought there was a shot opportunity. Great to see it find the back of the net.
+        <span class="attribution">— Alex Newhook, postgame</span>
+      </div>
+
+      <div class="breakdown-row">
+        <div class="label">What This Was</div>
+        <div class="content"><strong>The publication's "belief" thesis at its purest.</strong> Montreal was outshot, outchanced, and out-territoried for 40 minutes by a Buffalo team that had played its best hockey of Round 2 since Game 6. <em>They won anyway. Because they got a 2-0 first-period lead that took the crowd out, because Dobes made 37 saves including a sensational denial on Thompson, and because Newhook did what Newhook now does in Game 7 — score the deciding goal in overtime.</em> This was not the prettier game, but it was the only game that mattered.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Buffalo's Reality</div>
+        <div class="content">Per Ruff postgame: <em>"This one game doesn't define our season for us."</em> <strong>The Sabres won the Atlantic Division, ended a 15-year playoff drought, won 5 of 6 road games this postseason, and pushed Montreal to a Game 7 OT after being down 3–2.</strong> They fell to 2–5 at home in the playoffs — the season-defining statistical anomaly. <em>Ruff is on an expiring deal. Alex Tuch is on an expiring deal. Buffalo's offseason just became one of the most consequential in the league.</em></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Dahlin's Series</div>
+        <div class="content"><strong>5-point night in Game 6. Dominant 5v5 metrics in Game 7. The tying goal at 6:27 of the third.</strong> <em>The Sabres captain put up a series of his career — the same player who lost in 4 straight Game 7s at the World Championship level and finally got a real NHL playoff Game 7 in his hometown's loudest building. He played as well as a captain can. His team still lost. Sometimes the structural truth of playoff hockey is exactly that brutal.</em></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- § 02 SERIES ARC -->
+  <div class="section-head" id="section-02">
+    <div class="num">§ 02</div>
+    <div class="section-head-text">
+      <h2>The <em>series arc.</em></h2>
+      <p class="section-lead">Seven games. Five different daily-file framings. One road team won 5 of the 7. Two coaching staffs that traded structural punches for two weeks. One Habs team that never lost back-to-back.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="arc-grid">
+      <div class="arc-cell">
+        <div class="arc-label">G1 · Day 6 · May 6</div>
+        <div class="arc-title">Inversion</div>
+        <div class="arc-score">BUF 4–2 · Sabres impose</div>
+        <div class="arc-desc">Buffalo dictates pace and identity in Game 1. Day 6's parallel "inversion" framing.</div>
+      </div>
+      <div class="arc-cell">
+        <div class="arc-label">G2 · Day 8 · May 8</div>
+        <div class="arc-title">Reply</div>
+        <div class="arc-score">MTL 5–1 · Newhook elevates</div>
+        <div class="arc-desc">Habs respond on the road. Newhook's 4th goal in 4 games framed him as Mr. May.</div>
+      </div>
+      <div class="arc-cell">
+        <div class="arc-label">G3 · Day 10 · May 10</div>
+        <div class="arc-title">Field</div>
+        <div class="arc-score">MTL 6–2 · Habs dictate</div>
+        <div class="arc-desc">Hutson Norris narrative emerges. Habs dictate at home.</div>
+      </div>
+      <div class="arc-cell">
+        <div class="arc-label">G4 · Day 12 · May 12</div>
+        <div class="arc-title">Composure</div>
+        <div class="arc-score">BUF 3–2 · 1/7 Habs PP</div>
+        <div class="arc-desc">Buffalo stabilizes. Habs PP collapses. Helenius interference controversy. Benson birthday GWG.</div>
+      </div>
+      <div class="arc-cell">
+        <div class="arc-label">G5 · Day 13 · May 14</div>
+        <div class="arc-title">Trust</div>
+        <div class="arc-score">MTL 6–3 · Dobes 32 saves</div>
+        <div class="arc-desc">St. Louis stuck with Dobes. Dobes paid him back with 32 straight saves. Habs top line arrived 5v5.</div>
+      </div>
+      <div class="arc-cell">
+        <div class="arc-label">G6 · Day 14 · May 16</div>
+        <div class="arc-title">Spoiler</div>
+        <div class="arc-score">BUF 8–3 · 7 unanswered</div>
+        <div class="arc-desc">Buffalo silenced Bell Centre. Dahlin 5-pt night. Lyon pulled. Game 5 in reverse.</div>
+      </div>
+      <div class="arc-cell">
+        <div class="arc-label">G7 · TONIGHT · May 18</div>
+        <div class="arc-title">Belief</div>
+        <div class="arc-score">MTL 3–2 OT · Newhook</div>
+        <div class="arc-desc">Habs took crowd out early. Dobes 37 saves. Newhook 2nd G7 OT clincher of postseason.</div>
+      </div>
+      <div class="arc-cell" style="background: var(--ink-2);">
+        <div class="arc-label">Result</div>
+        <div class="arc-title" style="color: var(--mtl);">MTL in 7</div>
+        <div class="arc-score">Road team: 5–2</div>
+        <div class="arc-desc">5 of 7 games were decided by 3+ goals. Road team won 5 of 7. Habs never lost back-to-back.</div>
+      </div>
+    </div>
+
+    <p style="font-family: 'Source Serif 4', Georgia, serif; font-size: 19px; line-height: 1.6; color: var(--paper-dim); margin-top: 32px; max-width: 820px;">
+      <strong style="color: var(--paper); font-weight: 500;">Seven games, seven different stories, and a road team that won 5 of them.</strong> The series produced one of the strangest home-vs-road inversions in recent playoff memory. <em>Both teams played freer on the road, less burdened emotionally, and the structural truth of the matchup was that whichever team was at home tended to play worse. Game 7 in Buffalo confirmed it. Montreal hit the road, played a Tampa-Game-7 template, got 37 saves from Dobes, and survived.</em>
+    </p>
+
+  </section>
+
+  <!-- § 03 STORYLINES -->
+  <div class="section-head" id="section-03">
+    <div class="num">§ 03</div>
+    <div class="section-head-text">
+      <h2>The <em>storylines.</em></h2>
+      <p class="section-lead">Newhook's two-Game-7 record. Dobes' redemption from the Game 6 pulling. Dahlin's series of his career. Montreal's never-lose-back-to-back identity. The road-warrior anomaly. Buffalo's offseason of decisions.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="storylines">
+      <div class="storyline">
+        <div class="sl-label">Storyline · Historic</div>
+        <h4>Newhook joins <em>Horton.</em></h4>
+        <p>
+          Alex Newhook becomes the second player in NHL history to score multiple Game 7 series-clinching goals in a single postseason. <strong>Round 1: Game 7 OT winner in Tampa to eliminate the Lightning. Round 2: Game 7 OT winner in Buffalo to eliminate the Sabres.</strong> <em>The first player to do this was Nathan Horton in 2011 — the year Boston won the Stanley Cup. The historical parallel writes itself.</em> <strong>The publication's Day 10 framing called Newhook "Mr. May." That earned an asterisk tonight: now confirmed, with a historical anchor that places him in Cup-winner territory.</strong>
+        </p>
+      </div>
+      <div class="storyline">
+        <div class="sl-label">Storyline · Redemption</div>
+        <h4>Dobes <em>took it personal.</em></h4>
+        <p>
+          Pulled in Game 6 after 6 goals. <strong>Then made 37 saves in Game 7, including the season-defining stop on Tage Thompson at the end of the second period.</strong> <em>Postgame: "Me getting pulled at home was kind of a wake-up call, and I took it personal. And we won today, so I'm really happy."</em> The Day 13 "Trust" framing for St. Louis's faith in Dobes has now compounded across two series. <strong>Tampa Game 7: 25 saves of brilliance. Buffalo Game 7: 37 saves of grit. The Habs' rookie netminder is now structurally inseparable from this run.</strong>
+        </p>
+      </div>
+      <div class="storyline">
+        <div class="sl-label">Storyline · Identity</div>
+        <h4>Never <em>back-to-back.</em></h4>
+        <p>
+          <strong>Montreal never lost back-to-back games the entire postseason. 6-0 after losses.</strong> <em>That's not a fluke statistic. That's structural identity.</em> Every time they got punched — blown out 8-3 in Game 6, goalie pulled in Game 6, momentum swings, hostile road buildings — they stabilized emotionally instead of unraveling. <strong>This is the dividing line the analyst flagged: between talented teams and legitimate contenders. The Habs just earned the second category.</strong>
+        </p>
+      </div>
+      <div class="storyline">
+        <div class="sl-label">Storyline · Captain</div>
+        <h4>Dahlin's <em>series of his life.</em></h4>
+        <p>
+          5-point night in Game 6. <strong>Tying goal in Game 7. Dominant 5v5 metrics across both elimination games.</strong> <em>Per Athletic: "Nobody on this team has been waiting longer to play in these moments than Dahlin, and he saved his best stuff for the biggest moments of Buffalo's season."</em> <strong>The Sabres captain's transformation from steady defensive anchor to series-defining offensive driver is the editorial Buffalo gets to take into next year. He just isn't quite enough on his own — which is the structural reality of every captain whose team doesn't have championship depth around him.</strong>
+        </p>
+      </div>
+      <div class="storyline">
+        <div class="sl-label">Storyline · Roster Math</div>
+        <h4>Buffalo's <em>offseason of decisions.</em></h4>
+        <p>
+          The Sabres won the Atlantic Division. <strong>Made the playoffs for the first time in 15 years. Pushed Montreal to a Game 7 overtime.</strong> <em>And now both Lindy Ruff and top-six winger Alex Tuch are on expiring deals.</em> <strong>The structural question for Buffalo's front office: do you double down on the Ruff-led identity that just took you to within a single OT goal of the Eastern Conference Final, or do you reset? The publication's read: keep Ruff, keep Tuch, address the top-line minus-record problem, and run it back. This team was much closer to ECF than the final score suggests.</strong>
+        </p>
+      </div>
+      <div class="storyline">
+        <div class="sl-label">Storyline · Pattern</div>
+        <h4>The road-warrior <em>anomaly.</em></h4>
+        <p>
+          Final series totals: <strong>Road team won 5 of 7 games. Combined Montreal + Buffalo: 11–3 on the road this postseason, 4–8 at home.</strong> <em>The publication has been tracking this since Day 13. It got stranger every game. Per Ruff: "It was strange in the East, the disparity with the home and road."</em> <strong>The structural reality: both teams played freer on the road than at home, less burdened by expectation. This is now one of the strangest playoff trends of recent memory — and the only series in modern NHL history where the road team won EVERY game of a 7-game series didn't quite happen, but it came shockingly close.</strong>
+        </p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- § 04 FINAL FOUR -->
+  <div class="section-head" id="section-04">
+    <div class="num">§ 04</div>
+    <div class="section-head-text">
+      <h2>The <em>Final Four.</em></h2>
+      <p class="section-lead">The bracket is locked. Two Conference Finals starting in 48 hours. The publication's Day 5 power rankings predicted exactly this quartet five weeks ago. Now we play the games.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 0 0 20px; letter-spacing: -0.01em;">The four teams</h3>
+
+    <div class="final-four">
+      <div class="ff-cell car">
+        <div class="ff-label">East · #1 seed</div>
+        <h4>Carolina <em>Hurricanes</em></h4>
+        <div class="ff-identity">The structural standard. Relentless forecheck. Layered pressure. Elite shot suppression. Battle-tested maturity.</div>
+        <div class="ff-stats"><strong>8–0 postseason</strong> · Best record left · 13 days rest</div>
+      </div>
+      <div class="ff-cell mtl">
+        <div class="ff-label">East · #4 seed</div>
+        <h4>Montreal <em>Canadiens</em></h4>
+        <div class="ff-identity">The belief team. Opportunistic offense. Emotional resilience. Road warriors. Youngest team in Conference Finals since 1993.</div>
+        <div class="ff-stats">14 games in 30 days · <strong>6–0 after losses</strong> · 2 days rest</div>
+      </div>
+      <div class="ff-cell col">
+        <div class="ff-label">West · #1 seed</div>
+        <h4>Colorado <em>Avalanche</em></h4>
+        <div class="ff-identity">The complete team. Pressure-application identity. Speed through neutral zone. Scoring depth (16 different scorers vs MIN). MacKinnon legacy-tier.</div>
+        <div class="ff-stats"><strong>8–1 this run</strong> · Presidents' Trophy · 7 days rest</div>
+      </div>
+      <div class="ff-cell vgk">
+        <div class="ff-label">West · #2 seed</div>
+        <h4>Vegas <em>Golden Knights</em></h4>
+        <div class="ff-identity">The precision team. Pressure-resistance identity. Veteran composure. Marner leading NHL playoff scoring (18 pts). Howden ties Gretzky SHG record.</div>
+        <div class="ff-stats"><strong>5th Final Four in 9 years</strong> · Most of any team since 2017 · 5 days rest</div>
+      </div>
+    </div>
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 48px 0 20px; letter-spacing: -0.01em;">Eastern Conference Final · Thursday in Raleigh</h3>
+
+    <div class="cf-preview">
+      <div class="cf-team car">
+        <div class="team-label">Carolina · East #1</div>
+        <h4>Carolina <em>vs</em> Montreal</h4>
+        <p class="identity">
+          <strong>The most structurally dominant team left.</strong> Relentless forecheck. Layered
+          pressure. Elite shot suppression. <em>Per analyst: "They don't need chaos to score. They can
+          win low-event, territorial grind, transition, or special teams. That versatility is why
+          many see them as Cup favorites."</em>
+        </p>
+        <ul class="bullets">
+          <li><strong>8–0 postseason.</strong> Only team with a perfect record left.</li>
+          <li><strong>13 days rest</strong> by ECF Game 1 — right at the rust threshold.</li>
+          <li><strong>Stankoven 7G</strong> · co-leading playoff goal-scorer entering ECF.</li>
+          <li><strong>The "earn a seat" structural pivot</strong> the publication's been tracking since Round 1.</li>
+        </ul>
+      </div>
+      <div class="cf-team mtl">
+        <div class="team-label">Montreal · East #4</div>
+        <h4>The <em>belief</em> team</h4>
+        <p class="identity">
+          <strong>The structural opposite of Carolina.</strong> Opportunistic. Emotional. Road
+          warriors. Young. <em>Per analyst: "They don't overwhelm opponents — they survive them and
+          then strike. They've become this postseason's belief team. Nobody thought they'd survive
+          Tampa. Nobody thought they'd survive Buffalo."</em>
+        </p>
+        <ul class="bullets">
+          <li><strong>Newhook</strong> 2nd in NHL history with multi-G7 OT clinchers.</li>
+          <li><strong>Suzuki line</strong> finally producing 5v5 (G5 breakthrough).</li>
+          <li><strong>Hutson Norris narrative</strong> still active across rounds.</li>
+          <li><strong>Dobes</strong> 37 saves tonight after Game 6 pulling. Road-Game-7 redemption.</li>
+        </ul>
+      </div>
+    </div>
+
+    <p style="font-family: 'Source Serif 4', Georgia, serif; font-size: 17px; line-height: 1.6; color: var(--paper-dim); margin-top: 24px; max-width: 820px;">
+      <strong style="color: var(--paper); font-weight: 500;">The structural matchup question:</strong> Can Montreal survive Carolina's discipline-driven pressure cycle? <em>Buffalo pressured aggressively too, but often with emotional volatility and risk. Carolina pressures with discipline. That's different. Montreal's path: elite goaltending, survive early surges, capitalize on rush chances, drag games into coin-flip territory late.</em> <strong>If Carolina dictates pace consistently, this could end quickly. If Montreal's belief identity holds, they're still dangerous.</strong>
+    </p>
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 48px 0 20px; letter-spacing: -0.01em;">Western Conference Final · Wednesday in Denver</h3>
+
+    <div class="cf-preview">
+      <div class="cf-team col">
+        <div class="team-label">Colorado · West #1</div>
+        <h4>The <em>complete</em> team</h4>
+        <p class="identity">
+          <strong>Pressure-application identity.</strong> <em>Per analyst: "When Colorado is rolling,
+          opponents stop touching the puck." Speed through neutral zone. Transition attack. Elite
+          top-end talent. Defense activating offensively. Ability to score in waves.</em>
+        </p>
+        <ul class="bullets">
+          <li><strong>16 different goal scorers</strong> in MIN series.</li>
+          <li><strong>MacKinnon</strong> legacy-tier under pressure (G5 tying snipe).</li>
+          <li><strong>Makar</strong> Norris-tier; right-arm injury concern.</li>
+          <li><strong>Wedgewood/Blackwood</strong> goalie rotation working structurally.</li>
+        </ul>
+      </div>
+      <div class="cf-team vgk">
+        <div class="team-label">Vegas · West #2</div>
+        <h4>The <em>precision</em> team</h4>
+        <p class="identity">
+          <strong>Pressure-resistance identity.</strong> <em>Per analyst: "They suffocate space, wear
+          teams down physically, manage momentum swings, and force opponents into emotionally
+          exhausting hockey. They are psychologically hard to eliminate."</em>
+        </p>
+        <ul class="bullets">
+          <li><strong>Marner</strong> leading NHL playoff scoring at 18 pts.</li>
+          <li><strong>Howden</strong> tied Gretzky's SHG record (3 in single postseason).</li>
+          <li><strong>Hart</strong> structural anchor (.920+ across two rounds).</li>
+          <li><strong>Stone</strong> potential return for Game 1.</li>
+        </ul>
+      </div>
+    </div>
+
+    <p style="font-family: 'Source Serif 4', Georgia, serif; font-size: 17px; line-height: 1.6; color: var(--paper-dim); margin-top: 24px; max-width: 820px;">
+      <strong style="color: var(--paper); font-weight: 500;">The structural contrast:</strong> Colorado tries to overwhelm you. Vegas tries to slowly erase you. <em>If Colorado's pace wins, the series tilts fast. If Vegas slows the game into trench warfare, it becomes dangerous for the Avs.</em> <strong>The Athletic called this matchup "the real Stanley Cup Final in terms of pure hockey quality." It's also the publication's structural Cup favorite if both teams advance — pressure-application meets pressure-resistance in its purest bracket form.</strong>
+    </p>
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 48px 0 20px; letter-spacing: -0.01em;">Rest vs rust · days off entering Conference Finals</h3>
+
+    <div class="rest-grid">
+      <div class="rest-cell car danger">
+        <div class="rc-team">Carolina</div>
+        <div class="rc-days">13</div>
+        <div class="rc-label">days since Game 4 sweep over PHI · longest rest of any team</div>
+        <div class="rc-zone">⚠ Rust zone</div>
+      </div>
+      <div class="rest-cell col sweet">
+        <div class="rc-team">Colorado</div>
+        <div class="rc-days">7</div>
+        <div class="rc-label">days since Game 5 OT win over MIN · sweet spot</div>
+        <div class="rc-zone">✓ Optimal</div>
+      </div>
+      <div class="rest-cell vgk sweet">
+        <div class="rc-team">Vegas</div>
+        <div class="rc-days">5</div>
+        <div class="rc-label">days since Game 6 closeout vs ANA · healthy</div>
+        <div class="rc-zone">✓ Optimal</div>
+      </div>
+      <div class="rest-cell mtl danger">
+        <div class="rc-team">Montreal</div>
+        <div class="rc-days">2</div>
+        <div class="rc-label">days since Game 7 OT win at BUF · shortest rest of any team</div>
+        <div class="rc-zone">⚠ Fatigue zone</div>
+      </div>
+    </div>
+
+    <p style="font-family: 'Source Serif 4', Georgia, serif; font-size: 17px; line-height: 1.6; color: var(--paper-dim); margin-top: 24px; max-width: 820px;">
+      <strong style="color: var(--paper); font-weight: 500;">The two extremes are in the East matchup.</strong> Carolina at 13 days rest is right in the historical rust-risk window (10+ days). Montreal at 2 days is in legitimate fatigue territory after 14 playoff games in 30 days. <em>The argument for rest: healing time, fresh legs, mental reset, special teams prep. The argument for rust: timing loss, rhythm loss, mental softness, lack of game pressure. Historical data is genuinely mixed — Tampa 2020 won the Cup after 8 days off; the 2018 Predators struggled coming off 9 days.</em> <strong>The structural truth: rest helps if you needed it (Carolina hasn't been pushed). Rust hurts if you've lost the rhythm of playoff hockey (Carolina has now played 0 games in 13 days). Whichever way Game 1 breaks Thursday, the publication will have its first read.</strong>
+    </p>
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 48px 0 20px; letter-spacing: -0.01em;">What's next</h3>
+
+    <ul class="bullets" style="max-width: 820px;">
+      <li><strong>Wednesday May 20 · WCF Game 1 in Denver.</strong> Colorado vs Vegas at Ball Arena. <em>The bracket's first contender-vs-contender confrontation. Pressure-application vs pressure-resistance.</em></li>
+      <li><strong>Thursday May 21 · ECF Game 1 in Raleigh.</strong> Montreal vs Carolina at Lenovo Center. <em>Structural standard vs belief team. Discipline-driven pressure vs road-warrior opportunism.</em></li>
+      <li><strong>The Cup favorites:</strong> Colorado and Carolina, by structural read. <em>But the publication has been honest about the belief team's danger since Day 10 — and Newhook's historical Game 7 OT parallel to Nathan Horton 2011 is the kind of editorial detail that doesn't always stay quaint.</em></li>
+      <li><strong>The bracket's true Cup Final preview:</strong> if Colorado and Carolina advance, the publication's Round 2 thesis is fully validated and the Cup Final pairs the two most structurally dominant teams left. <em>If either upset happens, the publication's narrative changes — but the analytical framework holds.</em></li>
+    </ul>
+
+  </section>
+
+  <section class="closing">
+    <div class="overline">The Take</div>
+    <blockquote>
+      <em>Belief is a strange thing to measure.</em> It doesn't show up in shot attempt percentages
+      or scoring chances or possession metrics — all of which Buffalo dominated tonight and across
+      this series. <strong>What it does show up in is a team that never loses back-to-back games
+      across 30 days and 14 playoff games. A goaltender pulled in Game 6 who makes 37 saves in
+      Game 7. A 24-year-old named Newhook who becomes the second player in NHL history to score
+      multiple Game 7 OT clinchers in a single postseason — joining Boston's Nathan Horton from
+      the year the Bruins won the Stanley Cup.</strong> <em>The Final Four is now locked. The
+      Cup favorites are Colorado and Carolina, by every structural read. The publication has been
+      saying that since Day 5.</em> But the bracket has also produced two Conference Final teams
+      whose path here was supposed to be impossible — Vegas's veteran precision overcoming
+      Anaheim's youth, Montreal's belief overcoming Tampa and then Buffalo. <strong>Two Conference
+      Finals in 48 hours. Pressure-application meets pressure-resistance in the West. Structural
+      standard meets belief team in the East. The publication's Day 5 power rankings predicted
+      exactly these four. Now we get to find out which one actually wins.</strong>
+    </blockquote>
+    <div class="sig">— Round 2 · Series Recap · Montreal over Buffalo, 4–3 in OT · Final Four set · WCF G1 Wednesday · ECF G1 Thursday</div>
+  </section>
+
+  <footer>
+    <div>Rink Report · NHL Playoff Coverage</div>
+    <div>Round 2 of 4 · COMPLETE · CAR vs MTL · COL vs VGK · WCF Wed May 20 · ECF Thu May 21</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
