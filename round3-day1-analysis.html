@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Round 3, Day 1 — The Blueprint | NHL Playoffs Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0b0d12;
+    --ink-2: #13161f;
+    --ink-3: #1c1f2b;
+    --paper: #f2ebdc;
+    --paper-dim: #d6cdba;
+    --muted: #8a8374;
+    --ice: #7fb4d8;
+    --ice-deep: #3d6d93;
+    --goal: #d74e3a;
+    --gold: #d4a842;
+    --hairline: rgba(242, 235, 220, 0.14);
+    --hairline-strong: rgba(242, 235, 220, 0.28);
+    --car: #cc0000;
+    --col: #6F263D;
+    --min: #154734;
+    --mtl: #AF1E2D;
+    --buf: #002654;
+    --vgk: #B4975A;
+    --ana: #B9975B;
+    --phi: #f74902;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  ul.bullets { list-style: none; padding: 0; margin: 0; }
+  ul.bullets li {
+    position: relative;
+    padding-left: 26px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+  ul.bullets li:last-child { margin-bottom: 0; }
+  ul.bullets li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 11px;
+    width: 14px; height: 1px;
+    background: var(--goal);
+  }
+  ul.bullets li strong { color: var(--paper); font-weight: 500; }
+
+  /* ROUND 3 BANNER - elevated treatment with deeper gold gradient */
+  .round-banner {
+    background: linear-gradient(90deg, rgba(212, 168, 66, 0.20) 0%, rgba(111, 38, 61, 0.18) 50%, rgba(180, 151, 90, 0.18) 100%);
+    border-bottom: 1px solid var(--gold);
+    padding: 18px 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+  }
+  .round-banner span { color: var(--paper); }
+  .round-banner .round-id { color: var(--gold); font-weight: 700; }
+
+  .masthead {
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .masthead .brand { color: var(--paper); font-weight: 600; }
+  .masthead .brand span { color: var(--goal); }
+  .masthead .brand-link {
+    text-decoration: none;
+    transition: opacity 0.3s;
+    display: inline-block;
+  }
+  .masthead .brand-link:hover { opacity: 0.7; }
+  .masthead .nav-link {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    border-bottom: 1px solid transparent;
+  }
+  .masthead .nav-link:hover { color: var(--paper); border-bottom-color: var(--hairline-strong); }
+  .masthead .round-tag { color: var(--gold); font-weight: 600; letter-spacing: 0.22em; }
+
+  .hero {
+    padding: 80px 0 72px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .overline {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .overline::before {
+    content: "";
+    width: 32px; height: 1px;
+    background: var(--goal);
+  }
+  h1.headline {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(56px, 9vw, 136px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    margin-bottom: 40px;
+  }
+  h1.headline em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+  .dek {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.5;
+    color: var(--paper);
+    max-width: 760px;
+    font-weight: 500;
+  }
+  .byline {
+    margin-top: 48px;
+    display: flex;
+    gap: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+  .byline strong { color: var(--paper); font-weight: 600; }
+
+  .scores {
+    border-bottom: 1px solid var(--hairline);
+  }
+  .score {
+    padding: 32px 28px;
+  }
+  .score .tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .score .matchup {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: 32px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .score .winner { color: var(--paper); font-weight: 600; }
+  .score .loser { color: var(--muted); }
+  .score .final {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--paper-dim);
+    margin-top: 10px;
+  }
+
+  .lede { padding: 88px 0 64px; max-width: 820px; }
+  .lede p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 23px;
+    line-height: 1.58;
+    color: var(--paper);
+    font-weight: 400;
+  }
+  .lede p::first-letter {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 5.2em;
+    float: left;
+    line-height: 0.82;
+    padding: 10px 14px 0 0;
+    color: var(--goal);
+  }
+
+  .section-head {
+    padding: 56px 0 40px;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 40px;
+    align-items: baseline;
+    border-top: 1px solid var(--hairline);
+    scroll-margin-top: 24px;
+  }
+  .section-head .num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--goal);
+    letter-spacing: 0.1em;
+  }
+  .section-head-text { align-self: baseline; }
+  .section-lead {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.45;
+    color: var(--goal);
+    margin-top: 20px;
+    max-width: 780px;
+  }
+  .section-head h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(38px, 5vw, 68px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+  }
+  .section-head h2 em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+
+  .game {
+    padding: 64px 0;
+    border-top: 1px solid var(--hairline-strong);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 56px;
+  }
+  .game-title { position: sticky; top: 40px; align-self: start; }
+  .game-title .series-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .game-title h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 54px;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .game-title .vs {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--muted);
+    display: block;
+    font-size: 0.6em;
+    margin: 4px 0;
+  }
+  .colorbar { height: 6px; width: 100%; display: flex; margin-top: 20px; }
+  .colorbar span { flex: 1; }
+  .series-stand {
+    margin-top: 24px;
+    padding: 18px 20px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--goal);
+  }
+  .series-stand .ss-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 6px;
+  }
+  .series-stand .ss-score {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--paper);
+    letter-spacing: -0.01em;
+  }
+  .game-body { font-size: 17px; line-height: 1.65; }
+  .game-body > ul.bullets { margin-bottom: 8px; }
+  .game-body > ul.bullets li { font-size: 16px; }
+  .pullquote {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 1.4;
+    color: var(--paper);
+    padding: 28px 0 28px 28px;
+    border-left: 2px solid var(--goal);
+    margin: 28px 0;
+  }
+  .pullquote .attribution {
+    display: block;
+    margin-top: 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .breakdown-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 24px;
+    padding: 18px 0;
+    border-top: 1px solid var(--hairline);
+    align-items: start;
+  }
+  .breakdown-row:last-child { border-bottom: 1px solid var(--hairline); }
+  .breakdown-row .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding-top: 4px;
+  }
+  .breakdown-row .content { color: var(--paper-dim); font-size: 16px; }
+  .breakdown-row .content strong { color: var(--paper); font-weight: 500; }
+  .outlook-box {
+    margin-top: 28px;
+    padding: 24px 28px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--ice);
+  }
+  .outlook-box .olabel {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ice);
+    margin-bottom: 10px;
+  }
+  .outlook-box .otext {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--paper);
+  }
+
+  .statblock {
+    margin: 32px 0;
+    background: var(--ink-2);
+    border: 1px solid var(--hairline);
+    padding: 28px 32px;
+  }
+  .statblock-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .statblock-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .stat .num {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 38px;
+    color: var(--goal);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .stat .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+
+  /* MISSING STARS - 2 column */
+  .missing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+    margin: 32px 0;
+  }
+  .missing-cell {
+    background: var(--ink-2);
+    padding: 28px 30px;
+  }
+  .missing-cell.col { border-top: 3px solid var(--col); }
+  .missing-cell.vgk { border-top: 3px solid var(--vgk); }
+  .missing-cell .mc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .missing-cell h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--paper);
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+  }
+  .missing-cell h4 em { font-style: italic; }
+  .missing-cell.col h4 em { color: var(--col); }
+  .missing-cell.vgk h4 em { color: var(--vgk); }
+  .missing-cell .player {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--paper-dim);
+    margin-bottom: 12px;
+  }
+  .missing-cell .player strong { color: var(--paper); font-weight: 500; }
+  .missing-cell .status {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    padding-top: 12px;
+    border-top: 1px solid var(--hairline);
+  }
+
+  /* LEADERS PANEL */
+  .leaders {
+    margin: 32px 0;
+    background: var(--ink-2);
+    border-left: 3px solid var(--gold);
+    padding: 28px 32px;
+  }
+  .leaders-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .leaders h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 18px;
+  }
+  .leaders-grid {
+    display: grid;
+    grid-template-columns: 70px 1fr 80px;
+    gap: 16px;
+    align-items: center;
+    padding: 12px 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .leaders-grid:first-of-type { border-top: none; padding-top: 4px; }
+  .leaders-rank {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--goal);
+    letter-spacing: -0.02em;
+  }
+  .leaders-name {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.4;
+    color: var(--paper);
+  }
+  .leaders-name .team-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-left: 8px;
+  }
+  .leaders-pts {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--paper);
+    text-align: right;
+    letter-spacing: 0.04em;
+  }
+
+  /* BRACKET STATUS - Conference Finals */
+  .bracket-status {
+    margin: 40px 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .bracket-cell {
+    background: var(--ink);
+    padding: 28px 26px;
+  }
+  .bracket-cell .bc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .bracket-cell .bc-matchup {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--paper);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .bracket-cell .bc-series {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+    margin-bottom: 10px;
+  }
+  .bracket-cell .bc-status {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    padding-top: 10px;
+    border-top: 1px solid var(--hairline);
+  }
+  .bracket-cell.west .bc-label { color: var(--vgk); }
+  .bracket-cell.east .bc-label { color: var(--car); }
+
+  .closing { padding: 72px 0 48px; border-top: 1px solid var(--hairline-strong); }
+  .closing .overline { color: var(--gold); }
+  .closing .overline::before { background: var(--gold); }
+  .closing blockquote {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    max-width: 980px;
+  }
+  .closing blockquote em { font-style: italic; color: var(--goal); font-weight: 400; }
+  .closing .sig {
+    margin-top: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .toc { padding: 40px 0 48px; border-bottom: 1px solid var(--hairline); }
+  .toc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .toc-label::before {
+    content: "";
+    width: 24px; height: 1px;
+    background: var(--muted);
+  }
+  .toc-list {
+    list-style: none;
+    padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .toc-list li { background: var(--ink); }
+  .toc-list a {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px 26px;
+    text-decoration: none;
+    color: var(--paper);
+    transition: background 0.3s;
+    height: 100%;
+  }
+  .toc-list a:hover { background: var(--ink-2); }
+  .toc-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--goal);
+  }
+  .toc-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+    color: var(--paper);
+    transition: color 0.3s;
+  }
+  .toc-list a:hover .toc-title { color: var(--ice); }
+
+  footer {
+    padding: 36px 0;
+    border-top: 1px solid var(--hairline);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 820px) {
+    .wrap { padding: 0 20px; }
+    .section-head { grid-template-columns: 1fr; gap: 12px; padding: 44px 0 28px; }
+    .game { grid-template-columns: 1fr; gap: 28px; padding: 48px 0; }
+    .game-title { position: static; }
+    .game-title h3 { font-size: 42px; }
+    .breakdown-row { grid-template-columns: 1fr; gap: 8px; }
+    .statblock-grid { grid-template-columns: repeat(2, 1fr); }
+    .missing-grid { grid-template-columns: 1fr; }
+    .bracket-status { grid-template-columns: 1fr; }
+    .leaders-grid { grid-template-columns: 50px 1fr 70px; gap: 12px; }
+    .lede { padding: 56px 0 40px; }
+    .lede p { font-size: 20px; }
+    .byline { flex-direction: column; gap: 12px; }
+    .toc-list { grid-template-columns: 1fr; }
+    .toc { padding: 28px 0 32px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="round-banner">
+    <span class="round-id">Round Three</span> &nbsp;·&nbsp; <span>Conference Finals</span> &nbsp;·&nbsp; Vegas takes Game 1 in Denver, steals home ice
+  </div>
+
+  <div class="masthead">
+    <a href="index.html" class="brand-link"><div class="brand">Rink<span>&middot;</span>Report</div></a>
+    <div>
+      <a href="round2-series-mtl-buf-recap.html" class="nav-link">← MTL-BUF Recap</a>
+      &nbsp;&nbsp;Vol. I &nbsp;/&nbsp; <span class="round-tag">Round 03</span> &nbsp;/&nbsp; Day 1
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="overline">Western Conference Final · Game 1 · VGK 4, COL 2 · Series 1–0 Vegas</div>
+    <h1 class="headline">The <em>Blueprint.</em></h1>
+    <p class="dek">
+      Vegas survived Colorado's opening storm, completely took over the middle 25 minutes, and walked
+      out of Denver with home-ice advantage. <strong>Coghlan opened the scoring with his first NHL goal
+      since December 17, 2021 — 1,615 days ago. Dorofeyev scored his NHL-leading 10th playoff goal off
+      a Marner feed. Howden batted his 9th of the playoffs out of the air post-PK. Hart made 36 saves.</strong>
+      Both teams missing their best player (Makar for Colorado, Stone for Vegas). <em>Vegas may have
+      just shown the rest of the league how to frustrate the Cup favorite.</em>
+    </p>
+    <div class="byline">
+      <div><strong>Round 3</strong> · Day 1 Analysis</div>
+      <div><strong>Filed</strong> · May 20, 2026</div>
+      <div><strong>Read</strong> · 13 minutes</div>
+      <div><strong>Status</strong> · WCF G1 of 7</div>
+    </div>
+  </header>
+
+  <section class="scores">
+    <div class="score">
+      <div class="tag">WCF · Game 1 · West Conference Final &nbsp;·&nbsp; VGK Takes Home Ice</div>
+      <div class="matchup">
+        <span class="winner">Vegas</span> def. <span class="loser">Colorado</span>, 4–2
+      </div>
+      <div class="final">Vegas leads 1–0 &nbsp;·&nbsp; Coghlan opener (1,615 days) · Dorofeyev 10th · Howden 9th · Hart 36 sv · Makar OUT · Stone OUT</div>
+    </div>
+  </section>
+
+  <nav class="toc" aria-label="Table of contents">
+    <div class="toc-label">Contents</div>
+    <ol class="toc-list">
+      <li><a href="#section-01">
+        <span class="toc-num">§ 01</span>
+        <span class="toc-title">The blueprint emerged</span>
+      </a></li>
+      <li><a href="#section-02">
+        <span class="toc-num">§ 02</span>
+        <span class="toc-title">Missing stars · injuries</span>
+      </a></li>
+      <li><a href="#section-03">
+        <span class="toc-num">§ 03</span>
+        <span class="toc-title">Bracket · scoring leaders</span>
+      </a></li>
+    </ol>
+  </nav>
+
+  <section class="lede">
+    <p>
+      Round 3 began the way Round 2 ended — with Vegas controlling the moments that mattered while
+      Colorado played the higher-event hockey. <strong>The Avs dominated the opening 5 minutes,
+      forcing Vegas to scramble out of its own end. Then Vegas weathered it, settled the game, and
+      from the middle of the second period onward, completely controlled the structural battle.</strong>
+      Dylan Coghlan — a 28-year-old defenseman who'd spent most of this season in the AHL and hadn't
+      scored an NHL goal since December 2021 — opened scoring at 12:29 of the second. <em>Less than 4
+      minutes later, Dorofeyev scored his NHL-leading 10th playoff goal off a Marner feed. Less than
+      5 minutes into the third, Howden batted his 9th of the playoffs out of the air after a Vegas
+      penalty kill ended.</em> The Avs pushed late — Nichushkin and Landeskog cut it to 3-2 with
+      2:21 remaining — but Dowd's empty-netter sealed it. <strong>Vegas: home-ice advantage in
+      Denver. The Athletic called this "a composure win more than a skill win." That's the perfect
+      framing for the publication's "precision team" identity carrying forward from Round 2.</strong>
+    </p>
+  </section>
+
+  <!-- § 01 GAME -->
+  <div class="section-head" id="section-01">
+    <div class="num">§ 01</div>
+    <div class="section-head-text">
+      <h2>Vegas found <em>the blueprint.</em></h2>
+      <p class="section-lead">Survive the opening storm. Compress middle ice. Block shots (22). Force one-and-dones. Punish turnovers. Stay emotionally calm. That's the structural identity Vegas brought into Game 1 — and it worked against the Cup favorite in their own building.</p>
+    </div>
+  </div>
+
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Round 3 · WCF · Game 1 &nbsp;·&nbsp; <span style="color: var(--goal); font-weight: 600;">VGK Leads 1–0</span></div>
+      <h3>Vegas <span class="vs">at</span> Colorado</h3>
+      <div class="colorbar">
+        <span style="background: var(--vgk)"></span>
+        <span style="background: var(--col)"></span>
+      </div>
+      <div class="series-stand">
+        <div class="ss-label">Series Standing</div>
+        <div class="ss-score">Golden Knights 1 — Avalanche 0</div>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Vegas 4, Colorado 2. <strong>VGK scorers: Coghlan (1st NHL goal in 4 years, 5-hole on Wedgewood), Dorofeyev (PP, off Marner cross-seam feed), Howden (batted out of air post-PK), Dowd (EN).</strong> COL: Nichushkin (between his own legs off a Colton feed), Landeskog (PP, off a MacKinnon dance through McNabb). <em>VGK takes home-ice advantage. Game 2 Friday in Denver.</em></li>
+        <li>The structural truth: <strong>The opening 5 minutes were everything Colorado is supposed to be. Heavy forecheck, swarming pressure, neutral-zone speed. Vegas was scrambling.</strong> <em>And then Vegas settled. Hart made saves. The neutral zone tightened. The middle ice compressed. Colorado's transition game stopped functioning by the late first period.</em></li>
+        <li>The middle 25 minutes flipped the game. <strong>From late 1st through much of the 3rd: Vegas tilted the ice, generated cleaner entries, controlled rebounds, and won leverage moments.</strong> <em>Per the analyst: "That's where the series may actually swing — the 25-minute stretch where playoff games are usually decided."</em></li>
+        <li>22 blocked shots from Vegas. <strong>Colorado's first-two-period offense: 3 of their best chances came from fourth-line winger Logan O'Connor — not what you want from a team with MacKinnon, Necas, and the deepest forward room in the league.</strong> <em>Per Bednar postgame: "I didn't love our puck play tonight — like, our execution coming out of our zone, through the neutral zone a little bit, even O-zone play. We gave them a handful of odd-man rushes that came off our turnovers and missed execution."</em></li>
+        <li>The Coghlan opener is editorial gold. <strong>1,615 days since his last NHL goal (December 17, 2021).</strong> Spent most of this season with the Henderson Silver Knights (AHL). Played only 3 regular-season NHL games. Inserted into the Vegas lineup during the Anaheim series, replacing Kaedan Korczak. <em>Per Tortorella: "I'm happy for him, because he's plugged along, plugged along. With his background, it's a huge goal for us. He's an easy guy to pull for."</em></li>
+        <li>Dorofeyev's 10th playoff goal — NHL-leading. <strong>Marner cross-seam feed, Dorofeyev finish on the PP. The 2nd goal in 4 minutes that broke the game open.</strong> <em>The Marner-Dorofeyev partnership the publication has been tracking since Day 8 is now structurally the most productive forward pairing in the NHL playoffs.</em></li>
+        <li>The Howden goal is becoming routine. <strong>9th playoff goal — 2nd in NHL behind only Dorofeyev. Came on a 2-on-1 with Hutton seconds after a Vegas PK ended. Wedgewood blocked Hutton's shot; Howden knocked the puck out of the air with his glove and tapped it across the goal line.</strong> <em>Howden had 12 goals in the entire regular season. He has 9 in 14 playoff games. The publication has been tracking him since Day 10 — he is now a structural certainty as an X-factor.</em></li>
+        <li>Colorado's late push showed why they're dangerous. <strong>Nichushkin at 5:53 of the third (between-the-legs finish off a Colton feed). Landeskog PP goal at 17:39 (MacKinnon dance through McNabb, backdoor feed).</strong> <em>That's the explosive offense that Colorado can still produce on demand. But the structural problem stood: too little, too late, against a team that doesn't panic.</em></li>
+        <li>Hart was the difference at the right moments. <strong>36 saves, including a terrific stop on a Nazem Kadri PP shot at the first-period horn.</strong> <em>Per the Athletic: "Vegas never needed him to steal games constantly. They needed stability. He gave them exactly that." Same framing the publication used after the Anaheim series.</em></li>
+        <li>Special teams: Vegas won the structural battle. <strong>Dorofeyev PP goal. Killed off both Colorado PPs (Howden's goal came moments after the kill had ended). Vegas has now played opponents to a 4-4 draw when short-handed in this postseason.</strong> <em>Colorado entered with the 27th-best PP in the regular season; they were scoring at 25% in Rounds 1-2 only against teams that couldn't structurally defend them. Vegas can.</em></li>
+        <li>Wedgewood started for Colorado — the call Bednar made from the COL-MIN Series Recap's "Wedgewood-vs-Blackwood question." <strong>Tight early (stopped Kolesar breakaway, kicked aside Hertl shot), but allowed 3 through 40 minutes.</strong> <em>The Blackwood call could come Friday.</em></li>
+      </ul>
+
+      <div class="statblock">
+        <div class="statblock-label">The Blueprint · By the Numbers</div>
+        <div class="statblock-grid">
+          <div class="stat">
+            <div class="num">22</div>
+            <div class="label">VGK shots<br/>blocked</div>
+          </div>
+          <div class="stat">
+            <div class="num">36</div>
+            <div class="label">Hart saves<br/>in net</div>
+          </div>
+          <div class="stat">
+            <div class="num">10</div>
+            <div class="label">Dorofeyev G<br/>NHL leader</div>
+          </div>
+          <div class="stat">
+            <div class="num">1615</div>
+            <div class="label">Days since<br/>Coghlan's last G</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pullquote">
+        I didn't love our puck play tonight — our execution coming out of our zone, through the neutral zone, even O-zone play. We gave them a handful of odd-man rushes that came off our turnovers and missed execution even if we were doing the right thing.
+        <span class="attribution">— Jared Bednar, postgame</span>
+      </div>
+
+      <div class="breakdown-row">
+        <div class="label">What This Was</div>
+        <div class="content"><strong>The first time Colorado has looked genuinely uncomfortable for extended stretches in this postseason.</strong> Vegas didn't out-skate them. Vegas didn't out-talent them. <em>Vegas simply absorbed Colorado's opening push, tightened the neutral zone, blocked 22 shots, and converted the turnovers they generated. That's the structural identity the publication has been calling "precision hockey" since the VGK-ANA Series Recap. Carolina now has it confirmed against a team many had as the structural Cup favorite.</em></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">The Blueprint Question</div>
+        <div class="content">Per the analyst: <strong>"You cannot out-skate Colorado consistently. You cannot out-talent Colorado consistently. But Vegas may be proving you can FRUSTRATE Colorado structurally."</strong> <em>How? Compress middle ice. Force dump-ins. Block lanes. Punish turnovers. Stay emotionally calm. That's exactly what happened after the opening 5-minute stretch. If Vegas can replicate this for 3 more wins, the WCF flips from "Cup Final preview" to "Cup Final-tier upset path."</em></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Colorado's Reality</div>
+        <div class="content">Colorado still showed why they're dangerous. <strong>Down 3-0 in the third, they pushed. The Nichushkin goal woke up the building. MacKinnon set up Landeskog's PP goal to make it 3-2 with 2:21 left.</strong> <em>That's the explosive offense that can change a game on any shift. But the structural problem is real: when Vegas plays its best, Colorado's transition game stops functioning, and Colorado is currently without the player (Makar) who most reliably restarts it. Bednar's pregame "lot of work and a lot of sleep" comment may not have been about the right kind of work — the work needed is structural adjustment, and that has to happen between Game 1 and Game 2 Friday.</em></div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook · Updated</div>
+        <div class="otext">Vegas leads 1-0 with home ice advantage. <strong>Game 2 Friday in Denver. The Makar return timeline is the biggest structural variable.</strong> <em>If Makar is back for Game 2, Colorado gets its Norris-tier driver back and the structural ceiling rises immediately. If Makar misses another game, Vegas's blueprint just got another test run. The Stone return is more uncertain — he skated optionally pregame but Tortorella's commitment to his current lineup suggests he won't rush him back. Vegas can wait. Colorado cannot.</em></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- § 02 MISSING STARS -->
+  <div class="section-head" id="section-02">
+    <div class="num">§ 02</div>
+    <div class="section-head-text">
+      <h2>Missing <em>stars.</em></h2>
+      <p class="section-lead">Both teams without their best player. Makar's absence cost Colorado more visibly than Stone's cost Vegas — but the rest of this series may turn on which one returns first.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="missing-grid">
+      <div class="missing-cell col">
+        <div class="mc-label">Colorado · Cale Makar · OUT</div>
+        <h4>Norris-tier <em>absence.</em></h4>
+        <p class="player">
+          <strong>Left Round 2 Game 5 with a right-arm injury after a late collision with Mats Zuccarello.</strong> Skated on his own pregame Wednesday. Per Bednar postgame: <em>"Day-to-day. I expect him to return at some point."</em>
+        </p>
+        <p class="player">
+          <strong>Replacement:</strong> Jack Ahcan got the call for his 3rd career playoff appearance. Played fewest D-minutes of any Av. On ice for Vegas's opening goal. Devon Toews moved up to top PP. Manson moved up to top PK pair.
+        </p>
+        <p class="player">
+          <em>The structural cost: less clean zone exits, less transition support, less offensive activation on the back end, dynamically weaker PP. Colorado's neutral-zone game suffered all night.</em>
+        </p>
+        <div class="status">Status · Day-to-Day · Possible Game 2</div>
+      </div>
+      <div class="missing-cell vgk">
+        <div class="mc-label">Vegas · Mark Stone · OUT</div>
+        <h4>Captain's <em>absence.</em></h4>
+        <p class="player">
+          <strong>Hasn't played since leaving Round 2 Game 3 against Anaheim.</strong> Skated in Wednesday's optional morning skate at Ball Arena. Did not dress for Game 1.
+        </p>
+        <p class="player">
+          <strong>His postseason: 3G, 4A in 9 games before the injury.</strong> Selke-caliber two-way center.
+        </p>
+        <p class="player">
+          <em>The structural reality: Vegas is now 5-1 without Stone in these playoffs (won 4 of 5 vs ANA and tonight). Howden, Dorofeyev, Hertl, Karlsson, and Saad have absorbed his minutes. Per Kolesar pregame: "It's always a next-man-up mentality. With guys like him, it's hard to do that, but guys took it upon themselves last series — like Mitch and Pavel — pulled their socks up."</em>
+        </p>
+        <div class="status">Status · Unconfirmed return timeline</div>
+      </div>
+    </div>
+
+    <p style="font-family: 'Source Serif 4', Georgia, serif; font-size: 19px; line-height: 1.6; color: var(--paper-dim); margin-top: 32px; max-width: 820px;">
+      <strong style="color: var(--paper); font-weight: 500;">The structural asymmetry:</strong> Vegas has been winning without Stone for 6 straight playoff games and 6 of 8 total. Colorado has only been without Makar for one game — and they lost it on home ice. <em>Vegas has built a depth identity that absorbs star absence. Colorado has built a star-driven identity that depends on Makar being there. If both stars return, the matchup question reverses. If Stone returns and Makar doesn't, the WCF could end fast.</em>
+    </p>
+
+  </section>
+
+  <!-- § 03 LEADERS + BRACKET -->
+  <div class="section-head" id="section-03">
+    <div class="num">§ 03</div>
+    <div class="section-head-text">
+      <h2>Leaders & <em>bracket.</em></h2>
+      <p class="section-lead">Dorofeyev is the new playoff goal leader. Marner still leads in points. Howden is now structurally one of the bracket's most impactful X-factors. And the ECF starts Thursday in Raleigh.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="leaders">
+      <div class="leaders-label">NHL Playoff Scoring · Through WCF Game 1</div>
+      <h4>Vegas's <em>top-3 forward pairing</em> is now structurally elite.</h4>
+
+      <div class="leaders-grid">
+        <div class="leaders-rank">G</div>
+        <div class="leaders-name">Pavel Dorofeyev<span class="team-tag">VGK · 10 G</span></div>
+        <div class="leaders-pts">NHL lead</div>
+      </div>
+      <div class="leaders-grid">
+        <div class="leaders-rank">G</div>
+        <div class="leaders-name">Brett Howden<span class="team-tag">VGK · 9 G (3 SHG, tied Gretzky)</span></div>
+        <div class="leaders-pts">2nd</div>
+      </div>
+      <div class="leaders-grid">
+        <div class="leaders-rank">PTS</div>
+        <div class="leaders-name">Mitch Marner<span class="team-tag">VGK · 18+ pts (assist tonight)</span></div>
+        <div class="leaders-pts">NHL lead</div>
+      </div>
+      <div class="leaders-grid">
+        <div class="leaders-rank">PTS</div>
+        <div class="leaders-name">Jack Eichel<span class="team-tag">VGK · driving play in Stone's absence</span></div>
+        <div class="leaders-pts">14+ pts</div>
+      </div>
+
+      <p style="font-family: 'Source Serif 4', Georgia, serif; font-size: 16px; line-height: 1.6; color: var(--paper-dim); margin-top: 22px;">
+        <strong style="color: var(--paper); font-weight: 500;">Vegas has three of the top scorers in the postseason. Two playoff goal leaders. The NHL points leader.</strong> <em>That's structural offensive depth on top of veteran composure on top of elite goaltending. The Cup conversation has been a 3-team race (CAR, COL, VGK) since the COL-MIN Series Recap. Tonight just nudged Vegas closer to a 2-team conversation with Carolina.</em>
+      </p>
+    </div>
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 48px 0 20px; letter-spacing: -0.01em;">Conference Finals · Bracket</h3>
+
+    <div class="bracket-status">
+      <div class="bracket-cell west">
+        <div class="bc-label">Western Conference Final · LEAD VGK</div>
+        <div class="bc-matchup">VGK leads COL · 1–0</div>
+        <div class="bc-series">Game 1 tonight: Vegas 4, Colorado 2. Vegas takes home-ice advantage in Denver. Both teams without their best player.</div>
+        <div class="bc-status">Game 2 · Friday May 22 · Denver</div>
+      </div>
+      <div class="bracket-cell east">
+        <div class="bc-label">Eastern Conference Final · NOT YET STARTED</div>
+        <div class="bc-matchup">Carolina vs Montreal</div>
+        <div class="bc-series">Game 1 Thursday May 21 in Raleigh. Carolina: 13 days rest. Montreal: 2 days rest after Game 7 OT win Monday.</div>
+        <div class="bc-status">Game 1 · Thursday May 21 · Raleigh</div>
+      </div>
+    </div>
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 48px 0 20px; letter-spacing: -0.01em;">What's next</h3>
+
+    <ul class="bullets" style="max-width: 820px;">
+      <li><strong>Thursday May 21 · ECF Game 1 in Raleigh.</strong> Montreal vs Carolina at Lenovo Center. <em>The publication's rest-vs-rust thesis from the MTL-BUF Series Recap gets its first test. Carolina with 13 days off (rust zone). Montreal with 2 days off (fatigue zone). Cale Makar status update may come before then.</em></li>
+      <li><strong>Friday May 22 · WCF Game 2 in Denver.</strong> Colorado has 48 hours to figure out a structural answer to Vegas's blueprint. <em>The Makar return is the biggest variable. The Wedgewood-vs-Blackwood call is the second-biggest. Bednar gets less practice and more video sessions — per Tortorella, "the work's done that way" now.</em></li>
+      <li><strong>The blueprint question:</strong> if Vegas can replicate tonight's performance with Stone returning at any point, the WCF becomes structurally winnable in 5 games. <em>If Colorado adjusts with Makar back, the series gets long. The whole bracket pivots on those two health questions.</em></li>
+      <li><strong>The Cup conversation:</strong> three teams have a real path now — Carolina, Colorado, Vegas. <em>The publication has said this since the COL-MIN Recap. Vegas just nudged its own probability up by stealing Game 1 on the road. Carolina's first game Thursday will give the bracket its second structural read.</em></li>
+    </ul>
+
+  </section>
+
+  <section class="closing">
+    <div class="overline">The Take</div>
+    <blockquote>
+      <em>Vegas didn't beat Colorado with talent tonight.</em> They beat them by doing exactly what
+      the publication's Round 2 thesis predicted they would do at the highest level: <strong>absorb
+      pressure longer than the opponent could apply it, frustrate the structural identity of the
+      better team, and convert the turnovers that pressure-resistant hockey produces.</strong>
+      Coghlan — a 28-year-old AHL call-up who hadn't scored in 1,615 days — opened the scoring.
+      Dorofeyev — the NHL playoff goal leader — added a Marner PP goal moments later. Howden —
+      who already tied Gretzky's SHG record and has 9 playoff goals — knocked one out of the air
+      post-PK. <em>That's structural depth, leverage execution, and elite hockey IQ across the
+      lineup.</em> <strong>The Athletic called this game's framing "a composure win more than a
+      skill win." The publication agrees, and adds: this may be the moment the Cup conversation
+      stopped being "Colorado vs Carolina with Vegas as a 3rd option" and started being "Carolina
+      vs Vegas with Colorado as a 3rd option."</strong> Game 2 Friday will tell us if tonight
+      was a blueprint or a one-off.
+    </blockquote>
+    <div class="sig">— Round 3 · Day 1 · WCF Game 1 · Vegas 4, Colorado 2 · Vegas leads 1–0 · Game 2 Friday in Denver</div>
+  </section>
+
+  <footer>
+    <div>Rink Report · NHL Playoff Coverage</div>
+    <div>Round 3 of 4 · Conference Finals · WCF: VGK 1–0 over COL · ECF: starts Thu May 21 · Stanley Cup Final TBD</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
