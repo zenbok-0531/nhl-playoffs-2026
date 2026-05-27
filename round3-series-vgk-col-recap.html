@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WCF Series Recap — Inevitability | NHL Playoffs Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0b0d12;
+    --ink-2: #13161f;
+    --ink-3: #1c1f2b;
+    --paper: #f2ebdc;
+    --paper-dim: #d6cdba;
+    --muted: #8a8374;
+    --ice: #7fb4d8;
+    --ice-deep: #3d6d93;
+    --goal: #d74e3a;
+    --gold: #d4a842;
+    --hairline: rgba(242, 235, 220, 0.14);
+    --hairline-strong: rgba(242, 235, 220, 0.28);
+    --car: #cc0000;
+    --col: #6F263D;
+    --min: #154734;
+    --mtl: #AF1E2D;
+    --buf: #002654;
+    --vgk: #B4975A;
+    --ana: #B9975B;
+    --phi: #f74902;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  ul.bullets { list-style: none; padding: 0; margin: 0; }
+  ul.bullets li {
+    position: relative;
+    padding-left: 26px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+  ul.bullets li:last-child { margin-bottom: 0; }
+  ul.bullets li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 11px;
+    width: 14px; height: 1px;
+    background: var(--vgk);
+  }
+  ul.bullets li strong { color: var(--paper); font-weight: 500; }
+
+  /* RECAP BANNER - VGK gold elevated */
+  .round-banner {
+    background: linear-gradient(90deg, rgba(180, 151, 90, 0.30) 0%, rgba(212, 168, 66, 0.30) 50%, rgba(180, 151, 90, 0.30) 100%);
+    border-bottom: 2px solid var(--vgk);
+    padding: 22px 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    color: var(--vgk);
+    font-weight: 700;
+  }
+  .round-banner span { color: var(--paper); }
+  .round-banner .recap-id { color: var(--vgk); font-weight: 700; }
+
+  .masthead {
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .masthead .brand { color: var(--paper); font-weight: 600; }
+  .masthead .brand span { color: var(--goal); }
+  .masthead .brand-link {
+    text-decoration: none;
+    transition: opacity 0.3s;
+    display: inline-block;
+  }
+  .masthead .brand-link:hover { opacity: 0.7; }
+  .masthead .nav-link {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    border-bottom: 1px solid transparent;
+  }
+  .masthead .nav-link:hover { color: var(--paper); border-bottom-color: var(--hairline-strong); }
+  .masthead .recap-tag { color: var(--vgk); font-weight: 600; letter-spacing: 0.22em; }
+
+  /* SERIES CHAMPION BANNER */
+  .champion-banner {
+    background: linear-gradient(135deg, var(--vgk) 0%, #8a7240 60%, var(--ink-2) 100%);
+    padding: 56px 48px;
+    margin: 48px 0 0;
+    border: 1px solid var(--vgk);
+    text-align: center;
+    position: relative;
+  }
+  .champion-banner::before {
+    content: "";
+    position: absolute;
+    inset: 8px;
+    border: 1px solid rgba(242, 235, 220, 0.18);
+    pointer-events: none;
+  }
+  .champion-banner .cb-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    color: var(--paper);
+    margin-bottom: 18px;
+    opacity: 0.85;
+  }
+  .champion-banner h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(36px, 5vw, 60px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .champion-banner h2 em {
+    font-style: italic;
+    color: var(--paper);
+  }
+  .champion-banner .cb-sub {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--ink);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .hero {
+    padding: 80px 0 72px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .overline {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--vgk);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .overline::before {
+    content: "";
+    width: 32px; height: 1px;
+    background: var(--vgk);
+  }
+  h1.headline {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(56px, 9vw, 136px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    margin-bottom: 40px;
+  }
+  h1.headline em {
+    font-style: italic;
+    color: var(--vgk);
+    font-weight: 400;
+  }
+  .dek {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.5;
+    color: var(--paper);
+    max-width: 760px;
+    font-weight: 500;
+  }
+  .byline {
+    margin-top: 48px;
+    display: flex;
+    gap: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+  .byline strong { color: var(--paper); font-weight: 600; }
+
+  /* SERIES SCORES STRIP */
+  .series-scores {
+    border-bottom: 1px solid var(--hairline);
+    padding: 40px 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--hairline);
+  }
+  .ss-cell {
+    background: var(--ink);
+    padding: 24px 22px;
+    border-top: 3px solid var(--vgk);
+    text-align: center;
+  }
+  .ss-cell .ss-game {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--vgk);
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .ss-cell .ss-final {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--paper);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  .ss-cell .ss-winner {
+    color: var(--paper);
+  }
+  .ss-cell .ss-detail {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--paper-dim);
+    line-height: 1.4;
+  }
+
+  .lede { padding: 88px 0 64px; max-width: 820px; }
+  .lede p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 23px;
+    line-height: 1.58;
+    color: var(--paper);
+    font-weight: 400;
+  }
+  .lede p::first-letter {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 5.2em;
+    float: left;
+    line-height: 0.82;
+    padding: 10px 14px 0 0;
+    color: var(--vgk);
+  }
+
+  .section-head {
+    padding: 56px 0 40px;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 40px;
+    align-items: baseline;
+    border-top: 1px solid var(--hairline);
+    scroll-margin-top: 24px;
+  }
+  .section-head .num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--vgk);
+    letter-spacing: 0.1em;
+  }
+  .section-head-text { align-self: baseline; }
+  .section-lead {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.45;
+    color: var(--vgk);
+    margin-top: 20px;
+    max-width: 780px;
+  }
+  .section-head h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(38px, 5vw, 68px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+  }
+  .section-head h2 em {
+    font-style: italic;
+    color: var(--vgk);
+    font-weight: 400;
+  }
+
+  /* ARC GRID - 4 cells for 4 games */
+  .arc-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+    margin: 32px 0;
+  }
+  .arc-cell {
+    background: var(--ink-2);
+    padding: 28px 26px;
+    border-top: 3px solid var(--vgk);
+  }
+  .arc-cell .arc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--vgk);
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .arc-cell h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--paper);
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+  .arc-cell h4 em { font-style: italic; color: var(--vgk); }
+  .arc-cell .arc-result {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--paper);
+    padding: 8px 0 12px;
+    border-bottom: 1px solid var(--hairline);
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .arc-cell .arc-summary {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--paper-dim);
+  }
+  .arc-cell .arc-summary strong { color: var(--paper); font-weight: 500; }
+  .arc-cell .arc-summary em { color: var(--paper); font-style: italic; }
+
+  /* MARNER RENAISSANCE PANEL */
+  .marner {
+    margin: 36px 0;
+    background: linear-gradient(135deg, rgba(180, 151, 90, 0.22) 0%, var(--ink-2) 70%, var(--ink) 100%);
+    border-left: 4px solid var(--vgk);
+    padding: 36px 40px;
+  }
+  .marner .m-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--vgk);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .marner h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 18px;
+  }
+  .marner h4 em { color: var(--vgk); font-style: italic; }
+  .marner p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+    margin-bottom: 12px;
+  }
+  .marner p strong { color: var(--paper); font-weight: 500; }
+  .marner-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-top: 22px;
+    padding-top: 22px;
+    border-top: 1px solid var(--hairline);
+  }
+  .marner-stat .ms-num {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 30px;
+    color: var(--vgk);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+  .marner-stat .ms-lab {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+
+  /* ADVERSITY VERDICT */
+  .adversity-verdict {
+    margin: 36px 0;
+    background: var(--ink-2);
+    border: 1px solid var(--hairline-strong);
+    padding: 36px 40px;
+  }
+  .adversity-verdict .av-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .adversity-verdict h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 18px;
+  }
+  .adversity-verdict h4 em { color: var(--goal); font-style: italic; }
+  .adversity-verdict .av-body {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+    margin-bottom: 14px;
+  }
+  .adversity-verdict .av-body strong { color: var(--paper); font-weight: 500; }
+  .adversity-verdict .av-body em { color: var(--paper); font-style: italic; }
+
+  /* SERIES STAT PANEL */
+  .series-stats {
+    margin: 32px 0;
+    background: var(--ink-2);
+    border: 1px solid var(--hairline);
+    padding: 28px 32px;
+  }
+  .series-stats-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--vgk);
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+  .series-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .ss-stat .num {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 38px;
+    color: var(--vgk);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .ss-stat .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+
+  .pullquote {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 1.4;
+    color: var(--paper);
+    padding: 32px 0 32px 28px;
+    border-left: 2px solid var(--vgk);
+    margin: 32px 0;
+  }
+  .pullquote .attribution {
+    display: block;
+    margin-top: 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* STORYLINES GRID */
+  .storylines {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+    margin: 32px 0;
+  }
+  .storyline-cell {
+    background: var(--ink-2);
+    padding: 28px 30px;
+    border-top: 3px solid var(--ice);
+  }
+  .storyline-cell .sl-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ice);
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .storyline-cell h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--paper);
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .storyline-cell h4 em { color: var(--ice); font-style: italic; }
+  .storyline-cell p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--paper-dim);
+    margin-bottom: 10px;
+  }
+  .storyline-cell p strong { color: var(--paper); font-weight: 500; }
+
+  .cup-preview {
+    margin: 48px 0;
+    background: linear-gradient(135deg, rgba(180, 151, 90, 0.18) 0%, rgba(204, 0, 0, 0.10) 50%, rgba(175, 30, 45, 0.10) 100%);
+    border: 1px solid var(--hairline-strong);
+    padding: 44px 48px;
+    position: relative;
+  }
+  .cup-preview::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--vgk) 0%, var(--car) 50%, var(--mtl) 100%);
+  }
+  .cup-preview .cp-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--vgk);
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+  .cup-preview h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 18px;
+  }
+  .cup-preview h4 em { color: var(--vgk); font-style: italic; }
+  .cup-preview .cp-body {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+    margin-bottom: 14px;
+  }
+  .cup-preview .cp-body strong { color: var(--paper); font-weight: 500; }
+  .cup-preview .cp-body em { color: var(--paper); font-style: italic; }
+
+  .closing { padding: 72px 0 48px; border-top: 1px solid var(--hairline-strong); }
+  .closing .overline { color: var(--vgk); }
+  .closing .overline::before { background: var(--vgk); }
+  .closing blockquote {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    max-width: 980px;
+  }
+  .closing blockquote em { font-style: italic; color: var(--vgk); font-weight: 400; }
+  .closing .sig {
+    margin-top: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .toc { padding: 40px 0 48px; border-bottom: 1px solid var(--hairline); }
+  .toc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .toc-label::before {
+    content: "";
+    width: 24px; height: 1px;
+    background: var(--muted);
+  }
+  .toc-list {
+    list-style: none;
+    padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .toc-list li { background: var(--ink); }
+  .toc-list a {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px 22px;
+    text-decoration: none;
+    color: var(--paper);
+    transition: background 0.3s;
+    height: 100%;
+  }
+  .toc-list a:hover { background: var(--ink-2); }
+  .toc-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--vgk);
+  }
+  .toc-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+    color: var(--paper);
+    transition: color 0.3s;
+  }
+  .toc-list a:hover .toc-title { color: var(--vgk); }
+
+  footer {
+    padding: 36px 0;
+    border-top: 1px solid var(--hairline);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 820px) {
+    .wrap { padding: 0 20px; }
+    .section-head { grid-template-columns: 1fr; gap: 12px; padding: 44px 0 28px; }
+    .arc-grid { grid-template-columns: 1fr 1fr; }
+    .series-scores { grid-template-columns: 1fr 1fr; }
+    .marner-stats { grid-template-columns: 1fr 1fr; }
+    .series-stats-grid { grid-template-columns: 1fr 1fr; }
+    .storylines { grid-template-columns: 1fr; }
+    .lede { padding: 56px 0 40px; }
+    .lede p { font-size: 20px; }
+    .byline { flex-direction: column; gap: 12px; }
+    .toc-list { grid-template-columns: 1fr; }
+    .toc { padding: 28px 0 32px; }
+    .champion-banner { padding: 36px 24px; margin-top: 32px; }
+    .champion-banner h2 { font-size: 30px; }
+    .cup-preview { padding: 28px 24px; }
+    .cup-preview h4 { font-size: 26px; }
+    .marner, .adversity-verdict { padding: 24px 28px; }
+    .marner h4, .adversity-verdict h4 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="round-banner">
+    <span class="recap-id">Series Recap</span> &nbsp;·&nbsp; <span>Western Conference Final</span> &nbsp;·&nbsp; Vegas sweeps Colorado · Stanley Cup Final awaits
+  </div>
+
+  <div class="masthead">
+    <a href="index.html" class="brand-link"><div class="brand">Rink<span>&middot;</span>Report</div></a>
+    <div>
+      <a href="round3-day5-analysis.html" class="nav-link">← Day 5 · Onslaught</a>
+      &nbsp;&nbsp;Vol. I &nbsp;/&nbsp; <span class="recap-tag">Series Recap</span> &nbsp;/&nbsp; WCF · VGK · COL
+    </div>
+  </div>
+
+  <div class="champion-banner">
+    <div class="cb-label">·  Western Conference Champions · 2026  ·</div>
+    <h2>Vegas Golden Knights <em>advance to the Stanley Cup Final.</em></h2>
+    <div class="cb-sub">
+      Third Western Conference title in nine seasons of existence. Awaits the winner of Carolina vs Montreal in the Stanley Cup Final.
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="overline">WCF · Vegas def. Colorado · 4–0 · 3rd WCF title in 9 seasons</div>
+    <h1 class="headline">Inevitability.</h1>
+    <p class="dek">
+      Colorado was 26 points clear of Vegas in the regular-season standings. The clear class of the
+      NHL from puck drop in October. Presidents' Trophy winner. <strong>And Vegas demolished them
+      in four games.</strong> Marner's 21 playoff points (NHL lead) is a career best by 7 over his
+      entire Toronto career. Howden's 10 G ties for NHL lead, and his 3 SHG tie Gretzky's
+      single-postseason record. <strong>The Knights crowded the neutral zone, layered shooting lanes
+      with bodies, and absorbed Colorado's possession until the Avalanche's territorial dominance
+      became "nothing more than window dressing."</strong> <em>The publication's adversity-asymmetry
+      thesis from Day 5 just delivered its structural conclusion: Vegas built resilience earlier;
+      Colorado got the wrong kind of adversity at the worst possible time.</em>
+    </p>
+    <div class="byline">
+      <div><strong>Round 3</strong> · WCF Series Recap</div>
+      <div><strong>Filed</strong> · May 27, 2026</div>
+      <div><strong>Read</strong> · 18 minutes</div>
+      <div><strong>Result</strong> · VGK swept COL 4–0</div>
+    </div>
+  </header>
+
+  <section class="series-scores">
+    <div class="ss-cell">
+      <div class="ss-game">Game 1 · Denver · May 20</div>
+      <div class="ss-final"><span class="ss-winner">VGK 4</span>, COL 2</div>
+      <div class="ss-detail">Coghlan 1,615 days. Dorofeyev 10th. Howden 9th. Hart 36 sv.</div>
+    </div>
+    <div class="ss-cell">
+      <div class="ss-game">Game 2 · Denver · May 22</div>
+      <div class="ss-final"><span class="ss-winner">VGK 3</span>, COL 1</div>
+      <div class="ss-detail">Eichel TG. Barbashev GWG. COL PP zero SOG. 45-0 record died.</div>
+    </div>
+    <div class="ss-cell">
+      <div class="ss-game">Game 3 · Vegas · May 24</div>
+      <div class="ss-final"><span class="ss-winner">VGK 5</span>, COL 3</div>
+      <div class="ss-detail">3-goal comeback. Stone returns. MacKinnon injured.</div>
+    </div>
+    <div class="ss-cell">
+      <div class="ss-game">Game 4 · Vegas · May 26</div>
+      <div class="ss-final"><span class="ss-winner">VGK 2</span>, COL 1</div>
+      <div class="ss-detail">Stone breakaway. Cole Smith insurance. Sweep clinched.</div>
+    </div>
+  </section>
+
+  <nav class="toc" aria-label="Table of contents">
+    <div class="toc-label">Contents</div>
+    <ol class="toc-list">
+      <li><a href="#section-01">
+        <span class="toc-num">§ 01</span>
+        <span class="toc-title">The series arc</span>
+      </a></li>
+      <li><a href="#section-02">
+        <span class="toc-num">§ 02</span>
+        <span class="toc-title">Marner's career renaissance</span>
+      </a></li>
+      <li><a href="#section-03">
+        <span class="toc-num">§ 03</span>
+        <span class="toc-title">Adversity verdict</span>
+      </a></li>
+      <li><a href="#section-04">
+        <span class="toc-num">§ 04</span>
+        <span class="toc-title">Cup Final waiting</span>
+      </a></li>
+    </ol>
+  </nav>
+
+  <section class="lede">
+    <p>
+      Vegas won only 11 of 38 regular-season games against playoff opposition. Finished outside the
+      league's top 10. Fired Bruce Cassidy — their Stanley Cup-winning coach from 2023 — with eight
+      games remaining in the regular season. <strong>And then John Tortorella took over March 29,
+      reinvigorated the dressing room without major strategic alterations, and the team has now won
+      11 of its last 13 games — a feat it didn't accomplish at any point during the regular season.</strong>
+      <em>The publication's editorial through-line across Round 3 has been the adversity asymmetry —
+      Vegas built resilience earlier; Colorado spent 82 games being the NHL's best team and got no
+      practice handling adversity until Vegas introduced it in the Conference Final.</em> Tonight in
+      Game 4 the verdict was delivered: <strong>Stone breakaway 4:54 into the game off a McNabb
+      long-range pass. Cole Smith insurance off a Coghlan deflection 5:45 left. Hart 20-of-21. 15
+      blocked shots. Sweep clinched.</strong> <em>Colorado, the highest-scoring team in the NHL all
+      year (3.63 GPG), scored 7 goals total in the entire series. Players without a goal: MacKinnon,
+      Necas, Nelson, Lehkonen, Makar. The structural definition of demolition.</em> <strong>Vegas is
+      headed to its third Stanley Cup Final in nine years.</strong>
+    </p>
+  </section>
+
+  <!-- § 01 SERIES ARC -->
+  <div class="section-head" id="section-01">
+    <div class="num">§ 01</div>
+    <div class="section-head-text">
+      <h2>The series in <em>four moments.</em></h2>
+      <p class="section-lead">Each game in this series produced its own editorial framing across Round 3 Days 1, 3, and 5 — Blueprint, Stranglehold, Onslaught. Game 4's framing was the Smother. Together they form the structural autobiography of a championship-tier playoff team.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="arc-grid">
+      <div class="arc-cell">
+        <div class="arc-label">Game 1 · The Blueprint · May 20</div>
+        <h4>Vegas <em>found the structural answer.</em></h4>
+        <div class="arc-result">VGK 4 · COL 2 · Denver</div>
+        <p class="arc-summary">
+          Vegas survived Colorado's opening 5-minute storm, then took over the middle 25 minutes.
+          <strong>Coghlan scored his first NHL goal in 1,615 days. Dorofeyev's NHL-leading 10th
+          playoff goal off a Marner cross-seam feed. Howden's 9th. Hart 36 saves. 22 blocked shots.</strong>
+          <em>The framing: compress middle ice, layer shooting lanes, punish turnovers, stay
+          emotionally calm. Per the analyst: "Vegas may have found the blueprint against Colorado."</em>
+        </p>
+      </div>
+      <div class="arc-cell">
+        <div class="arc-label">Game 2 · The Stranglehold · May 22</div>
+        <h4>Vegas wins <em>a 2nd way.</em></h4>
+        <div class="arc-result">VGK 3 · COL 1 · Denver</div>
+        <p class="arc-summary">
+          Colorado played better than Game 1 — generated more pressure, held a 1-0 lead into the
+          3rd. <strong>Vegas became the FIRST team all season to mount a 3rd-period comeback against
+          Colorado. The Avs' 45-0-0 record with a 3rd-period lead this year died.</strong> Eichel
+          surgical TG. Barbashev GWG off a forecheck turnover. <em>COL PP: ZERO shots on goal across
+          2 PPs. The structural truth that scared Colorado most: Vegas can win their way AND
+          Colorado's way.</em>
+        </p>
+      </div>
+      <div class="arc-cell">
+        <div class="arc-label">Game 3 · The Onslaught · May 24</div>
+        <h4>Vegas <em>erases a 3-0 deficit.</em></h4>
+        <div class="arc-result">VGK 5 · COL 3 · T-Mobile</div>
+        <p class="arc-summary">
+          Colorado got their dream first period — 3-0 lead, transition flowing. <strong>Vegas scored
+          5 unanswered. First 3-goal playoff comeback in franchise history. Stone returned and scored
+          PP goal 19 seconds into the 2nd.</strong> Hertl walked through Malinski for the GWG in
+          transition (almost cruel irony). <em>MacKinnon went down blocking a Theodore slap shot
+          — knee injury, status unknown postgame. Bednar: "Everything fell apart. The first nine
+          minutes was pretty much an onslaught."</em>
+        </p>
+      </div>
+      <div class="arc-cell">
+        <div class="arc-label">Game 4 · The Smother · May 26</div>
+        <h4>Vegas <em>closes it out.</em></h4>
+        <div class="arc-result">VGK 2 · COL 1 · T-Mobile</div>
+        <p class="arc-summary">
+          Stone breakaway 4:54 in, off a long McNabb feed, deked Blackwood inside near-side post.
+          <strong>Vegas built a wall of defenders around their crease. 15 blocked shots. Hart
+          20-of-21.</strong> Blackwood was sensational in his start (24 saves, multiple sprawling
+          robberies of Dorofeyev) but couldn't single-handedly save the series. <em>Cole Smith
+          insurance goal off a Coghlan point shot deflection. Landeskog redirect ended Hart's
+          shutout bid late. Sweep clinched. Cup Final beckons.</em>
+        </p>
+      </div>
+    </div>
+
+    <div class="series-stats">
+      <div class="series-stats-label">Series Totals · By the Numbers</div>
+      <div class="series-stats-grid">
+        <div class="ss-stat">
+          <div class="num">4–0</div>
+          <div class="label">VGK sweep<br/>over COL</div>
+        </div>
+        <div class="ss-stat">
+          <div class="num">7 G</div>
+          <div class="label">COL total goals<br/>(highest-scoring NHL team)</div>
+        </div>
+        <div class="ss-stat">
+          <div class="num">14 G</div>
+          <div class="label">VGK total goals<br/>through 4 games</div>
+        </div>
+        <div class="ss-stat">
+          <div class="num">2019</div>
+          <div class="label">Last Pres' Trophy sweep<br/>(Tortorella's CBJ over TBL)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pullquote">
+      Doubt the Vegas Golden Knights at your own peril. ... The Golden Knights entered the playoffs as underdogs and steamrolled their way through the Western Conference. Their coup de grâce was a sweep of the Presidents' Trophy-winning Colorado Avalanche, which mercifully ended Tuesday night in Las Vegas... The Golden Knights didn't just beat the Avalanche — they demolished them.
+      <span class="attribution">— Jesse Granger, The Athletic · postgame analysis</span>
+    </div>
+
+  </section>
+
+  <!-- § 02 MARNER -->
+  <div class="section-head" id="section-02">
+    <div class="num">§ 02</div>
+    <div class="section-head-text">
+      <h2>Marner's career <em>renaissance.</em></h2>
+      <p class="section-lead">The publication began tracking Mitch Marner's Toronto-to-Vegas redemption arc in Round 2 Day 8 ("The Standard"). Five weeks later he leads the entire NHL postseason in points with a personal career best — and he still has at least 4 games left.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="marner">
+      <div class="m-label">Mitch Marner · Vegas · NHL Playoff Leader</div>
+      <h4>21 points. 7 goals. <em>More playoff goals than his last 3 Toronto playoffs combined.</em></h4>
+      <p>
+        <strong>Marner has 21 playoff points through 16 games — NHL lead.</strong> His previous career
+        high over nine seasons with the Toronto Maple Leafs was 14 (in 2023). <em>He's now 7 points past
+        that — and his team has just begun the Stanley Cup Final.</em>
+      </p>
+      <p>
+        <strong>His 7 playoff goals are more than his last 3 playoff runs in Toronto combined.</strong>
+        He has as many GWG in 16 playoff games as he had in 81 regular-season games for Vegas. <em>Per
+        Granger: "He has dazzled with a between-the-legs breakaway goal. He has impressed his coaches
+        and teammates more with his otherworldly efficiency in the grunt work: staying above the puck,
+        killing penalties, winning stick battles along the boards."</em>
+      </p>
+      <p>
+        <strong>The Marner-Howden-Dorofeyev top-line ecosystem has produced the NHL's two playoff goal
+        leaders.</strong> <em>Howden's 10 goals are tied for the league lead (more than his entire
+        49-game pre-2026 playoff career). His 3 SHG ties Wayne Gretzky's single-postseason record.
+        Dorofeyev has 10 goals himself.</em>
+      </p>
+      <p>
+        <em>The structural truth: Toronto's Marner was supposed to be the player who wilted under
+        pressure. Vegas's Marner is the player Vegas hopes lifts the Cup. Same player. Different
+        ecosystem. Different result.</em>
+      </p>
+      <div class="marner-stats">
+        <div class="marner-stat">
+          <div class="ms-num">21 pts</div>
+          <div class="ms-lab">NHL playoff lead<br/>career high (+7)</div>
+        </div>
+        <div class="marner-stat">
+          <div class="ms-num">7 G</div>
+          <div class="ms-lab">more than last 3<br/>Toronto playoffs combined</div>
+        </div>
+        <div class="marner-stat">
+          <div class="ms-num">10+ PA1</div>
+          <div class="ms-lab">primary assists<br/>NHL lead</div>
+        </div>
+        <div class="marner-stat">
+          <div class="ms-num">4 SHA</div>
+          <div class="ms-lab">SH assists<br/>elite VGK PK</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 48px 0 24px; letter-spacing: -0.01em;">The Knights' multi-headed monster</h3>
+
+    <div class="storylines">
+      <div class="storyline-cell">
+        <div class="sl-label">Brett Howden</div>
+        <h4>3 SHG ties <em>Gretzky's record.</em></h4>
+        <p>
+          <strong>10 playoff goals — tied for NHL lead.</strong> More than his entire 49-game pre-2026 playoff career combined. <em>His 3 SHG ties Wayne Gretzky's single-postseason record (and 6 other players). 12 regular-season goals. 10 in 16 playoff games. The publication has tracked him since Round 2 Day 10 ("The Field") — every game added another layer of structural certainty.</em>
+        </p>
+      </div>
+      <div class="storyline-cell">
+        <div class="sl-label">Mark Stone</div>
+        <h4>The captain's <em>return arc.</em></h4>
+        <p>
+          <strong>Out from Round 2 Game 3 through WCF Game 2. Returned for WCF Game 3 — scored PP goal 19 seconds into the 2nd period of the 3-goal comeback.</strong> <em>Game 4: breakaway opener 4:54 in off a long McNabb feed, deked Blackwood inside the post. His 5th goal of the postseason in 2 games back. Per Karlsson: "He's been leading this team for a long time, and he's going to continue doing that."</em>
+        </p>
+      </div>
+      <div class="storyline-cell">
+        <div class="sl-label">Pavel Dorofeyev</div>
+        <h4>Quiet <em>10 goals.</em></h4>
+        <p>
+          <strong>10 playoff goals — co-leads NHL with Howden.</strong> <em>Brilliant finisher off Marner's playmaking. Didn't score in Game 4 (a rare quiet night) but was robbed twice by Blackwood on sprawling sprawling sprawling saves during a 2nd-period PP. He's the cleanest finisher Vegas has had in years.</em>
+        </p>
+      </div>
+      <div class="storyline-cell">
+        <div class="sl-label">Jack Eichel</div>
+        <h4>Captaincy <em>by absence.</em></h4>
+        <p>
+          <strong>Drove Vegas's top line for 6 weeks while Stone was out. WCF Game 2 surgical TG.</strong> <em>Vegas's centers (Eichel, Hertl, Karlsson, Howden, Dowd) outplayed Colorado's vaunted center group (MacKinnon, Kadri, Nelson, Roy, Drury) — the structural matchup advantage Colorado supposedly had at the trade deadline reversed completely.</em>
+        </p>
+      </div>
+      <div class="storyline-cell">
+        <div class="sl-label">Carter Hart</div>
+        <h4>Steady at <em>the right moments.</em></h4>
+        <p>
+          <strong>36 saves in Game 1. 22-of-22 after going down 3-0 in Game 3. 20-of-21 in Game 4 close-out.</strong> <em>Hart didn't steal the series — Vegas's skaters won it — but he was the structural definition of stability. Out-dueled both halves of Colorado's Jennings-winning Wedgewood/Blackwood tandem.</em>
+        </p>
+      </div>
+      <div class="storyline-cell">
+        <div class="sl-label">Tomas Hertl</div>
+        <h4>The drought-breaker <em>arrived.</em></h4>
+        <p>
+          <strong>Game 3 GWG in transition — walked through Malinski, roofed a backhand past Wedgewood.</strong> <em>Vegas's power-forward acquisition was snakebitten through Round 1 and most of Round 2 (the 29-game drought from Day 10 of R2 framing). Hertl scored when it mattered most — the dagger goal in the comeback game that broke Colorado's belief.</em>
+        </p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- § 03 ADVERSITY VERDICT -->
+  <div class="section-head" id="section-03">
+    <div class="num">§ 03</div>
+    <div class="section-head-text">
+      <h2>The adversity verdict <em>arrives.</em></h2>
+      <p class="section-lead">The publication's Day 5 thesis: "Vegas underachieved all year but experiencing adversity earlier may be to their advantage. Colorado is having the wrong kind of adversity — injury problems." Game 4 delivered the structural conclusion.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="adversity-verdict">
+      <div class="av-label">Round 3 Thesis · Delivered</div>
+      <h4>Vegas's adversity built <em>resilience</em>. Colorado's adversity built <em>fragility</em>.</h4>
+      <p class="av-body">
+        <strong>Vegas's regular season was structurally difficult.</strong> 11 wins in 38 games against
+        playoff opposition. Outside the league's top 10. Fired Bruce Cassidy (the 2023 Cup-winning
+        coach) with 8 games remaining. Cassidy out → Tortorella in. <em>Per Granger: "Tortorella
+        reinvigorated the Golden Knights with a blend of positivity and reassurance when he took over
+        for Bruce Cassidy on March 29."</em>
+      </p>
+      <p class="av-body">
+        <strong>Vegas's front office kept pushing chips in during the struggle.</strong> Acquired Rasmus
+        Andersson from Calgary in January (Whitecloud + prospect + 2027 first-round pick + conditional
+        2028 2nd that becomes a 1st if Vegas wins the Cup). Trade deadline: Nic Dowd from Washington,
+        Cole Smith from Nashville. <em>Vegas had as many losses as wins at the deadline. They kept
+        building anyway.</em>
+      </p>
+      <p class="av-body">
+        <strong>Colorado was the structural opposite.</strong> Presidents' Trophy winner. 45-0-0 when
+        leading after two periods. Highest-scoring team in the NHL all year (3.63 GPG). 9-0 sweep of
+        Round 1 and Round 2. <em>Then Vegas introduced adversity in the Conference Final and Colorado's
+        injuries compounded: Makar missed Games 1 and 2 (PP went 0 shots on 2 PPs in Game 2). MacKinnon
+        injured Game 3. Nichushkin out Game 4. Wedgewood replaced by Blackwood.</em>
+      </p>
+      <p class="av-body">
+        <strong>Adversity has a timing component.</strong> <em>Vegas spent 82 games building
+        adversity-resilience. Colorado spent 82 games being the best team in the league. When playoff
+        adversity arrived, only one team was prepared for it. Vegas had 21 regular-season comeback wins
+        and added 5 more in the playoffs — including the first 3-goal playoff comeback in franchise
+        history in WCF Game 3.</em>
+      </p>
+      <p class="av-body">
+        <strong>Per the Athletic: "The typical anxiety that accompanies playing from behind with the
+        season on the line seems to have no effect on the Vegas bench."</strong>
+      </p>
+    </div>
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 48px 0 20px; letter-spacing: -0.01em;">Vegas's structural identity (final form)</h3>
+
+    <ul class="bullets" style="max-width: 820px;">
+      <li><strong>Heavy. Layered. Patient. Territorial. Emotionally flat (in a good way).</strong> <em>Vegas doesn't beat teams by dazzling them. They lean on you, wear down your breakout, kill your 2nd and 3rd options, force you into longer defensive shifts, and punish mistakes late.</em></li>
+      <li><strong>Adaptable in every game style.</strong> <em>The publication's "two ways" framing from Day 3 became "every way" by the end of this series. Vegas can win low-event games, comeback games, forecheck games, rush games, special-teams games, and emotional games. They have proven each. The terrifying versatility Colorado lacked.</em></li>
+      <li><strong>Depth in the right places.</strong> <em>Cole Smith insurance goal in Game 4 (4th line, trade-deadline acquisition). Dylan Coghlan's 1,615-day-drought goal in Game 1 (recent AHL call-up). Nic Dowd empty-netter in Game 1 (deadline addition). McNabb assist on Stone's Game 4 breakaway (defenseman with 3 assists this postseason). The publication has been tracking depth contributions since the VGK-ANA Series Recap. Every name compounds.</em></li>
+      <li><strong>Penalty kill that's nearly inactive shorthanded.</strong> <em>VGK PK during this series: 4 of 5 (80%). Marner and Howden are constant short-handed threats. Colorado's PP managed zero shots on 2 PPs in Game 2. The bracket's best top-line PP unit got structurally broken.</em></li>
+      <li><strong>Goaltending that doesn't have to be exceptional — just stable.</strong> <em>Hart was excellent at the right moments but not asked to steal games. He stopped 36 in Game 1, 22-of-22 after a Game 3 3-goal hole, 20-of-21 in Game 4 closeout. Stability over heroics — the championship-tier model.</em></li>
+    </ul>
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 48px 0 20px; letter-spacing: -0.01em;">Colorado's structural reckoning</h3>
+
+    <ul class="bullets" style="max-width: 820px;">
+      <li><strong>The highest-scoring team in the NHL all year scored 7 goals in 4 games.</strong> <em>Players without a goal: MacKinnon, Necas, Nelson, Lehkonen, Makar. Almost the entire top six. That's a structural collapse, not a slump.</em></li>
+      <li><strong>The 45-0-0 record died in Game 2.</strong> <em>And then died again in Game 3 (where they led 3-0 after the 1st and lost). Colorado's "we never lose with a lead" identity dissolved across two consecutive games against the same opponent.</em></li>
+      <li><strong>Per Landeskog postgame:</strong> <em>"They're moving on and we're not. Whether that's in four games or seven games, it hurt just as much."</em> Captain naming the structural reality — the path to a 4-2 or 4-3 series didn't exist.</li>
+      <li><strong>The Avs' transition identity got dismantled.</strong> <em>Vegas crowded the neutral zone. Layered shooting lanes with bodies. Forced dump-ins. Punished turnovers. Colorado's territorial dominance became "nothing more than window dressing for the underlying numbers" — Granger's framing.</em></li>
+      <li><strong>The hard questions Colorado now faces:</strong> <em>Goaltending tandem (Wedgewood/Blackwood neither carried the load). Top-six finishing. Defensive depth. Coaching adjustments. Plus injury recovery. Per the Athletic: "the NHL's most shocking sweep since the 2019 Columbus Blue Jackets — coached by current Vegas coach John Tortorella — knocked off the Presidents' Trophy-winning Tampa Bay Lightning in the first round."</em></li>
+    </ul>
+
+  </section>
+
+  <!-- § 04 CUP FINAL -->
+  <div class="section-head" id="section-04">
+    <div class="num">§ 04</div>
+    <div class="section-head-text">
+      <h2>The Cup Final <em>waits.</em></h2>
+      <p class="section-lead">Vegas advances to its 3rd Stanley Cup Final in 9 years of franchise existence. The Eastern Conference Final continues — Carolina leads Montreal 2-1 with Game 4 tonight in Montreal.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="cup-preview">
+      <div class="cp-label">·  Stanley Cup Final 2026 · Vegas vs ECF Winner  ·</div>
+      <h4>The Knights <em>wait.</em></h4>
+      <p class="cp-body">
+        <strong>Vegas finishes Round 3 with at least 6 days of rest before the Stanley Cup Final
+        opens.</strong> The Eastern Conference Final continues — Carolina leads Montreal 2-1 heading
+        into Game 4 tonight in Montreal. <em>If Carolina wins, they need at least 2 more games to
+        clinch (potential to extend to 7). If Montreal wins, the ECF goes minimum 6, possibly 7.</em>
+      </p>
+      <p class="cp-body">
+        <strong>The publication's Round 3 prediction zone gets tested:</strong> <em>The Day 2 "Counter"
+        framing said Montreal exposed a real structural seam in Carolina. The Day 4 "Reset" framing
+        said Carolina's identity was restorable AND it still required overtime. The ECF G3 update
+        (which we'll cover when available) will tell us whether Carolina's adjustments traveled or
+        Montreal's home-ice identity reasserted.</em>
+      </p>
+      <p class="cp-body">
+        <strong>For Vegas, the structural advantage of waiting:</strong> <em>Stone heals further.
+        Whoever else is banged up heals. The system stays sharp via internal practice and video.
+        Tortorella is on record from Day 1 that this team doesn't need extensive on-ice practice in
+        late playoffs — they like the rest. Per the Day 3 framing: "We're very comfortable in the
+        third period. All year we played a lot of comebacks."</em>
+      </p>
+      <p class="cp-body">
+        <strong>The publication's Cup Final favorite is now structurally Vegas.</strong> <em>Healthier.
+        Deeper. More versatile. Coming off a 4-game sweep of the Presidents' Trophy winner. The
+        publication's Day 5 thesis — that Vegas's regular-season adversity built playoff resilience —
+        is now structurally confirmed. Whether Carolina or Montreal advances next, they will face the
+        most complete remaining team in the bracket.</em>
+      </p>
+    </div>
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 48px 0 20px; letter-spacing: -0.01em;">Vegas in context · franchise milestones</h3>
+
+    <ul class="bullets" style="max-width: 820px;">
+      <li><strong>9th banner in 9 seasons of existence.</strong> <em>Vegas has now hung division titles (5), conference titles (3), and the 2023 Stanley Cup. They have more division titles, more playoff games, more playoff series than any other NHL team since their 2017 inception. Sustained excellence at a level the league rarely sees from an expansion franchise.</em></li>
+      <li><strong>3rd Stanley Cup Final appearance.</strong> 2018 (lost to Washington). 2023 (won vs Florida). 2026 (vs TBD). <em>Of those three runs, this current team may be the most structurally complete. The 2018 team was a Cinderella. The 2023 team had peak Eichel/Stone. The 2026 team has Marner career-best AND depth AND Tortorella's identity AND adversity-tested resilience.</em></li>
+      <li><strong>11 of last 13 games won — including the 4-game sweep of the Presidents' Trophy winner.</strong> <em>Per Granger: "Under the brightest lights, against the stiffest competition, the team has come to life." That's a structural read — not running hot, peaking at the right time.</em></li>
+      <li><strong>The Cassidy → Tortorella story is structural editorial.</strong> <em>Cassidy won the 2023 Cup but was fired with 8 games remaining this regular season. Tortorella reinvigorated the room without major strategic alterations. Now Tortorella may be 4 wins from his first Stanley Cup as a head coach since 2004 (Tampa Bay). The publication won't editorialize on the Cassidy firing — but the result speaks structurally.</em></li>
+    </ul>
+
+  </section>
+
+  <section class="closing">
+    <div class="overline">The Take</div>
+    <blockquote>
+      <em>Vegas spent 82 games being NOT the best team in the league.</em> <strong>They won 11 of
+      38 games against playoff opposition. They fired their Stanley Cup-winning coach with 8 games
+      remaining. They finished outside the league's top 10. Colorado, meanwhile, won the Presidents'
+      Trophy, posted a 45-0-0 record with a 3rd-period lead, and was the clear class of the NHL from
+      October through the start of the Conference Final.</strong> <em>And then Vegas demolished
+      them.</em> <strong>The Avs' highest-scoring offense in the NHL produced 7 goals in 4 games.
+      MacKinnon, Necas, Nelson, Lehkonen, and Makar combined for zero. Vegas's adversity-resilience
+      built across 82 regular-season games delivered the structural conclusion. Marner is now NHL
+      points leader with a career-best 21 points — more than his last 3 Toronto playoffs combined.
+      Howden ties Gretzky for SHG in a single postseason. Stone returned from injury and scored in
+      both games back. The Knights have won 11 of their last 13 games.</strong> <em>The Cup
+      conversation has compressed to one team being the structural favorite — Vegas — with the
+      Eastern Conference winner having to prove they can match the most complete team in the
+      bracket.</em> <strong>The publication's Day 5 thesis is now Round 3's editorial conclusion:
+      adversity at the right time builds champions; adversity at the wrong time breaks them.</strong>
+    </blockquote>
+    <div class="sig">— Round 3 · WCF Series Recap · Vegas 4, Colorado 0 · Vegas advances to Stanley Cup Final · Awaits ECF winner</div>
+  </section>
+
+  <footer>
+    <div>Rink Report · NHL Playoff Coverage</div>
+    <div>Round 3 of 4 · Vegas advances to Stanley Cup Final · 3rd appearance in 9 seasons · ECF: CAR leads 2-1 · Game 4 tonight in Montreal</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
