@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Round 3, Day 6 — The Suffocation | NHL Playoffs Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0b0d12;
+    --ink-2: #13161f;
+    --ink-3: #1c1f2b;
+    --paper: #f2ebdc;
+    --paper-dim: #d6cdba;
+    --muted: #8a8374;
+    --ice: #7fb4d8;
+    --ice-deep: #3d6d93;
+    --goal: #d74e3a;
+    --gold: #d4a842;
+    --hairline: rgba(242, 235, 220, 0.14);
+    --hairline-strong: rgba(242, 235, 220, 0.28);
+    --car: #cc0000;
+    --col: #6F263D;
+    --min: #154734;
+    --mtl: #AF1E2D;
+    --buf: #002654;
+    --vgk: #B4975A;
+    --ana: #B9975B;
+    --phi: #f74902;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  ul.bullets { list-style: none; padding: 0; margin: 0; }
+  ul.bullets li {
+    position: relative;
+    padding-left: 26px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+  ul.bullets li:last-child { margin-bottom: 0; }
+  ul.bullets li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 11px;
+    width: 14px; height: 1px;
+    background: var(--goal);
+  }
+  ul.bullets li strong { color: var(--paper); font-weight: 500; }
+
+  /* ROUND 3 BANNER */
+  .round-banner {
+    background: linear-gradient(90deg, rgba(212, 168, 66, 0.20) 0%, rgba(204, 0, 0, 0.20) 50%, rgba(204, 0, 0, 0.16) 100%);
+    border-bottom: 1px solid var(--gold);
+    padding: 18px 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+  }
+  .round-banner span { color: var(--paper); }
+  .round-banner .round-id { color: var(--gold); font-weight: 700; }
+
+  .masthead {
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .masthead .brand { color: var(--paper); font-weight: 600; }
+  .masthead .brand span { color: var(--goal); }
+  .masthead .brand-link {
+    text-decoration: none;
+    transition: opacity 0.3s;
+    display: inline-block;
+  }
+  .masthead .brand-link:hover { opacity: 0.7; }
+  .masthead .nav-link {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    border-bottom: 1px solid transparent;
+  }
+  .masthead .nav-link:hover { color: var(--paper); border-bottom-color: var(--hairline-strong); }
+  .masthead .round-tag { color: var(--gold); font-weight: 600; letter-spacing: 0.22em; }
+
+  .hero {
+    padding: 80px 0 72px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .overline {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .overline::before {
+    content: "";
+    width: 32px; height: 1px;
+    background: var(--goal);
+  }
+  h1.headline {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(56px, 9vw, 136px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    margin-bottom: 40px;
+  }
+  h1.headline em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+  .dek {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.5;
+    color: var(--paper);
+    max-width: 760px;
+    font-weight: 500;
+  }
+  .byline {
+    margin-top: 48px;
+    display: flex;
+    gap: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+  .byline strong { color: var(--paper); font-weight: 600; }
+
+  .scores {
+    border-bottom: 1px solid var(--hairline);
+  }
+  .score {
+    padding: 32px 28px;
+  }
+  .score .tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .score .matchup {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: 32px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .score .winner { color: var(--paper); font-weight: 600; }
+  .score .loser { color: var(--muted); }
+  .score .final {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--paper-dim);
+    margin-top: 10px;
+  }
+
+  .lede { padding: 88px 0 64px; max-width: 820px; }
+  .lede p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 23px;
+    line-height: 1.58;
+    color: var(--paper);
+    font-weight: 400;
+  }
+  .lede p::first-letter {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 5.2em;
+    float: left;
+    line-height: 0.82;
+    padding: 10px 14px 0 0;
+    color: var(--goal);
+  }
+
+  .section-head {
+    padding: 56px 0 40px;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 40px;
+    align-items: baseline;
+    border-top: 1px solid var(--hairline);
+    scroll-margin-top: 24px;
+  }
+  .section-head .num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--goal);
+    letter-spacing: 0.1em;
+  }
+  .section-head-text { align-self: baseline; }
+  .section-lead {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.45;
+    color: var(--goal);
+    margin-top: 20px;
+    max-width: 780px;
+  }
+  .section-head h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(38px, 5vw, 68px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+  }
+  .section-head h2 em {
+    font-style: italic;
+    color: var(--ice);
+    font-weight: 400;
+  }
+
+  .game {
+    padding: 64px 0;
+    border-top: 1px solid var(--hairline-strong);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 56px;
+  }
+  .game-title { position: sticky; top: 40px; align-self: start; }
+  .game-title .series-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .game-title h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 54px;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .game-title .vs {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--muted);
+    display: block;
+    font-size: 0.6em;
+    margin: 4px 0;
+  }
+  .colorbar { height: 6px; width: 100%; display: flex; margin-top: 20px; }
+  .colorbar span { flex: 1; }
+  .series-stand {
+    margin-top: 24px;
+    padding: 18px 20px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--goal);
+  }
+  .series-stand .ss-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--goal);
+    margin-bottom: 6px;
+  }
+  .series-stand .ss-score {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--paper);
+    letter-spacing: -0.01em;
+  }
+  .game-body { font-size: 17px; line-height: 1.65; }
+  .game-body > ul.bullets { margin-bottom: 8px; }
+  .game-body > ul.bullets li { font-size: 16px; }
+  .pullquote {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 1.4;
+    color: var(--paper);
+    padding: 28px 0 28px 28px;
+    border-left: 2px solid var(--car);
+    margin: 28px 0;
+  }
+  .pullquote .attribution {
+    display: block;
+    margin-top: 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .breakdown-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 24px;
+    padding: 18px 0;
+    border-top: 1px solid var(--hairline);
+    align-items: start;
+  }
+  .breakdown-row:last-child { border-bottom: 1px solid var(--hairline); }
+  .breakdown-row .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding-top: 4px;
+  }
+  .breakdown-row .content { color: var(--paper-dim); font-size: 16px; }
+  .breakdown-row .content strong { color: var(--paper); font-weight: 500; }
+  .outlook-box {
+    margin-top: 28px;
+    padding: 24px 28px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--ice);
+  }
+  .outlook-box .olabel {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ice);
+    margin-bottom: 10px;
+  }
+  .outlook-box .otext {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--paper);
+  }
+
+  .statblock {
+    margin: 32px 0;
+    background: var(--ink-2);
+    border: 1px solid var(--hairline);
+    padding: 28px 32px;
+  }
+  .statblock-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--car);
+    margin-bottom: 18px;
+  }
+  .statblock-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .stat .num {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 38px;
+    color: var(--car);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .stat .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+
+  /* MONTREAL COLLAPSE PANEL */
+  .collapse {
+    margin: 36px 0;
+    background: linear-gradient(135deg, rgba(175, 30, 45, 0.18) 0%, var(--ink-2) 70%, var(--ink) 100%);
+    border: 1px solid var(--hairline-strong);
+    padding: 36px 40px;
+    position: relative;
+  }
+  .collapse::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 4px;
+    background: var(--mtl);
+  }
+  .collapse .c-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--mtl);
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+  .collapse h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 18px;
+  }
+  .collapse h4 em { color: var(--mtl); font-style: italic; }
+  .collapse .c-body {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+    margin-bottom: 14px;
+  }
+  .collapse .c-body strong { color: var(--paper); font-weight: 500; }
+  .collapse .c-body em { color: var(--paper); font-style: italic; }
+  .collapse-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 22px;
+    padding-top: 22px;
+    border-top: 1px solid var(--hairline);
+  }
+  .c-stat .num {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 32px;
+    color: var(--mtl);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+  .c-stat .lab {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+
+  /* BURST - 3 GOALS IN 2:47 */
+  .burst {
+    margin: 36px 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .burst-cell {
+    background: var(--ink-2);
+    padding: 24px 22px;
+    border-top: 3px solid var(--car);
+  }
+  .burst-cell .b-time {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--car);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .burst-cell .b-scorer {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--paper);
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .burst-cell .b-detail {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--paper-dim);
+  }
+  .burst-cell .b-detail strong { color: var(--paper); font-weight: 500; }
+
+  /* MILLER PLAYER FOCUS */
+  .player-focus {
+    margin: 32px 0;
+    background: var(--ink-2);
+    border-left: 3px solid var(--car);
+    padding: 28px 32px;
+  }
+  .player-focus .pf-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--car);
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .player-focus h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 18px;
+  }
+  .player-focus h4 em { color: var(--car); font-style: italic; }
+  .player-focus p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+    margin-bottom: 12px;
+  }
+  .player-focus p strong { color: var(--paper); font-weight: 500; }
+
+  /* DOBES CALLOUT - hero performance */
+  .dobes {
+    margin: 36px 0;
+    background: linear-gradient(135deg, rgba(175, 30, 45, 0.12) 0%, var(--ink-2) 70%, var(--ink) 100%);
+    border-left: 4px solid var(--mtl);
+    padding: 30px 36px;
+  }
+  .dobes .d-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--mtl);
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .dobes h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 16px;
+  }
+  .dobes h4 em { color: var(--mtl); font-style: italic; }
+  .dobes p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+    margin-bottom: 12px;
+  }
+  .dobes p strong { color: var(--paper); font-weight: 500; }
+
+  /* CUP FINAL PREVIEW PANEL */
+  .cup-preview {
+    margin: 40px 0;
+    background: linear-gradient(135deg, rgba(180, 151, 90, 0.20) 0%, rgba(204, 0, 0, 0.16) 100%);
+    border: 1px solid var(--hairline-strong);
+    padding: 40px 44px;
+    position: relative;
+  }
+  .cup-preview::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--vgk) 0%, var(--car) 100%);
+  }
+  .cup-preview .cp-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+  .cup-preview h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 18px;
+  }
+  .cup-preview h4 em { color: var(--vgk); font-style: italic; }
+  .cup-preview .cp-body {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+    margin-bottom: 14px;
+  }
+  .cup-preview .cp-body strong { color: var(--paper); font-weight: 500; }
+  .cup-preview .cp-body em { color: var(--paper); font-style: italic; }
+
+  /* BRACKET STATUS */
+  .bracket-status {
+    margin: 40px 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .bracket-cell {
+    background: var(--ink);
+    padding: 28px 26px;
+  }
+  .bracket-cell .bc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .bracket-cell .bc-matchup {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--paper);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .bracket-cell .bc-series {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+    margin-bottom: 10px;
+  }
+  .bracket-cell .bc-status {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    padding-top: 10px;
+    border-top: 1px solid var(--hairline);
+  }
+  .bracket-cell.west .bc-label { color: var(--vgk); }
+  .bracket-cell.east .bc-label { color: var(--car); }
+
+  .closing { padding: 72px 0 48px; border-top: 1px solid var(--hairline-strong); }
+  .closing .overline { color: var(--gold); }
+  .closing .overline::before { background: var(--gold); }
+  .closing blockquote {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    max-width: 980px;
+  }
+  .closing blockquote em { font-style: italic; color: var(--car); font-weight: 400; }
+  .closing .sig {
+    margin-top: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .toc { padding: 40px 0 48px; border-bottom: 1px solid var(--hairline); }
+  .toc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .toc-label::before {
+    content: "";
+    width: 24px; height: 1px;
+    background: var(--muted);
+  }
+  .toc-list {
+    list-style: none;
+    padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .toc-list li { background: var(--ink); }
+  .toc-list a {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px 22px;
+    text-decoration: none;
+    color: var(--paper);
+    transition: background 0.3s;
+    height: 100%;
+  }
+  .toc-list a:hover { background: var(--ink-2); }
+  .toc-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--goal);
+  }
+  .toc-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+    color: var(--paper);
+    transition: color 0.3s;
+  }
+  .toc-list a:hover .toc-title { color: var(--ice); }
+
+  footer {
+    padding: 36px 0;
+    border-top: 1px solid var(--hairline);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 820px) {
+    .wrap { padding: 0 20px; }
+    .section-head { grid-template-columns: 1fr; gap: 12px; padding: 44px 0 28px; }
+    .game { grid-template-columns: 1fr; gap: 28px; padding: 48px 0; }
+    .game-title { position: static; }
+    .game-title h3 { font-size: 42px; }
+    .breakdown-row { grid-template-columns: 1fr; gap: 8px; }
+    .statblock-grid { grid-template-columns: repeat(2, 1fr); }
+    .burst { grid-template-columns: 1fr; }
+    .collapse-grid { grid-template-columns: 1fr; }
+    .bracket-status { grid-template-columns: 1fr; }
+    .lede { padding: 56px 0 40px; }
+    .lede p { font-size: 20px; }
+    .byline { flex-direction: column; gap: 12px; }
+    .toc-list { grid-template-columns: 1fr; }
+    .toc { padding: 28px 0 32px; }
+    .collapse, .dobes, .player-focus, .cup-preview { padding: 24px 28px; }
+    .collapse h4, .cup-preview h4 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="round-banner">
+    <span class="round-id">Round Three</span> &nbsp;·&nbsp; <span>Conference Finals</span> &nbsp;·&nbsp; Carolina one win from Cup Final · Vegas waits
+  </div>
+
+  <div class="masthead">
+    <a href="index.html" class="brand-link"><div class="brand">Rink<span>&middot;</span>Report</div></a>
+    <div>
+      <a href="round3-series-vgk-col-recap.html" class="nav-link">← WCF Recap</a>
+      &nbsp;&nbsp;Vol. I &nbsp;/&nbsp; <span class="round-tag">Round 03</span> &nbsp;/&nbsp; Day 6
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="overline">ECF Game 4 · Carolina 4, Montreal 0 · Series 3–1 Carolina</div>
+    <h1 class="headline">The <em>Suffocation.</em></h1>
+    <p class="dek">
+      Carolina played its most complete game of the postseason. <strong>Three goals in 2:47 late in
+      the 1st (Aho PP, Staal net-front, Stankoven 2-on-1). 43 shots to Montreal's 18. The Habs had
+      ONE shot on goal over 32:57 of game time (Game 3 3rd into Game 4 1st). Bell Centre crowd chanted
+      "Shoot the puck!" in their own building.</strong> <em>Per the analyst: "This was suffocation
+      hockey." Men against boys for long stretches. Dobes 39 saves was the only reason it wasn't 7-0.</em>
+      <strong>Carolina is one win from a Cup Final matchup with Vegas. Game 5 Friday in Raleigh.</strong>
+    </p>
+    <div class="byline">
+      <div><strong>Round 3</strong> · Day 6 Analysis</div>
+      <div><strong>Filed</strong> · May 27, 2026</div>
+      <div><strong>Read</strong> · 15 minutes</div>
+      <div><strong>Status</strong> · ECF G4 · CAR 3–1</div>
+    </div>
+  </header>
+
+  <section class="scores">
+    <div class="score">
+      <div class="tag">ECF · Game 4 · Bell Centre &nbsp;·&nbsp; CAR Up 3–1 · Cup Final 1 Win Away</div>
+      <div class="matchup">
+        <span class="winner">Carolina</span> def. <span class="loser">Montreal</span>, 4–0
+      </div>
+      <div class="final">CAR leads 3–1 &nbsp;·&nbsp; Aho · Staal · Stankoven (3 G in 2:47) · Svechnikov EN · Dobes 39 sv · K'Andre Miller dominant · Game 5 Friday in Raleigh</div>
+    </div>
+  </section>
+
+  <nav class="toc" aria-label="Table of contents">
+    <div class="toc-label">Contents</div>
+    <ol class="toc-list">
+      <li><a href="#section-01">
+        <span class="toc-num">§ 01</span>
+        <span class="toc-title">The suffocation</span>
+      </a></li>
+      <li><a href="#section-02">
+        <span class="toc-num">§ 02</span>
+        <span class="toc-title">Montreal's collapse</span>
+      </a></li>
+      <li><a href="#section-03">
+        <span class="toc-num">§ 03</span>
+        <span class="toc-title">K'Andre Miller emerges</span>
+      </a></li>
+      <li><a href="#section-04">
+        <span class="toc-num">§ 04</span>
+        <span class="toc-title">VGK vs CAR? Cup preview</span>
+      </a></li>
+    </ol>
+  </nav>
+
+  <section class="lede">
+    <p>
+      Carolina just played its most complete game of the postseason. <strong>Three goals in 2:47 late
+      in the 1st period. All three top centers (Aho, Staal, Stankoven) scoring in succession. The
+      Habs first SOG came at 8:07 of the 1st — Carolina had 6 by then.</strong> <em>By the time the
+      Bell Centre had finished settling in, Montreal had seven failed zone exits and a three-goal
+      deficit.</em> The user named it: <strong>men against boys.</strong> The analyst confirmed it:
+      <em>"This was suffocation hockey."</em> <strong>Carolina's territorial dominance from Games 2
+      and 3 finally converted into bunches of goals. The Stankoven framing — "Sometimes you gotta find
+      the body blows to get to the head" — described the entire series compressed into one game.</strong>
+      <em>Dobes was the only reason it wasn't 7-0 (39 saves, including breakaway stops on Blake and
+      Jarvis). The Bell Centre crowd chanted "Shoot the puck!" in their own building. St. Louis
+      postgame: "It's not fun to hear that. But they're not wrong."</em> <strong>One win and a
+      Cup Final matchup with Vegas. Game 5 Friday in Raleigh.</strong>
+    </p>
+  </section>
+
+  <!-- § 01 GAME -->
+  <div class="section-head" id="section-01">
+    <div class="num">§ 01</div>
+    <div class="section-head-text">
+      <h2>Carolina's <em>most complete game.</em></h2>
+      <p class="section-lead">Forecheck. Veterans. Depth. Goaltending. Defensive pairing performance. Special teams. Every piece of Carolina's structural identity arrived simultaneously in one game — at the perfect leverage moment of the series.</p>
+    </div>
+  </div>
+
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Round 3 · ECF · Game 4 &nbsp;·&nbsp; <span style="color: var(--goal); font-weight: 600;">CAR Leads 3–1</span></div>
+      <h3>Carolina <span class="vs">at</span> Montreal</h3>
+      <div class="colorbar">
+        <span style="background: var(--car)"></span>
+        <span style="background: var(--mtl)"></span>
+      </div>
+      <div class="series-stand">
+        <div class="ss-label">Series Standing</div>
+        <div class="ss-score">Hurricanes 3 — Canadiens 1</div>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Carolina 4, Montreal 0. <strong>CAR scorers: Aho (PP, 15:00 of 1st, cross-ice one-timer off Bolduc hooking call), Staal (net-front battle vs Anderson, banked off skate from Miller pass), Stankoven (2-on-1 capper, Blake feed, his first point of the series), Svechnikov (EN late).</strong> <em>Carolina leads series 3-1. Game 5 Friday in Raleigh — Carolina can clinch.</em></li>
+        <li>The 1st-period burst was structural devastation. <strong>3 goals in 2:47. All three Carolina top centers (Aho, Staal, Stankoven) tallied in succession.</strong> <em>17:46 into the game it was 3-0 — Carolina's first 3-goal lead of the series. Montreal had a massive hole, and unlike the Habs' famous comebacks in Tampa and Buffalo, Carolina doesn't give holes back.</em></li>
+        <li>The structural truth that defined Game 4: <strong>Montreal had ONE shot on goal in 32:57 of game time (from the 3rd period of Game 3 through the first 8 minutes of Game 4).</strong> <em>That's more than half a game's worth of game time with one shot. The publication has never seen a stat like that against a competitive Conference Final opponent. Carolina's forecheck broke Montreal's puck-possession identity entirely.</em></li>
+        <li>The 7-failed-exits stat. <strong>By Basu's count, Montreal had 7 failed zone exits in the opening 8 minutes alone.</strong> <em>That's a structural collapse, not a slump. Carolina retrieved, recycled, attacked, and forced Montreal into hesitation decisions. Per Basu: "The Canadiens' inability to clear the puck from their own zone under the relentless Hurricanes forecheck was going to be the biggest adjustment we would see in Game 4. Or so we thought."</em></li>
+        <li>The Aho PP goal followed a questionable Bolduc hooking call. <strong>Carolina's top PP unit made very short work of it — cross-ice one-timer with 5 min left in the opening frame.</strong> <em>Carolina entered the game with their PP working at higher than expected efficiency this postseason; tonight they capitalized when given the chance.</em></li>
+        <li>The Staal goal was the editorial detail. <strong>Net-front battle with Josh Anderson. Miller carried the puck from blue line to goal line on the wide-side, drawing Dobes' attention before banking the puck off Staal's skate back toward the Canadiens' net.</strong> <em>Per Gentille: "It was a slick play, the sort of thing Miller does with some degree of regularity, and it certainly came at a crucial moment for the Hurricanes."</em></li>
+        <li>The Stankoven 2-on-1 was the symbolic moment. <strong>Capped by a Blake feed. Stankoven's FIRST point of the series.</strong> <em>The publication's MTL-BUF/COL-MIN recap analyses noted that the Stankoven-Blake-Hall line generated 58% of Carolina's R1-R2 goals — and was structurally invisible through ECF Games 1-2. Tonight Stankoven arrived. Per his postgame: "Sometimes you gotta find the body blows to get to the head."</em></li>
+        <li>The St. Louis line shuffle came too late. <strong>Down 3-0 to start the 2nd, St. Louis shuffled all 4 forward lines: Newhook with Suzuki/Caufield, Bolduc with Danault/Anderson, Slafkovsky with Demidov.</strong> <em>Per Basu: "Considering the Canadiens put 10 shots on goal in the second period alone after putting up 13 and 12 in the previous two games, which each went to overtime, it is a fair question why he began the game with the same line combinations." Game 4 might have been different had the Canadiens started this way — but the emotional damage was already done.</em></li>
+        <li>The Bell Centre chant is the editorial moment of the series. <strong>"Shoot the puck! Shoot the puck!"</strong> from Habs fans in their own building with under 7 minutes left in regulation. <em>Per St. Louis postgame: "It's not fun to hear that. But they're not wrong."</em> <strong>A head coach acknowledging his crowd's frustration was justified. That's the structural truth of the series.</strong></li>
+        <li>Andersen had a remarkably easy night. <strong>18 saves on Montreal's 18 shots.</strong> <em>The publication's Day 2 ("Counter") flagged Andersen's career 4-10 conference final record. After Game 1's rust-related troubles, he settled and Carolina protected him. Tonight Carolina protected him completely — Montreal didn't manage a single SOG in the 3rd period until 2:55 remained.</em></li>
+        <li>Carolina shots: <strong>43. Montreal shots: 18.</strong> <em>The 25-shot differential is the structural definition of dominance. Per Gentille: "It might have been the strongest game of the postseason for the Hurricanes."</em></li>
+      </ul>
+
+      <div class="statblock">
+        <div class="statblock-label">The Suffocation · By the Numbers</div>
+        <div class="statblock-grid">
+          <div class="stat">
+            <div class="num">2:47</div>
+            <div class="label">CAR first 3<br/>goals in</div>
+          </div>
+          <div class="stat">
+            <div class="num">7</div>
+            <div class="label">MTL failed exits<br/>first 8 minutes</div>
+          </div>
+          <div class="stat">
+            <div class="num">1 SOG</div>
+            <div class="label">MTL over 32:57<br/>game time</div>
+          </div>
+          <div class="stat">
+            <div class="num">43–18</div>
+            <div class="label">CAR shot<br/>advantage</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pullquote">
+        Sometimes you gotta find the body blows to get to the head. When you can stack shifts and set up the other guys for success, good things will continue to happen.
+        <span class="attribution">— Logan Stankoven, postgame</span>
+      </div>
+
+      <!-- THE 3-GOAL BURST -->
+      <div class="burst">
+        <div class="burst-cell">
+          <div class="b-time">Goal 1 · 15:00 · 1st</div>
+          <div class="b-scorer">Aho · PP</div>
+          <div class="b-detail">
+            <strong>5 minutes left in 1st. Cross-ice one-timer on the 2nd PP after a Zack Bolduc hooking call.</strong> Carolina's top PP unit's quick conversion gave them their first goal of the night.
+          </div>
+        </div>
+        <div class="burst-cell">
+          <div class="b-time">Goal 2 · 16:08 · 1st</div>
+          <div class="b-scorer">Staal · NF</div>
+          <div class="b-detail">
+            <strong>Net-front battle vs Anderson. Miller carried from blue line to goal line — banked off Staal's skate back to the net.</strong> 1:08 after Aho. Anderson's lost battle vs Staal.
+          </div>
+        </div>
+        <div class="burst-cell">
+          <div class="b-time">Goal 3 · 17:46 · 1st</div>
+          <div class="b-scorer">Stankoven · 2-on-1</div>
+          <div class="b-detail">
+            <strong>2-on-1 capper off Jackson Blake feed.</strong> Stankoven's FIRST point of the series. Carolina's 3-goal first-period burst — the editorial moment that broke Montreal's belief identity.
+          </div>
+        </div>
+      </div>
+
+      <div class="breakdown-row">
+        <div class="label">What This Was</div>
+        <div class="content"><strong>Carolina's structural identity arriving in full at the most leverage-heavy moment of the series.</strong> <em>Forecheck. Veterans. Depth across all 4 lines. K'Andre Miller defensively elite. PP conversion. Andersen protected. Net-front pressure. Carolina has been edging toward this game since Game 2's "Reset" but never quite delivered the full performance. Tonight everything synchronized.</em></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">The Body Blows Truth</div>
+        <div class="content">The Stankoven framing is the publication's editorial through-line for the series: <strong>"Body blows to get to the head."</strong> <em>Games 1-3 were body blows (Carolina restoring identity, finally winning a hard-match adjustment, controlling possession). Game 4 was the head shot — the bunched goals that converted territorial dominance into scoreboard damage. Per the analyst: "This was the evolution from good system team to Cup finalist-level team."</em></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">Montreal's Reality</div>
+        <div class="content"><strong>The "belief team" framing from the MTL-BUF Series Recap finally hit a structural limit.</strong> <em>Montreal's belief carried them through Tampa, through Buffalo (two G7 OT wins), and through the first 3 games against Carolina. Tonight Carolina found the pressure level that prevents Montreal from emotionally recovering. Per Dobes postgame: "I feel like we've been underdogs the whole season, the whole playoffs. So we are a super underdog right now." Belief without the structural underpinning becomes desperate hope.</em></div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Series Outlook · Carolina One Win from Cup Final</div>
+        <div class="otext">Carolina leads 3-1. <strong>Game 5 Friday in Raleigh — Carolina can clinch the Eastern Conference and the Cup Final matchup with Vegas.</strong> <em>Per Stankoven: "When you have them right on the edge, you want to push them off. You don't want to let them hang around. That fourth game to win is always the toughest." Montreal's path: Dobes continues to stand on his head, the line shuffle pays off earlier, and they extend the series. Carolina's path: same Game 4 identity, on home ice, in a building that hasn't lost in this postseason.</em></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- § 02 MONTREAL COLLAPSE -->
+  <div class="section-head" id="section-02">
+    <div class="num">§ 02</div>
+    <div class="section-head-text">
+      <h2>Montreal's structural <em>collapse.</em></h2>
+      <p class="section-lead">The Habs had ONE shot on goal across 32:57 of game time. Seven failed zone exits in the opening 8 minutes. The Bell Centre crowd chanted "Shoot the puck!" in their own building. St. Louis: "They're not wrong."</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="collapse">
+      <div class="c-label">Montreal · Structural Collapse · 32:57 Window</div>
+      <h4>The "Shoot the puck" <em>chant.</em></h4>
+      <p class="c-body">
+        <strong>The Bell Centre crowd chanted "Shoot the puck!" with under 7 minutes left in regulation.</strong> Montreal had ZERO shots on goal in the 3rd period until 2:55 remained. <em>St. Louis postgame: "It's not fun to hear that. But they're not wrong."</em> A head coach acknowledging his crowd's frustration was justified — that's the structural editorial moment of the series.
+      </p>
+      <p class="c-body">
+        <strong>The longer-window stat is more damning:</strong> <em>Going back to the 3rd period of Game 3 (from a Dobson SOG at 10:06), Montreal had ONE shot on goal across 32:57 of game time.</em> More than half a game's worth. Against a Conference Final opponent. <strong>Carolina's forecheck broke Montreal's puck-possession identity completely.</strong>
+      </p>
+      <p class="c-body">
+        <strong>The 7 failed zone exits in the opening 8 minutes</strong> is the structural definition of collapse. <em>Per Basu: "The Canadiens' inability to clear the puck from their own zone under the relentless Hurricanes forecheck was going to be the biggest adjustment we would see in Game 4. Or so we thought." The adjustment never came.</em>
+      </p>
+      <p class="c-body">
+        <em>The 2nd-period line shuffle (Newhook with Suzuki/Caufield; Bolduc with Danault/Anderson) generated 10 SOG — but came too late. The damage was done in the 1st period. Once Carolina established the lead, structural collapse compounded with emotional collapse.</em>
+      </p>
+      <div class="collapse-grid">
+        <div class="c-stat">
+          <div class="num">1 SOG</div>
+          <div class="lab">MTL across<br/>32:57 of game time</div>
+        </div>
+        <div class="c-stat">
+          <div class="num">7</div>
+          <div class="lab">MTL failed zone<br/>exits in 8 min</div>
+        </div>
+        <div class="c-stat">
+          <div class="num">2:55</div>
+          <div class="lab">left when MTL got<br/>3rd-period 1st SOG</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dobes">
+      <div class="d-label">Jakub Dobes · 39 saves · Birthday Game · The Only Reason</div>
+      <h4>Dobes was <em>the only reason</em> it wasn't 7-0.</h4>
+      <p>
+        <strong>39 saves on Carolina's 43 shots. Multiple breakaway stops — including Jackson Blake and Seth Jarvis.</strong> Multiple huge 2nd-period saves. <em>The 25-year-old rookie celebrated his birthday by being the only Hab who showed up structurally.</em>
+      </p>
+      <p>
+        <strong>The publication has tracked Dobes since Round 2 — his Game 7 OT win vs Buffalo, his 40+ saves in ECF Game 1, his survival in ECF Game 2's 11-3 shot deluge.</strong> <em>Tonight may have been his best performance of the postseason despite Montreal losing 4-0. Per Dobes postgame: "I feel like we've been underdogs the whole season, the whole playoffs. So we are a super underdog right now. We'll go to Carolina and try to win Game 5, come back and try to win (Game 6), and hopefully we'll get to Game 7."</em>
+      </p>
+      <p>
+        <em>That's belief. But belief without the structural underpinning becomes the wrong kind of confidence — Montreal's exits aren't getting fixed by belief. The Habs need cleaner puck support, simpler exits, less east-west play, and more emotional composure. None of that came tonight.</em>
+      </p>
+    </div>
+
+  </section>
+
+  <!-- § 03 K'ANDRE MILLER -->
+  <div class="section-head" id="section-03">
+    <div class="num">§ 03</div>
+    <div class="section-head-text">
+      <h2>K'Andre Miller <em>emerges.</em></h2>
+      <p class="section-lead">The offseason acquisition from the New York Rangers may be the structural piece that makes Carolina Cup Final-ready. Elite skating. Elite reach. Erases scoring chances by all 3 of Carolina's postseason opponents.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="player-focus">
+      <div class="pf-label">K'Andre Miller · CAR · Primary Assist on Staal Goal</div>
+      <h4>The acquisition that <em>completed Carolina's identity.</em></h4>
+      <p>
+        <strong>Carolina acquired K'Andre Miller from the New York Rangers in the offseason for first- and second-round picks and defenseman Scott Morrow.</strong> <em>Miller, 26, had flashed potential with the Rangers but also struggled at times, playing for three coaching staffs and frequently being deployed in matchup minutes with mismatched partners.</em> Carolina saw a player who could thrive in their pressure ecosystem.
+      </p>
+      <p>
+        <strong>Tonight's Staal goal:</strong> Miller carried the puck from the blue line to the goal line, going wide on Danault. <em>That drew Dobes' attention away from the traffic in the crease — Miller, with plenty of space, banked the puck off Staal's skate back toward the Canadiens' net.</em> Per Gentille: "It was a slick play, the sort of thing Miller does with some degree of regularity."
+      </p>
+      <p>
+        <strong>Per Aho:</strong> <em>"He kind of does it all. He skates really well. He has really good offensive instincts as well. He's been a great player for us."</em>
+      </p>
+      <p>
+        <strong>Per the Athletic:</strong> <em>"his skating and reach are elite, and he's used both to regularly erase scoring chances by all three of Carolina's postseason opponents, including several by Montreal throughout Game 4."</em> <strong>That's a player who has elevated Carolina's structural ceiling. If Carolina meets Vegas in the Cup Final, Miller's defensive activation against Vegas's transition forwards (Marner, Eichel, Dorofeyev) becomes one of the key matchup variables.</strong>
+      </p>
+    </div>
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 48px 0 20px; letter-spacing: -0.01em;">Carolina's depth identity in full</h3>
+
+    <ul class="bullets" style="max-width: 820px;">
+      <li><strong>All three top centers scored within 2:47.</strong> <em>Aho (1st PP unit), Staal (depth/leadership C), Stankoven (formerly the line that generated 58% of CAR R1-R2 goals). Carolina rolls 4 lines — the depth identity that wins long playoff series.</em></li>
+      <li><strong>Ehlers continues to deliver since the Day 4 emergence.</strong> <em>2 assists tonight (Aho's PP goal, Staal's net-front goal). 3 G + 2 A in his last 2 games. The $8.5M FA acquisition the publication had been tracking as an underperformer through Day 2 has now structurally arrived. He's the missing offensive game-breaker.</em></li>
+      <li><strong>Andersen had his easiest night of the postseason.</strong> <em>18 saves on 18 shots. The Day 2 framing of his 4-10 career conference final record now reads differently — he didn't need to win games, Carolina needed to protect him. They did.</em></li>
+      <li><strong>The 4-line depth is the Cup Final argument:</strong> <em>Per the analyst: "Not just stars dominating. The Staal line, Robinson line, Stankoven line all tilted the ice. That means Montreal cannot simply shut down one line. Carolina's pressure comes everywhere."</em> That depth is exactly the kind of identity Vegas just used to demolish Colorado. <strong>The Cup Final matchup (if Carolina closes Friday) becomes the deepest-team-wins debate.</strong></li>
+    </ul>
+
+  </section>
+
+  <!-- § 04 CUP FINAL -->
+  <div class="section-head" id="section-04">
+    <div class="num">§ 04</div>
+    <div class="section-head-text">
+      <h2>Vegas <em>waits.</em></h2>
+      <p class="section-lead">Carolina is one win from the Stanley Cup Final. If they close Game 5 Friday in Raleigh, the publication's Day 5 power rankings prediction from way back in early Round 2 produces its second confirmed call: Vegas vs Carolina in the Stanley Cup Final.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="cup-preview">
+      <div class="cp-label">·  Stanley Cup Final Preview · If CAR Closes  ·</div>
+      <h4>Vegas vs Carolina · <em>the matchup the publication called.</em></h4>
+      <p class="cp-body">
+        <strong>The publication's Day 5 Round 2 power rankings ("Maturity") predicted Carolina + Colorado + Vegas + Montreal as the Final Four.</strong> Colorado was wrong — but the Vegas + Carolina + Montreal calls have held. <em>If Carolina closes Friday, the Cup Final is exactly the matchup the publication has been pointing to since the COL-MIN Series Recap shifted the Cup conversation to a 3-team race (CAR + COL + VGK).</em>
+      </p>
+      <p class="cp-body">
+        <strong>The structural matchup is fascinating:</strong> Two of the deepest 4-line teams left. Two veteran rosters. Two elite-tier goaltenders (Hart for Vegas, Andersen for Carolina). Two coaching identities built on territorial pressure and emotional composure. <em>This isn't the kind of Cup Final where one team has talent and the other has structure — both teams have both. It's a matchup that could be decided by line-matching, special teams, or one goaltender stealing a game.</em>
+      </p>
+      <p class="cp-body">
+        <strong>The Marner question:</strong> <em>Marner's 21 playoff points (NHL lead, career high) earned him the publication's "Toronto-to-Vegas career renaissance" framing. Carolina's hard-match defensive identity (which neutralized the Habs' Suzuki line in Games 2-4) becomes the structural test of whether Marner's run continues into the Cup Final or whether Carolina is the matchup that finally answers Vegas's top line.</em>
+      </p>
+      <p class="cp-body">
+        <strong>The K'Andre Miller variable:</strong> <em>Miller's defensive activation against Vegas's transition forwards is the kind of structural answer Colorado tried to provide without Makar and couldn't. If Miller plays the matchup-killer role Carolina acquired him for, the Cup Final tilts toward Carolina. If Vegas's depth (Howden, Dorofeyev, Hertl) overwhelms Carolina's matchup math, Vegas's "Inevitability" thesis from the WCF Recap delivers a Cup.</em>
+      </p>
+      <p class="cp-body">
+        <strong>But first Carolina has to close Friday.</strong> <em>Montreal's belief identity has survived elimination twice this postseason (Game 7 OT wins in Tampa and Buffalo). Per Stankoven: "That fourth game to win is always the toughest." Carolina's Game 5 Friday in Raleigh is now the most important game of their playoff run.</em>
+      </p>
+    </div>
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 48px 0 20px; letter-spacing: -0.01em;">Conference Finals · Bracket</h3>
+
+    <div class="bracket-status">
+      <div class="bracket-cell west">
+        <div class="bc-label">Western Conference · COMPLETE · VGK</div>
+        <div class="bc-matchup">Vegas swept Colorado · 4–0</div>
+        <div class="bc-series">Inevitability. The 4-game demolition of the Presidents' Trophy winner. Marner career-best. Adversity asymmetry delivered.</div>
+        <div class="bc-status">Cup Final · Vegas advances · Awaits ECF winner</div>
+      </div>
+      <div class="bracket-cell east">
+        <div class="bc-label">Eastern Conference Final · CAR 3–1</div>
+        <div class="bc-matchup">CAR leads MTL · 3–1</div>
+        <div class="bc-series">The Suffocation. Carolina's most complete game. Body blows became the head shot. Habs collapsed structurally and emotionally.</div>
+        <div class="bc-status">Game 5 · Friday May 29 · Raleigh</div>
+      </div>
+    </div>
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 48px 0 20px; letter-spacing: -0.01em;">What's next</h3>
+
+    <ul class="bullets" style="max-width: 820px;">
+      <li><strong>Friday May 29 · ECF Game 5 in Raleigh.</strong> Carolina can clinch the Eastern Conference. <em>The Hurricanes have one job: replicate Game 4's identity on home ice in front of their crowd. Montreal needs Dobes to steal a game and extend the series back to Bell Centre Sunday.</em></li>
+      <li><strong>If Carolina closes:</strong> <em>Stanley Cup Final opens probably early next week. Vegas has had since May 26 to rest — Stone heals further, system stays sharp via video. The deepest, most veteran, most resilient team in the East faces the most complete and structurally versatile team in the West. Cup Final analysis becomes the publication's next major artifact.</em></li>
+      <li><strong>If Montreal wins Game 5:</strong> <em>Game 6 Sunday at Bell Centre. The Habs' road-warrior + belief identity has survived two elimination games this postseason. Carolina's structural advantage compounds — they have the better team, on the road, in a building that's hostile but not insurmountable. Carolina is still heavy favorite to advance.</em></li>
+      <li><strong>The publication's editorial position:</strong> <em>Carolina is the Eastern Conference favorite to close out. Vegas is the Stanley Cup Final favorite to win it all. Both calls earned from the structural reads of Round 3. But Carolina has earned the right to make Vegas defend the Cup — and the Cup Final matchup the publication predicted in Round 2 may be 60 minutes from arrival.</em></li>
+    </ul>
+
+  </section>
+
+  <section class="closing">
+    <div class="overline">The Take</div>
+    <blockquote>
+      <em>The user named it perfectly: Carolina played like men in their defeat of Montreal who played
+      like boys.</em> <strong>The analyst confirmed it: "This was suffocation hockey."</strong> Carolina
+      had been edging toward this game since the Day 4 "Reset" — restored identity, dominant
+      territorially in Games 2 and 3 — but the bunched goals never came. <em>Tonight the dam burst.
+      Three goals in 2:47 from all three top centers. Aho, Staal, Stankoven. Seven failed Montreal
+      zone exits in the opening 8 minutes. One Habs SOG over 32:57 of game time. K'Andre Miller
+      dominant. Ehlers two assists. Andersen 18 saves on 18 shots — his easiest night of the
+      playoffs.</em> <strong>Dobes 39 saves was the only reason it wasn't 7-0. And the Bell Centre
+      crowd chanted "Shoot the puck!" at their own team. St. Louis postgame: "They're not wrong."</strong>
+      <em>Per Stankoven: "Sometimes you gotta find the body blows to get to the head." Games 1-3 were
+      body blows. Game 4 was the head shot. The publication's MTL-BUF Series Recap framing of
+      Montreal as "the belief team" finally hit its structural limit — belief without the underlying
+      structure to support it becomes desperate hope.</em> <strong>Carolina is one win from the
+      Stanley Cup Final. Vegas waits. The matchup the publication predicted in Round 2 power
+      rankings — Carolina vs Vegas — is now 60 minutes of competent hockey from arrival.</strong>
+    </blockquote>
+    <div class="sig">— Round 3 · Day 6 · ECF Game 4 · Carolina 4, Montreal 0 · Carolina leads 3–1 · Game 5 Friday in Raleigh</div>
+  </section>
+
+  <footer>
+    <div>Rink Report · NHL Playoff Coverage</div>
+    <div>Round 3 of 4 · Conference Finals · WCF: VGK swept COL 4-0 · ECF: CAR leads MTL 3-1 · Cup Final 1 ECF win away</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
