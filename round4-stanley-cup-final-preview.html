@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Final · Vegas vs Carolina · Stanley Cup Final Preview | NHL Playoffs Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0b0d12;
+    --ink-2: #13161f;
+    --ink-3: #1c1f2b;
+    --paper: #f2ebdc;
+    --paper-dim: #d6cdba;
+    --muted: #8a8374;
+    --ice: #7fb4d8;
+    --ice-deep: #3d6d93;
+    --goal: #d74e3a;
+    --gold: #d4a842;
+    --hairline: rgba(242, 235, 220, 0.14);
+    --hairline-strong: rgba(242, 235, 220, 0.28);
+    --car: #cc0000;
+    --col: #6F263D;
+    --min: #154734;
+    --mtl: #AF1E2D;
+    --buf: #002654;
+    --vgk: #B4975A;
+    --ana: #B9975B;
+    --phi: #f74902;
+    --silver: #b8b4a8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  ul.bullets { list-style: none; padding: 0; margin: 0; }
+  ul.bullets li {
+    position: relative;
+    padding-left: 26px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+  ul.bullets li:last-child { margin-bottom: 0; }
+  ul.bullets li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 11px;
+    width: 14px; height: 1px;
+    background: var(--gold);
+  }
+  ul.bullets li strong { color: var(--paper); font-weight: 500; }
+
+  /* CUP FINAL BANNER - elevated, gold + dual-team gradient */
+  .round-banner {
+    background: linear-gradient(90deg, var(--car) 0%, #8a0000 25%, var(--gold) 50%, #8a7240 75%, var(--vgk) 100%);
+    border-top: 3px solid var(--gold);
+    border-bottom: 3px solid var(--gold);
+    padding: 26px 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.38em;
+    text-transform: uppercase;
+    color: var(--paper);
+    font-weight: 700;
+    text-align: center;
+  }
+  .round-banner span { color: var(--paper); }
+  .round-banner .round-id { color: var(--paper); font-weight: 700; }
+
+  .masthead {
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .masthead .brand { color: var(--paper); font-weight: 600; }
+  .masthead .brand span { color: var(--goal); }
+  .masthead .brand-link {
+    text-decoration: none;
+    transition: opacity 0.3s;
+    display: inline-block;
+  }
+  .masthead .brand-link:hover { opacity: 0.7; }
+  .masthead .nav-link {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    border-bottom: 1px solid transparent;
+  }
+  .masthead .nav-link:hover { color: var(--paper); border-bottom-color: var(--hairline-strong); }
+  .masthead .preview-tag { color: var(--gold); font-weight: 600; letter-spacing: 0.24em; }
+
+  /* CUP FINAL TROPHY BANNER - the centerpiece visual moment */
+  .cup-banner {
+    background: linear-gradient(135deg, rgba(212, 168, 66, 0.10) 0%, var(--ink) 50%, rgba(212, 168, 66, 0.10) 100%);
+    padding: 80px 48px 64px;
+    margin: 56px 0 0;
+    border: 2px solid var(--gold);
+    text-align: center;
+    position: relative;
+  }
+  .cup-banner::before {
+    content: "";
+    position: absolute;
+    inset: 12px;
+    border: 1px solid rgba(212, 168, 66, 0.4);
+    pointer-events: none;
+  }
+  .cup-banner .cb-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+  .cup-banner .cb-versus {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(40px, 6vw, 88px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    margin-bottom: 22px;
+  }
+  .cup-banner .cb-versus .vs {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--gold);
+    margin: 0 18px;
+    font-size: 0.7em;
+  }
+  .cup-banner .cb-versus .car-name { color: var(--car); }
+  .cup-banner .cb-versus .vgk-name { color: var(--vgk); }
+  .cup-banner .cb-tagline {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(18px, 2vw, 22px);
+    color: var(--paper-dim);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+  .cup-banner .cb-tagline strong { color: var(--paper); font-weight: 500; }
+  .cup-banner .cb-schedule {
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(212, 168, 66, 0.3);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .cup-banner .cb-schedule span { color: var(--paper); }
+
+  .hero {
+    padding: 80px 0 72px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .overline {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .overline::before {
+    content: "";
+    width: 32px; height: 1px;
+    background: var(--gold);
+  }
+  h1.headline {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(56px, 9vw, 136px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    margin-bottom: 40px;
+  }
+  h1.headline em {
+    font-style: italic;
+    color: var(--gold);
+    font-weight: 400;
+  }
+  .dek {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.5;
+    color: var(--paper);
+    max-width: 760px;
+    font-weight: 500;
+  }
+  .byline {
+    margin-top: 48px;
+    display: flex;
+    gap: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+  .byline strong { color: var(--paper); font-weight: 600; }
+
+  .lede { padding: 88px 0 64px; max-width: 820px; }
+  .lede p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 23px;
+    line-height: 1.58;
+    color: var(--paper);
+    font-weight: 400;
+  }
+  .lede p::first-letter {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 5.2em;
+    float: left;
+    line-height: 0.82;
+    padding: 10px 14px 0 0;
+    color: var(--gold);
+  }
+
+  .section-head {
+    padding: 56px 0 40px;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 40px;
+    align-items: baseline;
+    border-top: 1px solid var(--hairline);
+    scroll-margin-top: 24px;
+  }
+  .section-head .num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+  }
+  .section-head-text { align-self: baseline; }
+  .section-lead {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.45;
+    color: var(--gold);
+    margin-top: 20px;
+    max-width: 780px;
+  }
+  .section-head h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(38px, 5vw, 68px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+  }
+  .section-head h2 em {
+    font-style: italic;
+    color: var(--gold);
+    font-weight: 400;
+  }
+
+  /* IDENTITIES - side-by-side team identity panels */
+  .identities {
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr;
+    gap: 0;
+    background: var(--ink-2);
+    border: 1px solid var(--hairline-strong);
+    margin: 36px 0;
+  }
+  .id-cell {
+    padding: 36px 32px;
+  }
+  .id-cell.car {
+    border-top: 4px solid var(--car);
+    border-right: 1px solid var(--hairline);
+  }
+  .id-cell.vgk {
+    border-top: 4px solid var(--vgk);
+    border-left: 1px solid var(--hairline);
+  }
+  .id-cell .id-team {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+  .id-cell.car .id-team { color: var(--car); }
+  .id-cell.vgk .id-team { color: var(--vgk); }
+  .id-cell h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 36px;
+    color: var(--paper);
+    margin-bottom: 16px;
+    letter-spacing: -0.015em;
+    line-height: 1.05;
+  }
+  .id-cell h4 em { font-style: italic; }
+  .id-cell.car h4 em { color: var(--car); }
+  .id-cell.vgk h4 em { color: var(--vgk); }
+  .id-cell .id-record {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--paper);
+    padding: 10px 0 14px;
+    border-bottom: 1px solid var(--hairline);
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .id-cell .id-summary {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--paper-dim);
+    margin-bottom: 12px;
+  }
+  .id-cell .id-summary strong { color: var(--paper); font-weight: 500; }
+  .id-cell .id-summary em { color: var(--paper); font-style: italic; }
+  .id-divider {
+    background: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 20px;
+    color: var(--gold);
+    border-left: 1px solid var(--hairline);
+    border-right: 1px solid var(--hairline);
+    text-align: center;
+    line-height: 1.2;
+    padding: 8px;
+  }
+
+  /* THE MATCHUP PHILOSOPHY */
+  .philosophy {
+    margin: 36px 0;
+    background: linear-gradient(135deg, rgba(204, 0, 0, 0.18) 0%, var(--ink-2) 35%, var(--ink-2) 65%, rgba(180, 151, 90, 0.18) 100%);
+    border: 1px solid var(--hairline-strong);
+    padding: 44px 48px;
+    text-align: center;
+  }
+  .philosophy .p-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    font-weight: 600;
+  }
+  .philosophy .p-grid {
+    display: grid;
+    grid-template-columns: 1fr 60px 1fr;
+    gap: 0;
+    align-items: center;
+  }
+  .p-side {
+    padding: 20px;
+  }
+  .p-side h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--paper);
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+  }
+  .p-side.car h4 em { color: var(--car); font-style: italic; }
+  .p-side.vgk h4 em { color: var(--vgk); font-style: italic; }
+  .p-side .p-quote {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+  .p-vs {
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 24px;
+    color: var(--gold);
+    text-align: center;
+  }
+
+  /* KEY MATCHUP */
+  .key-matchup {
+    margin: 36px 0;
+    background: var(--ink-2);
+    border: 1px solid var(--hairline-strong);
+    padding: 40px 44px;
+    position: relative;
+  }
+  .key-matchup::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--car) 0%, var(--vgk) 100%);
+  }
+  .key-matchup .km-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+  .key-matchup h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 22px;
+  }
+  .key-matchup h4 em { color: var(--gold); font-style: italic; }
+  .km-body {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+    margin-bottom: 14px;
+  }
+  .km-body strong { color: var(--paper); font-weight: 500; }
+  .km-body em { color: var(--paper); font-style: italic; }
+  .km-versus {
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr;
+    gap: 0;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--hairline);
+    align-items: center;
+  }
+  .km-side {
+    text-align: center;
+    padding: 16px 12px;
+  }
+  .km-side.car { border-top: 3px solid var(--car); }
+  .km-side.vgk { border-top: 3px solid var(--vgk); }
+  .km-side .km-title {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .km-side.car .km-title { color: var(--car); }
+  .km-side.vgk .km-title { color: var(--vgk); }
+  .km-side .km-stat {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--paper);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  .km-side .km-detail {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--paper-dim);
+    line-height: 1.4;
+  }
+  .km-vs-text {
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    color: var(--gold);
+    font-size: 18px;
+    text-align: center;
+  }
+
+  /* X-FACTORS GRID */
+  .x-factors {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+    margin: 36px 0;
+  }
+  .xf-cell {
+    background: var(--ink-2);
+    padding: 32px 30px;
+  }
+  .xf-cell.car { border-top: 3px solid var(--car); }
+  .xf-cell.vgk { border-top: 3px solid var(--vgk); }
+  .xf-cell .xf-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .xf-cell.car .xf-label { color: var(--car); }
+  .xf-cell.vgk .xf-label { color: var(--vgk); }
+  .xf-cell h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--paper);
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+  .xf-cell h4 em { font-style: italic; }
+  .xf-cell.car h4 em { color: var(--car); }
+  .xf-cell.vgk h4 em { color: var(--vgk); }
+  .xf-cell p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--paper-dim);
+    margin-bottom: 10px;
+  }
+  .xf-cell p strong { color: var(--paper); font-weight: 500; }
+  .xf-cell p em { color: var(--paper); font-style: italic; }
+
+  /* WANT THIS SERIES TO BE */
+  .wants {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+    margin: 32px 0;
+  }
+  .want-cell {
+    background: var(--ink-2);
+    padding: 30px 32px;
+  }
+  .want-cell.car { border-top: 3px solid var(--car); }
+  .want-cell.vgk { border-top: 3px solid var(--vgk); }
+  .want-cell .w-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .want-cell.car .w-label { color: var(--car); }
+  .want-cell.vgk .w-label { color: var(--vgk); }
+  .want-cell h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--paper);
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .want-cell h4 em { font-style: italic; }
+  .want-cell.car h4 em { color: var(--car); }
+  .want-cell.vgk h4 em { color: var(--vgk); }
+  .want-cell ul { list-style: none; padding: 0; margin: 0; }
+  .want-cell ul li {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+    padding: 8px 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .want-cell ul li:first-child { border-top: none; padding-top: 4px; }
+  .want-cell ul li strong { color: var(--paper); font-weight: 500; }
+  .want-cell .w-motto {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 2px solid var(--hairline-strong);
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--paper);
+    line-height: 1.3;
+  }
+  .want-cell.car .w-motto { color: var(--car); }
+  .want-cell.vgk .w-motto { color: var(--vgk); }
+
+  /* PREDICTION */
+  .prediction {
+    margin: 48px 0;
+    background: linear-gradient(135deg, rgba(212, 168, 66, 0.18) 0%, var(--ink-2) 100%);
+    border: 1px solid var(--gold);
+    padding: 44px 48px;
+  }
+  .prediction .pr-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 22px;
+    font-weight: 600;
+  }
+  .prediction h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 38px;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    margin-bottom: 22px;
+  }
+  .prediction h4 em { color: var(--gold); font-style: italic; }
+  .prediction .pr-body {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+    margin-bottom: 14px;
+  }
+  .prediction .pr-body strong { color: var(--paper); font-weight: 500; }
+  .prediction .pr-body em { color: var(--paper); font-style: italic; }
+  .pr-picks {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(212, 168, 66, 0.3);
+  }
+  .pr-pick {
+    background: var(--ink);
+    padding: 22px 24px;
+    border: 1px solid var(--hairline);
+  }
+  .pr-pick.analyst { border-left: 3px solid var(--car); }
+  .pr-pick.pub { border-left: 3px solid var(--vgk); }
+  .pr-pick .pp-source {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .pr-pick .pp-call {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--paper);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .pr-pick.analyst .pp-call em { color: var(--car); font-style: italic; }
+  .pr-pick.pub .pp-call em { color: var(--vgk); font-style: italic; }
+  .pr-pick .pp-rationale {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+    font-style: italic;
+  }
+
+  /* ROAD HERE - 2 col paths */
+  .road-here {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+    margin: 32px 0;
+  }
+  .rh-cell {
+    background: var(--ink-2);
+    padding: 28px 30px;
+  }
+  .rh-cell.car { border-top: 3px solid var(--car); }
+  .rh-cell.vgk { border-top: 3px solid var(--vgk); }
+  .rh-cell .rh-team {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+  .rh-cell.car .rh-team { color: var(--car); }
+  .rh-cell.vgk .rh-team { color: var(--vgk); }
+  .rh-cell h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--paper);
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .rh-cell h4 em { font-style: italic; }
+  .rh-cell.car h4 em { color: var(--car); }
+  .rh-cell.vgk h4 em { color: var(--vgk); }
+  .rh-rounds { list-style: none; padding: 0; margin: 0; }
+  .rh-rounds li {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+    padding: 10px 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .rh-rounds li:first-child { border-top: none; padding-top: 4px; }
+  .rh-rounds li strong { color: var(--paper); font-weight: 500; }
+  .rh-rounds li .r-result {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    display: block;
+    margin-top: 4px;
+  }
+
+  .closing { padding: 72px 0 48px; border-top: 1px solid var(--hairline-strong); }
+  .closing .overline { color: var(--gold); }
+  .closing .overline::before { background: var(--gold); }
+  .closing blockquote {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    max-width: 980px;
+  }
+  .closing blockquote em { font-style: italic; color: var(--gold); font-weight: 400; }
+  .closing .sig {
+    margin-top: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .toc { padding: 40px 0 48px; border-bottom: 1px solid var(--hairline); }
+  .toc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .toc-label::before {
+    content: "";
+    width: 24px; height: 1px;
+    background: var(--muted);
+  }
+  .toc-list {
+    list-style: none;
+    padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .toc-list li { background: var(--ink); }
+  .toc-list a {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px 22px;
+    text-decoration: none;
+    color: var(--paper);
+    transition: background 0.3s;
+    height: 100%;
+  }
+  .toc-list a:hover { background: var(--ink-2); }
+  .toc-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+  }
+  .toc-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+    color: var(--paper);
+    transition: color 0.3s;
+  }
+  .toc-list a:hover .toc-title { color: var(--gold); }
+
+  footer {
+    padding: 36px 0;
+    border-top: 1px solid var(--hairline);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 820px) {
+    .wrap { padding: 0 20px; }
+    .section-head { grid-template-columns: 1fr; gap: 12px; padding: 44px 0 28px; }
+    .identities { grid-template-columns: 1fr; }
+    .id-cell.car { border-right: none; border-bottom: 1px solid var(--hairline); }
+    .id-cell.vgk { border-left: none; }
+    .id-divider { border: none; padding: 12px; }
+    .x-factors, .wants, .road-here { grid-template-columns: 1fr; }
+    .pr-picks { grid-template-columns: 1fr; }
+    .km-versus { grid-template-columns: 1fr; gap: 16px; }
+    .km-vs-text { padding: 8px; }
+    .philosophy .p-grid { grid-template-columns: 1fr; gap: 16px; }
+    .p-vs { padding: 8px; }
+    .lede { padding: 56px 0 40px; }
+    .lede p { font-size: 20px; }
+    .byline { flex-direction: column; gap: 12px; }
+    .toc-list { grid-template-columns: 1fr; }
+    .toc { padding: 28px 0 32px; }
+    .cup-banner { padding: 48px 24px 36px; margin-top: 36px; }
+    .cup-banner .cb-versus { font-size: 36px; }
+    .cup-banner .cb-versus .vs { display: block; margin: 8px 0; }
+    .key-matchup, .philosophy, .prediction { padding: 28px 24px; }
+    .key-matchup h4, .prediction h4 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="round-banner">
+    <span class="round-id">Round Four · Stanley Cup Final</span> &nbsp;·&nbsp; <span>Game 1 · Monday June 2 · Raleigh</span>
+  </div>
+
+  <div class="masthead">
+    <a href="index.html" class="brand-link"><div class="brand">Rink<span>&middot;</span>Report</div></a>
+    <div>
+      <a href="round3-series-car-mtl-recap.html" class="nav-link">← ECF Recap · Machine</a>
+      &nbsp;&nbsp;Vol. I &nbsp;/&nbsp; <span class="preview-tag">Cup Final Preview</span>
+    </div>
+  </div>
+
+  <div class="cup-banner">
+    <div class="cb-eyebrow">·  Stanley Cup Final 2026  ·</div>
+    <div class="cb-versus">
+      <span class="car-name">Carolina</span><span class="vs">vs</span><span class="vgk-name">Vegas</span>
+    </div>
+    <div class="cb-tagline">
+      The two most complete teams left. <strong>Not the flashiest. Not the most talented. The most
+      complete.</strong> Carolina tries to win every shift. Vegas tries to win every moment. That's
+      the Stanley Cup Final.
+    </div>
+    <div class="cb-schedule">
+      Game 1 · <span>Monday June 2</span> · Lenovo Center · Raleigh
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="overline">Stanley Cup Final Preview · Carolina vs Vegas · 7-game series · Game 1 June 2</div>
+    <h1 class="headline">The <em>Final.</em></h1>
+    <p class="dek">
+      The publication's Round 2 Day 5 power rankings ("Maturity") called Carolina + Colorado + Vegas
+      + Montreal as the Final Four. <strong>Three of four were right. The Cup Final the publication
+      has been pointing toward since May 9 is now confirmed: Carolina vs Vegas.</strong> <em>Per the
+      analyst: "Carolina acts like a machine. Vegas acts like a predator. Carolina says we'll
+      pressure you until you break. Vegas says we'll wait until you make one mistake."</em>
+      <strong>This may be the closest Cup Final matchup in recent memory — two teams that win
+      differently but both win at championship levels.</strong>
+    </p>
+    <div class="byline">
+      <div><strong>Round 4</strong> · Stanley Cup Final Preview</div>
+      <div><strong>Filed</strong> · May 29, 2026</div>
+      <div><strong>Read</strong> · 20 minutes</div>
+      <div><strong>Game 1</strong> · June 2 · Raleigh</div>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="Table of contents">
+    <div class="toc-label">Contents</div>
+    <ol class="toc-list">
+      <li><a href="#section-01">
+        <span class="toc-num">§ 01</span>
+        <span class="toc-title">Two identities</span>
+      </a></li>
+      <li><a href="#section-02">
+        <span class="toc-num">§ 02</span>
+        <span class="toc-title">The key matchup</span>
+      </a></li>
+      <li><a href="#section-03">
+        <span class="toc-num">§ 03</span>
+        <span class="toc-title">X-factors · roads here</span>
+      </a></li>
+      <li><a href="#section-04">
+        <span class="toc-num">§ 04</span>
+        <span class="toc-title">Predictions · the call</span>
+      </a></li>
+    </ol>
+  </nav>
+
+  <section class="lede">
+    <p>
+      Six weeks ago in early Round 2, the publication's "Maturity" power rankings called Carolina,
+      Colorado, Vegas, and Montreal as the Final Four. <strong>Colorado fell to Vegas in the WCF
+      (Inevitability). The other three made it. The Cup Final the publication has been pointing
+      toward — Vegas vs Carolina — is now confirmed.</strong> <em>These are arguably the two most
+      complete teams left in the postseason. Not the flashiest. Not the most talented. The most
+      structurally sound, the most playoff-ready, the deepest at every position.</em>
+      <strong>Carolina is 13-1 in the postseason, having swept Ottawa and Philadelphia and finished
+      with 4 straight wins over Montreal after dropping ECF Game 1. Vegas is 13-3, having beaten
+      Utah, Anaheim in 6, and swept the Presidents' Trophy-winning Colorado Avalanche.</strong>
+      <em>Per the analyst: "Colorado was Vegas' hardest matchup. Montreal was Carolina's hardest
+      emotional matchup. Now we get the two most complete teams left."</em> <strong>Game 1 Monday
+      night in Raleigh. Carolina has home-ice advantage as the 113-point Eastern Conference leader.</strong>
+    </p>
+  </section>
+
+  <!-- § 01 IDENTITIES -->
+  <div class="section-head" id="section-01">
+    <div class="num">§ 01</div>
+    <div class="section-head-text">
+      <h2>Two <em>identities.</em></h2>
+      <p class="section-lead">Carolina is the machine. Vegas is the predator. Both are championship-tier identities. The Cup Final is whether the machine grinds the predator down or the predator catches the machine off-balance.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="identities">
+      <div class="id-cell car">
+        <div class="id-team">Carolina Hurricanes · East</div>
+        <h4>The <em>Machine.</em></h4>
+        <div class="id-record">13-1 playoffs · 113 reg-season pts · East leader · 1st Cup Final since 2006</div>
+        <p class="id-summary">
+          <strong>Carolina wins through pressure. Possession. Territory. Forecheck.</strong> <em>The
+          most relentless 4-line team in hockey. Per the analyst: "By the end of the Montreal series
+          the Canadiens could barely leave their own zone."</em> Carolina pressures every retrieval,
+          forces turnovers, creates exhaustion, denies clean exits.
+        </p>
+        <p class="id-summary">
+          <strong>Their identity is structural:</strong> <em>"Death by 1,000 cuts."</em> Long
+          offensive-zone shifts. Sustained possession. Layered pressure. Wave-after-wave depth.
+        </p>
+        <p class="id-summary">
+          <strong>Their core threats:</strong> <em>Aho. Svechnikov. Ehlers. Stankoven. Hall. Blake.
+          K'Andre Miller. Andersen.</em> The Hall-Stankoven-Blake line emerged as their offensive
+          engine — all three at 5+ playoff goals, 43+ combined points.
+        </p>
+      </div>
+      <div class="id-divider">vs</div>
+      <div class="id-cell vgk">
+        <div class="id-team">Vegas Golden Knights · West</div>
+        <h4>The <em>Predator.</em></h4>
+        <div class="id-record">13-3 playoffs · West leader · Swept Presidents' Trophy COL · 3rd Cup Final in 9 yrs</div>
+        <p class="id-summary">
+          <strong>Vegas wins through composure. Situational execution. Mistake punishment. Leverage
+          moments.</strong> <em>Per the WCF Recap thesis: "Vegas doesn't beat teams by dazzling them.
+          They lean on you, wear down your breakout, kill your 2nd and 3rd options, force you into
+          longer defensive shifts, and punish mistakes late."</em>
+        </p>
+        <p class="id-summary">
+          <strong>Their identity is emotional:</strong> <em>"One mistake, one goal, game over."</em>
+          21 regular-season comeback wins. 5 playoff comeback wins. First 3-goal playoff comeback in
+          franchise history vs Colorado. Adversity-tested resilience.
+        </p>
+        <p class="id-summary">
+          <strong>Their core threats:</strong> <em>Marner (NHL playoff points leader, career-best 21).
+          Dorofeyev (10G, co-NHL lead). Howden (10G, 3 SHG ties Gretzky). Eichel. Hertl. Karlsson.
+          Stone (returning). Hart.</em> Multi-headed monster.
+        </p>
+      </div>
+    </div>
+
+    <div class="philosophy">
+      <div class="p-label">·  ·  ·   The Philosophy   ·  ·  ·</div>
+      <div class="p-grid">
+        <div class="p-side car">
+          <h4>Carolina <em>says:</em></h4>
+          <div class="p-quote">"We'll pressure you until you break."</div>
+        </div>
+        <div class="p-vs">vs</div>
+        <div class="p-side vgk">
+          <h4>Vegas <em>says:</em></h4>
+          <div class="p-quote">"We'll wait until you make one mistake."</div>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-family: 'Source Serif 4', Georgia, serif; font-size: 19px; line-height: 1.6; color: var(--paper-dim); margin-top: 24px; max-width: 820px;">
+      <strong style="color: var(--paper); font-weight: 500;">Both approaches have worked brilliantly through 14-16 games of playoff hockey.</strong> <em>The Cup Final is the test of which approach scales to the highest leverage of a 7-game championship series. Pressure has won Cups. Composure has won Cups. The question is which one wins when both are operating at peak.</em>
+    </p>
+
+  </section>
+
+  <!-- § 02 KEY MATCHUP -->
+  <div class="section-head" id="section-02">
+    <div class="num">§ 02</div>
+    <div class="section-head-text">
+      <h2>The key <em>matchup.</em></h2>
+      <p class="section-lead">Carolina's forecheck vs Vegas's breakout. This is the series. If Vegas exits cleanly, transition opens and Carolina becomes vulnerable. If Vegas gets trapped, Carolina suffocates them the way they suffocated Montreal.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="key-matchup">
+      <div class="km-label">·  Series-Deciding Structural Question  ·</div>
+      <h4>Can Vegas <em>exit cleanly</em> against the best forecheck in hockey?</h4>
+      <p class="km-body">
+        <strong>The Montreal series revealed the limit of Carolina's pressure: 7 failed Habs zone exits in 8 minutes (Game 4). One Montreal SOG over 32:57 of game time (G3-G4 window). One Montreal goal across the final two games.</strong> <em>If you cannot exit cleanly against Carolina, you cannot win.</em>
+      </p>
+      <p class="km-body">
+        <strong>Vegas has better defensemen and centers than Montreal.</strong> Theodore. Hanifin. Andersson. McNabb. Eichel. Hertl. Karlsson. <em>Their breakout will not collapse the way Montreal's did. But it will be tested constantly — more relentlessly than any team Vegas has faced this postseason.</em>
+      </p>
+      <p class="km-body">
+        <strong>The question becomes:</strong> <em>How clean is "clean enough"? Vegas needs to exit cleanly often enough to generate transition chances and force Carolina to defend. Carolina needs to disrupt enough exits to create extended zone time and force Vegas to defend. The team that wins this micro-battle wins the series.</em>
+      </p>
+      <div class="km-versus">
+        <div class="km-side car">
+          <div class="km-title">Carolina Forecheck</div>
+          <div class="km-stat">Best in hockey</div>
+          <div class="km-detail">7 failed MTL exits in 8 min G4. 4 lines of pressure waves.</div>
+        </div>
+        <div class="km-vs-text">vs</div>
+        <div class="km-side vgk">
+          <div class="km-title">Vegas Breakout</div>
+          <div class="km-stat">Elite, untested</div>
+          <div class="km-detail">Better D + Cs than MTL. Hasn't faced this pressure yet.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 48px 0 20px; letter-spacing: -0.01em;">Where each team wants this series to be</h3>
+
+    <div class="wants">
+      <div class="want-cell car">
+        <div class="w-label">Carolina wants</div>
+        <h4>Low chaos. <em>Long shifts.</em></h4>
+        <ul>
+          <li><strong>Sustained offensive-zone time</strong></li>
+          <li>Long shifts that wear down Vegas defenders</li>
+          <li>Cycle hockey along the walls</li>
+          <li>Forecheck after every dump-in</li>
+          <li>Possession battles in the corners</li>
+          <li><strong>Grinding pressure across all 4 lines</strong></li>
+        </ul>
+        <div class="w-motto">Death by 1,000 cuts.</div>
+      </div>
+      <div class="want-cell vgk">
+        <div class="w-label">Vegas wants</div>
+        <h4>Transition. <em>Mistakes.</em></h4>
+        <ul>
+          <li><strong>Clean breakouts into open ice</strong></li>
+          <li>Special teams advantages</li>
+          <li>Forced Carolina turnovers</li>
+          <li>Marner playmaking time + space</li>
+          <li>Leverage moments late in periods</li>
+          <li><strong>Counter-punch goals off pressure</strong></li>
+        </ul>
+        <div class="w-motto">One mistake, one goal, game over.</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- § 03 X-FACTORS + ROAD HERE -->
+  <div class="section-head" id="section-03">
+    <div class="num">§ 03</div>
+    <div class="section-head-text">
+      <h2>X-factors & <em>roads here.</em></h2>
+      <p class="section-lead">Carolina's missing offensive game-breaker has been Stankoven (NHL national breakout). Vegas's Marner has had a career renaissance (NHL points leader at 21). Both teams arrived through different routes — Carolina by domination, Vegas by adversity. Both got to the same destination.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="x-factors">
+      <div class="xf-cell car">
+        <div class="xf-label">Carolina X-Factor</div>
+        <h4>Logan <em>Stankoven.</em></h4>
+        <p>
+          <strong>9 playoff goals — Carolina team lead.</strong> Acquired in the offseason. <em>Per the analyst: "This series may have been his national breakout. Vegas will focus on Aho, Svechnikov, Ehlers. Stankoven may decide games."</em>
+        </p>
+        <p>
+          <strong>The Day 6 quote that defined the ECF:</strong> <em>"Sometimes you gotta find the body blows to get to the head."</em> Stankoven embodies Carolina's identity — relentless pressure, finishing instincts, net-front presence. <strong>If Vegas's defensive structure focuses on Aho and Svechnikov, Stankoven becomes the variable Vegas hasn't seen yet.</strong>
+        </p>
+      </div>
+      <div class="xf-cell vgk">
+        <div class="xf-label">Vegas X-Factor</div>
+        <h4>Mitch <em>Marner.</em></h4>
+        <p>
+          <strong>21 playoff points — NHL lead. Career best by 7 over his entire Toronto career.</strong> <em>Per the analyst: "Nobody manipulates space better. If he consistently beats Carolina's pressure, Vegas becomes extremely dangerous."</em>
+        </p>
+        <p>
+          <strong>The Toronto-to-Vegas redemption arc the publication tracked since Round 2 Day 8 ("The Standard") just culminated in the WCF.</strong> <em>7 playoff goals (more than his last 3 Toronto playoff runs combined). 10+ primary assists (NHL lead). 4 SHA on Vegas's elite PK.</em> <strong>Carolina's hard-match defensive identity (which neutralized Suzuki) is the structural test of whether Marner's run continues into the Cup Final.</strong>
+        </p>
+      </div>
+    </div>
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 48px 0 20px; letter-spacing: -0.01em;">The roads here</h3>
+
+    <div class="road-here">
+      <div class="rh-cell car">
+        <div class="rh-team">Carolina · 13-1 · Eastern Champ</div>
+        <h4>By <em>domination.</em></h4>
+        <ul class="rh-rounds">
+          <li>
+            <strong>Round 1: vs Ottawa</strong>
+            <span class="r-result">Swept 4-0</span>
+          </li>
+          <li>
+            <strong>Round 2: vs Philadelphia</strong>
+            <span class="r-result">Swept 4-0</span>
+          </li>
+          <li>
+            <strong>Round 3 ECF: vs Montreal</strong>
+            <span class="r-result">Won 4-1 (lost G1 6-2, won 4 straight)</span>
+          </li>
+          <li>
+            <em>The most dominant non-Vegas playoff run of 2026. 12 of 14 games before the Cup Final were won. The final two games of the ECF outscored Montreal 10-1. Carolina is the East's confirmed best team.</em>
+          </li>
+        </ul>
+      </div>
+      <div class="rh-cell vgk">
+        <div class="rh-team">Vegas · 13-3 · Western Champ</div>
+        <h4>By <em>adversity.</em></h4>
+        <ul class="rh-rounds">
+          <li>
+            <strong>Round 1: vs Utah</strong>
+            <span class="r-result">Beat them</span>
+          </li>
+          <li>
+            <strong>Round 2: vs Anaheim</strong>
+            <span class="r-result">Won 4-2 (without Stone after G3)</span>
+          </li>
+          <li>
+            <strong>Round 3 WCF: vs Colorado</strong>
+            <span class="r-result">Swept 4-0 (Presidents' Trophy winner)</span>
+          </li>
+          <li>
+            <em>Vegas's "Inevitability" framing — they demolished the Cup favorite in 4 games. 5 playoff comeback wins. The first 3-goal playoff comeback in franchise history. Adversity-tested resilience built across 82 regular-season games of underachievement.</em>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 48px 0 20px; letter-spacing: -0.01em;">Strengths and weaknesses</h3>
+
+    <ul class="bullets" style="max-width: 820px;">
+      <li><strong>Carolina's biggest strength is its forecheck — best in hockey.</strong> <em>Their biggest weakness: sometimes shot volume exceeds danger quality. They can generate 40 shots without creating enough elite chances. Vegas is comfortable allowing perimeter offense.</em></li>
+      <li><strong>Vegas's biggest strength is emotional stability — they don't get rattled.</strong> <em>Their biggest weakness: they have not faced pressure like Carolina's forecheck this postseason. Colorado was closer, but Carolina's relentlessness is on another level. Vegas will spend more time defending than they have all playoffs.</em></li>
+      <li><strong>Carolina has scored first in every ECF game (5 of 5).</strong> <em>If they score first in the Cup Final consistently, their structural model compounds. Vegas chasing the game is Vegas's worst-case scenario.</em></li>
+      <li><strong>Vegas has Marner career-best, Howden tied-Gretzky, and Dorofeyev as co-NHL goal leader.</strong> <em>That's three top-7 NHL playoff scorers on the same roster. Carolina has to defend depth that Colorado couldn't contain.</em></li>
+      <li><strong>Goaltending is approximately even.</strong> <em>Hart (Vegas) was 22-of-22 in WCF G3's 3-goal comeback. Andersen (Carolina) was a Conn Smythe candidate through 2 rounds with .950 SV%. Both are size-and-positioning goalies who let their teams' structure do the work.</em></li>
+    </ul>
+
+  </section>
+
+  <!-- § 04 PREDICTION -->
+  <div class="section-head" id="section-04">
+    <div class="num">§ 04</div>
+    <div class="section-head-text">
+      <h2>The <em>call.</em></h2>
+      <p class="section-lead">The publication's WCF Recap leaned Vegas as Cup favorite. The analyst's Cup Final preview leans Carolina in 7. Both edges are real and small. This may be the closest Cup Final matchup in recent memory.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="prediction">
+      <div class="pr-label">·  The Publication's Final Position  ·</div>
+      <h4>Both edges are real. <em>Both edges are small.</em></h4>
+      <p class="pr-body">
+        <strong>The publication has been editorially honest across Round 3. The WCF Recap ("Inevitability") framed Vegas as the most complete team in the bracket and the structural Cup favorite — coming off a sweep of the Presidents' Trophy winner.</strong> <em>That call was made before the ECF concluded. Now that Carolina has finished the ECF as decisively as Vegas finished the WCF, the calculus changes.</em>
+      </p>
+      <p class="pr-body">
+        <strong>The analyst's call: Carolina in 7.</strong> <em>Rationale: "Carolina has finally solved the issue that has haunted them for years — they now have finishers to complement the system. Andersen has been excellent. Stankoven has emerged. Hall has become a difference-maker. Their depth is rolling. This feels like a series where four games go to one goal, multiple overtimes happen, momentum swings wildly."</em>
+      </p>
+      <p class="pr-body">
+        <strong>The publication's position:</strong> <em>This may be the closest Cup Final matchup in recent memory. Both teams are deeper than any opponent the other has faced. Both teams have championship-tier identities that have worked against everyone except this matchup. The series is genuinely a coin flip — and the team that wins one specific micro-battle (Carolina forecheck vs Vegas breakout) probably wins the Cup.</em>
+      </p>
+      <p class="pr-body">
+        <strong>The publication leans Vegas slightly</strong> on the basis of: (a) the adversity asymmetry thesis carrying forward, (b) Marner's career-best playoff run, (c) Hart's structural stability, (d) Vegas's emotional composure being structurally untestable in a way that even Carolina's pressure may not crack. <em>But the lean is one game out of seven — and Carolina's home-ice advantage plus their machine identity makes it functionally a 50-50 series.</em>
+      </p>
+      <div class="pr-picks">
+        <div class="pr-pick analyst">
+          <div class="pp-source">The Analyst</div>
+          <div class="pp-call">Carolina <em>in 7</em></div>
+          <div class="pp-rationale">"Right now Carolina looks like the most complete team in hockey. The Montreal series wasn't close after Game 1." Four 1-goal games. Multiple OTs.</div>
+        </div>
+        <div class="pr-pick pub">
+          <div class="pp-source">The Publication</div>
+          <div class="pp-call">Vegas <em>in 6 or 7</em></div>
+          <div class="pp-rationale">The adversity-asymmetry thesis carries forward. Vegas hasn't faced pressure like Carolina's, but composure is structurally non-degradable in this version of Vegas.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 48px 0 20px; letter-spacing: -0.01em;">The key questions of the series</h3>
+
+    <ul class="bullets" style="max-width: 820px;">
+      <li><strong>Can Vegas exit cleanly?</strong> <em>If yes, transition offense feeds Marner / Dorofeyev / Howden — Vegas's most dangerous configuration. If no, Carolina suffocates them the way they suffocated Montreal.</em></li>
+      <li><strong>Does the Carolina hard-match work on Marner the way it worked on Suzuki?</strong> <em>The Staal line crushed Suzuki in Games 2-5 of the ECF. Marner is a different problem — more space manipulation, more PP focus, more shorthanded threat. If Carolina contains him, Vegas's offense gets significantly thinner.</em></li>
+      <li><strong>Who wins the goaltending battle by margin?</strong> <em>Both Hart and Andersen are stable, structurally sound goaltenders. Neither needs to steal games. But the team whose goalie wins 2-3 marginal saves over a 7-game series probably wins the Cup.</em></li>
+      <li><strong>Does Carolina's depth match Vegas's depth?</strong> <em>The deepest team in each conference faces the deepest team from the other conference. Hall-Stankoven-Blake vs Marner-Dorofeyev-Howden. Robinson-Jankowski-Carrier vs Smith-Coghlan-Dowd. The deeper roster wins.</em></li>
+      <li><strong>Where does the series go to be decided?</strong> <em>The publication's read: special teams + one extended overtime period. Both teams have killed at high rates (Vegas's PK at 86%, Carolina's PP at high efficiency in the ECF). One PP goal or one OT goal probably swings the entire Cup.</em></li>
+    </ul>
+
+  </section>
+
+  <section class="closing">
+    <div class="overline">The Take</div>
+    <blockquote>
+      <em>Six weeks ago in Round 2, the publication's "Maturity" power rankings called Carolina,
+      Colorado, Vegas, and Montreal as the Final Four.</em> <strong>Three of four were right.
+      Colorado was the only wrong call (swept by Vegas). The Cup Final the publication has been
+      pointing toward since May 9 is now confirmed: Carolina vs Vegas.</strong> <em>These are
+      arguably the two most complete teams left in the postseason. Not the flashiest, not the most
+      talented, but the deepest, most structurally sound, and most playoff-ready.</em>
+      <strong>Carolina is the machine — pressure until you break. Vegas is the predator — wait until
+      you make one mistake. Both approaches have worked at championship levels through 14-16 games
+      of playoff hockey.</strong> <em>The Cup Final is the test of which approach scales to the
+      highest leverage of a 7-game championship series.</em> <strong>The analyst leans Carolina in
+      7. The publication leans Vegas slightly on adversity-thesis grounds. Both edges are real and
+      small. This may be the closest Cup Final matchup in recent memory — and the series the
+      publication has been editorially honest about across 4 rounds of coverage may be the series
+      that finally tests the publication's analytical framework against a genuinely 50-50
+      matchup.</strong> <em>Game 1 Monday June 2 in Raleigh. The Stanley Cup will be lifted by one
+      of these two teams in approximately 17 days.</em>
+    </blockquote>
+    <div class="sig">— Round 4 · Stanley Cup Final Preview · Carolina (East · 113 pts) vs Vegas (West · sweep of COL) · Game 1 · Monday June 2 · Raleigh</div>
+  </section>
+
+  <footer>
+    <div>Rink Report · NHL Playoff Coverage</div>
+    <div>Round 4 · Stanley Cup Final · CAR (East champ) vs VGK (West champ) · Game 1 · June 2 · Raleigh · Best of 7</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
