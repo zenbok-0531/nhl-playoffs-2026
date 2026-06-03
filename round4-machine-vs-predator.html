@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Machine vs Predator · From the Desk · Cup Final Editor's Take | NHL Playoffs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0b0d12;
+    --ink-2: #13161f;
+    --ink-3: #1c1f2b;
+    --paper: #f2ebdc;
+    --paper-dim: #d6cdba;
+    --muted: #8a8374;
+    --ice: #7fb4d8;
+    --goal: #d74e3a;
+    --gold: #d4a842;
+    --hairline: rgba(242, 235, 220, 0.14);
+    --hairline-strong: rgba(242, 235, 220, 0.28);
+    --car: #cc0000;
+    --vgk: #B4975A;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    line-height: 1.7;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .round-banner {
+    background: var(--ink-2);
+    border-top: 1px solid var(--gold);
+    border-bottom: 1px solid var(--gold);
+    padding: 18px 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    text-align: center;
+  }
+  .round-banner span { color: var(--paper); }
+
+  .masthead {
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .masthead .brand { color: var(--paper); font-weight: 600; }
+  .masthead .brand span { color: var(--goal); }
+  .masthead .brand-link {
+    text-decoration: none;
+    transition: opacity 0.3s;
+    display: inline-block;
+  }
+  .masthead .brand-link:hover { opacity: 0.7; }
+  .masthead .nav-link {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    border-bottom: 1px solid transparent;
+  }
+  .masthead .nav-link:hover { color: var(--paper); border-bottom-color: var(--hairline-strong); }
+  .masthead .desk-tag { color: var(--gold); font-weight: 600; letter-spacing: 0.24em; }
+
+  /* HERO - punchier than analytical previews */
+  .hero {
+    padding: 80px 0 56px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .eyebrow::before, .eyebrow::after {
+    content: "";
+    width: 28px; height: 1px;
+    background: var(--gold);
+  }
+  h1.headline {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(60px, 11vw, 144px);
+    line-height: 0.92;
+    letter-spacing: -0.025em;
+    color: var(--paper);
+    margin-bottom: 40px;
+    text-align: center;
+  }
+  h1.headline .car-word { color: var(--car); }
+  h1.headline .vgk-word { color: var(--vgk); }
+  h1.headline em {
+    font-style: italic;
+    color: var(--gold);
+    font-weight: 400;
+  }
+  .hero-tagline {
+    text-align: center;
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: clamp(20px, 2.2vw, 26px);
+    line-height: 1.4;
+    color: var(--paper);
+    font-weight: 500;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .byline {
+    margin-top: 56px;
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+  .byline strong { color: var(--paper); font-weight: 600; }
+
+  /* OPENING THESIS - the framework setup */
+  .thesis {
+    padding: 64px 0 48px;
+    text-align: center;
+  }
+  .thesis p {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    margin: 0 auto;
+    max-width: 680px;
+  }
+  .thesis p .a { color: var(--car); }
+  .thesis p .b { color: var(--vgk); }
+  .thesis .vs-mark {
+    display: block;
+    margin: 18px auto;
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--gold);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+
+  /* SECTION HEADER */
+  .sect-head {
+    margin: 64px 0 32px;
+    padding-top: 48px;
+    border-top: 1px solid var(--hairline);
+  }
+  .sect-head .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .sect-head h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+  }
+  .sect-head h2 em {
+    font-style: italic;
+    color: var(--gold);
+    font-weight: 400;
+  }
+
+  /* SPLIT GRID - two cards side by side for comparisons */
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 32px 0;
+  }
+  .split-card {
+    background: var(--ink-2);
+    border: 1px solid var(--hairline);
+    padding: 32px 32px 28px;
+    position: relative;
+  }
+  .split-card.car { border-left: 3px solid var(--car); }
+  .split-card.vgk { border-left: 3px solid var(--vgk); }
+  .split-card .sc-name {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    font-weight: 700;
+  }
+  .split-card.car .sc-name { color: var(--car); }
+  .split-card.vgk .sc-name { color: var(--vgk); }
+  .split-card h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--paper);
+    margin-bottom: 18px;
+    letter-spacing: -0.015em;
+    line-height: 1.1;
+  }
+  .split-card h4 em { font-style: italic; }
+  .split-card.car h4 em { color: var(--car); }
+  .split-card.vgk h4 em { color: var(--vgk); }
+  .split-card p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--paper-dim);
+    margin-bottom: 12px;
+  }
+  .split-card p:last-child { margin-bottom: 0; }
+  .split-card p strong { color: var(--paper); font-weight: 500; }
+  .split-card p em { color: var(--paper); font-style: italic; }
+  .split-card .sc-line {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--hairline);
+    font-family: "Playfair Display", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 1.4;
+  }
+  .split-card.car .sc-line { color: var(--car); }
+  .split-card.vgk .sc-line { color: var(--vgk); }
+
+  /* MANIFESTO BLOCK - declarative blocks within sections */
+  .manifesto {
+    margin: 28px 0;
+    padding: 32px 0 32px 36px;
+    border-left: 3px solid var(--gold);
+  }
+  .manifesto p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 22px;
+    line-height: 1.5;
+    color: var(--paper);
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .manifesto p:last-child { margin-bottom: 0; }
+  .manifesto p strong { font-weight: 600; }
+  .manifesto p em { font-style: italic; color: var(--paper); }
+  .manifesto .lead-line {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--paper);
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .manifesto .lead-line em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  /* THE Q&A PATTERN */
+  .qa {
+    margin: 32px 0;
+    background: var(--ink-2);
+    border: 1px solid var(--hairline);
+    padding: 32px 36px;
+  }
+  .qa h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--paper);
+    margin-bottom: 18px;
+    letter-spacing: -0.01em;
+  }
+  .qa h4 em { color: var(--gold); font-style: italic; }
+  .qa-row {
+    padding: 14px 0;
+    border-top: 1px solid var(--hairline);
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 18px;
+    align-items: baseline;
+  }
+  .qa-row:first-of-type { border-top: none; padding-top: 4px; }
+  .qa-row .qa-team {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .qa-row.car .qa-team { color: var(--car); }
+  .qa-row.vgk .qa-team { color: var(--vgk); }
+  .qa-row .qa-q {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--paper);
+    font-weight: 500;
+  }
+
+  /* PROSE BLOCK - body paragraphs */
+  .prose {
+    max-width: 740px;
+    margin: 0 auto;
+  }
+  .prose p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 19px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+    margin-bottom: 18px;
+  }
+  .prose p strong { color: var(--paper); font-weight: 500; }
+  .prose p em { color: var(--paper); font-style: italic; }
+
+  /* THE BIG QUESTION */
+  .big-q {
+    margin: 48px 0;
+    padding: 40px 44px;
+    background: linear-gradient(135deg, rgba(204, 0, 0, 0.10) 0%, var(--ink-2) 50%, rgba(180, 151, 90, 0.10) 100%);
+    border: 1px solid var(--hairline-strong);
+  }
+  .big-q .bq-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+  .big-q h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    margin-bottom: 20px;
+  }
+  .big-q h3 em { color: var(--gold); font-style: italic; }
+  .big-q .bq-row {
+    padding: 14px 0;
+    border-top: 1px solid var(--hairline);
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 18px;
+    align-items: baseline;
+  }
+  .big-q .bq-row:first-of-type { border-top: 1px solid var(--hairline); }
+  .big-q .bq-team {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .big-q .bq-row.car .bq-team { color: var(--car); }
+  .big-q .bq-row.vgk .bq-team { color: var(--vgk); }
+  .big-q .bq-q {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--paper);
+    font-weight: 500;
+  }
+
+  /* THE MAGIC 8 BALL */
+  .magic {
+    margin: 32px 0;
+    background: var(--ink-2);
+    border: 1px solid var(--hairline-strong);
+    padding: 36px 40px;
+    position: relative;
+  }
+  .magic::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--car) 0%, var(--gold) 50%, var(--vgk) 100%);
+  }
+  .magic .m-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .magic h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 22px;
+  }
+  .magic h3 em { color: var(--gold); font-style: italic; }
+  .magic-arc {
+    list-style: none;
+    padding: 0; margin: 0;
+  }
+  .magic-arc li {
+    padding: 16px 0;
+    border-top: 1px solid var(--hairline);
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 22px;
+    align-items: baseline;
+  }
+  .magic-arc li:first-child { border-top: none; padding-top: 0; }
+  .magic-arc .ma-games {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    color: var(--gold);
+    font-weight: 700;
+  }
+  .magic-arc .ma-text {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--paper);
+    font-weight: 500;
+  }
+  .magic-arc .ma-text strong { font-weight: 600; }
+  .magic-arc .ma-text em { font-style: italic; }
+
+  /* CLOSING SIGN-OFF */
+  .signoff {
+    padding: 80px 0 56px;
+    text-align: center;
+    border-top: 1px solid var(--hairline-strong);
+    margin-top: 56px;
+  }
+  .signoff .so-mid {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+    max-width: 580px;
+    margin: 0 auto 32px;
+  }
+  .signoff .so-mid strong { color: var(--paper); font-weight: 500; }
+  .signoff .so-line {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(40px, 7vw, 80px);
+    line-height: 1;
+    letter-spacing: -0.025em;
+    color: var(--paper);
+    margin-bottom: 24px;
+  }
+  .signoff .so-line em { color: var(--goal); font-style: italic; }
+  .signoff .so-tail {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--paper-dim);
+    max-width: 540px;
+    margin: 0 auto;
+  }
+  .signoff .so-tail strong { color: var(--paper); font-weight: 500; }
+  .signoff .so-sig {
+    margin-top: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  footer {
+    padding: 36px 0;
+    border-top: 1px solid var(--hairline);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  @media (max-width: 820px) {
+    .wrap { padding: 0 20px; }
+    .split { grid-template-columns: 1fr; gap: 16px; }
+    .qa-row, .big-q .bq-row { grid-template-columns: 1fr; gap: 4px; }
+    .magic-arc li { grid-template-columns: 1fr; gap: 4px; }
+    .magic-arc .ma-games { font-size: 11px; }
+    .hero { padding: 56px 0 40px; }
+    .thesis { padding: 48px 0 32px; }
+    .thesis p { font-size: 24px; }
+    .sect-head { margin: 48px 0 24px; padding-top: 32px; }
+    .manifesto { padding: 20px 0 20px 22px; }
+    .manifesto p { font-size: 18px; }
+    .manifesto .lead-line { font-size: 21px; }
+    .big-q, .magic, .qa { padding: 24px 26px; }
+    .big-q h3, .magic h3 { font-size: 22px; }
+    .signoff .so-line { font-size: 42px; }
+    .signoff { padding: 56px 0 36px; }
+    .byline { gap: 16px; flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="round-banner">
+    <span>From the Desk</span> &nbsp;·&nbsp; The Editor's Take &nbsp;·&nbsp; <span>Cup Final</span>
+  </div>
+
+  <div class="masthead">
+    <a href="index.html" class="brand-link"><div class="brand">Rink<span>&middot;</span>Report</div></a>
+    <div>
+      <a href="round4-stanley-cup-final-preview.html" class="nav-link">← The Final</a>
+      &nbsp;&nbsp;Vol. I &nbsp;/&nbsp; <span class="desk-tag">From the Desk</span>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="eyebrow">Stanley Cup Final · Carolina · Vegas · From the Desk</div>
+    <h1 class="headline"><span class="car-word">Machine</span> <em>vs</em> <span class="vgk-word">Predator.</span></h1>
+    <p class="hero-tagline">
+      Not the flashiest. Not the most talented. The most complete. <strong>Pressure vs Execution. Patience vs Relentlessness.</strong> The closest Cup Final matchup in years.
+    </p>
+    <div class="byline">
+      <div><strong>From</strong> · The Desk</div>
+      <div><strong>Filed</strong> · June 2, 2026</div>
+      <div><strong>Read</strong> · 8 minutes</div>
+      <div><strong>Pre</strong> · Cup Final Game 1</div>
+    </div>
+  </header>
+
+  <section class="thesis">
+    <p>
+      The best team wins by <span class="a">making it hard.</span>
+      <span class="vs-mark">·  ·  ·</span>
+      The smartest team wins by <span class="b">making it simple.</span>
+    </p>
+  </section>
+
+  <!-- COACHING -->
+  <div class="sect-head">
+    <div class="label">·  Coaching  ·</div>
+    <h2>Two <em>opposites.</em></h2>
+  </div>
+
+  <div class="split">
+    <div class="split-card car">
+      <div class="sc-name">Rod Brind'Amour · Carolina</div>
+      <h4>The <em>human.</em></h4>
+      <p>
+        <strong>Players would run through walls for him.</strong> He teaches effort, accountability, sacrifice, identity.
+      </p>
+      <p>
+        His teams are <em>relentless. Disciplined. Exhausting.</em>
+      </p>
+      <div class="sc-line">"Just keep playing the right way."</div>
+    </div>
+    <div class="split-card vgk">
+      <div class="sc-name">John Tortorella · Vegas</div>
+      <h4>The <em>combustible.</em></h4>
+      <p>
+        <strong>The hockey nihilist.</strong> His teams are never comfortable. But they are rarely surprised.
+      </p>
+      <p>
+        Vegas plays with a mentality like a card shark. <em>Never emotional. Never rushed. Never showing their hand.</em>
+      </p>
+      <div class="sc-line">"Just keep playing the right card."</div>
+    </div>
+  </div>
+
+  <!-- THE CITIES -->
+  <div class="sect-head">
+    <div class="label">·  The Cities  ·</div>
+    <h2>Two <em>worlds.</em></h2>
+  </div>
+
+  <div class="split">
+    <div class="split-card car">
+      <div class="sc-name">Raleigh · Carolina</div>
+      <h4>Understated. <em>No circus.</em></h4>
+      <p>
+        The Hurricanes have spent years hearing <em>"great team, but..."</em>
+      </p>
+      <p>
+        <strong>Now they're four wins from erasing the "but".</strong>
+      </p>
+    </div>
+    <div class="split-card vgk">
+      <div class="sc-name">Las Vegas · Vegas</div>
+      <h4>Overstated. <em>Bright lights.</em></h4>
+      <p>
+        Big personalities. <strong>And yet:</strong> the Knights are one of the most pragmatic organizations in hockey.
+      </p>
+      <p>
+        No sentiment. No nostalgia. Only: <em>does this make us better?</em> They are hockey's version of a Formula One team. <strong>Cold. Efficient. Ruthless.</strong>
+      </p>
+    </div>
+  </div>
+
+  <!-- WHAT THEY BELIEVE -->
+  <div class="sect-head">
+    <div class="label">·  What They Believe  ·</div>
+    <h2>Two <em>philosophies.</em></h2>
+  </div>
+
+  <div class="split">
+    <div class="split-card car">
+      <div class="sc-name">Carolina believes:</div>
+      <h4>Hockey is a game of <em>pressure.</em></h4>
+      <p>
+        Forecheck longer. Pressure harder. Win more puck battles. <strong>Eventually physics takes over.</strong>
+      </p>
+      <p>
+        They suffocate opponents. They make mistakes. They break.
+      </p>
+      <div class="sc-line">Montreal learned this brutally. The last 4 games were not close.</div>
+    </div>
+    <div class="split-card vgk">
+      <div class="sc-name">Vegas believes:</div>
+      <h4>Hockey is a game of <em>moments.</em></h4>
+      <p>
+        Not shifts. Not periods. <strong>One turnover. One odd-man rush. One special-teams opportunity.</strong>
+      </p>
+      <p>
+        For long stretches Colorado looked like the better team. <em>Vegas won anyway.</em>
+      </p>
+      <div class="sc-line">Colorado learned this painfully.</div>
+    </div>
+  </div>
+
+  <!-- THE PSYCHOLOGICAL BATTLE -->
+  <div class="sect-head">
+    <div class="label">·  The Psychological Battle  ·</div>
+    <h2>The <em>silent war.</em></h2>
+  </div>
+
+  <div class="qa">
+    <h4>Every shift asks <em>a different question.</em></h4>
+    <div class="qa-row car">
+      <div class="qa-team">Carolina:</div>
+      <div class="qa-q">"Can you survive this pressure?"</div>
+    </div>
+    <div class="qa-row vgk">
+      <div class="qa-team">Vegas:</div>
+      <div class="qa-q">"Can you keep doing this without a mistake?"</div>
+    </div>
+  </div>
+
+  <div class="manifesto">
+    <div class="lead-line">Carolina wants to make Vegas <em>uncomfortable.</em></div>
+    <p>
+      Vegas wants to make Carolina <em>impatient.</em>
+    </p>
+    <p>
+      <strong>Two very different forms of psychological warfare,</strong> aimed at producing two very different kinds of breakdowns.
+    </p>
+  </div>
+
+  <!-- THE X-FACTOR YOU WON'T HEAR -->
+  <div class="sect-head">
+    <div class="label">·  The X-Factor You Won't Hear  ·</div>
+    <h2>Fatigue. <em>But not the kind you think.</em></h2>
+  </div>
+
+  <div class="prose">
+    <p>
+      <strong>Not physical. Decision fatigue.</strong>
+    </p>
+  </div>
+
+  <div class="split">
+    <div class="split-card car">
+      <div class="sc-name">Carolina creates:</div>
+      <h4>Decision <em>fatigue.</em></h4>
+      <p>
+        Every retrieval. Every breakout. Every loose puck. <strong>Eventually brains get tired before legs do.</strong>
+      </p>
+      <p>
+        Defenders pick the wrong pass. Forwards make the lazy read. Goalies guess instead of see.
+      </p>
+      <div class="sc-line">That's how Carolina wins.</div>
+    </div>
+    <div class="split-card vgk">
+      <div class="sc-name">Vegas creates:</div>
+      <h4>Emotional <em>fatigue.</em></h4>
+      <p>
+        You dominate a period. Nothing happens. You dominate another. <strong>Nothing happens.</strong>
+      </p>
+      <p>
+        Then... goal. Vegas. <em>Again.</em>
+      </p>
+      <div class="sc-line">That's how Vegas wins.</div>
+    </div>
+  </div>
+
+  <!-- WHAT THIS FEELS LIKE -->
+  <div class="sect-head">
+    <div class="label">·  What This Series Feels Like  ·</div>
+    <h2>Machine <em>vs</em> Predator.</h2>
+  </div>
+
+  <div class="manifesto">
+    <div class="lead-line">Carolina is the <em>machine.</em></div>
+    <p>
+      <strong>Relentless. Predictable. Unstoppable once it gets moving.</strong>
+    </p>
+  </div>
+
+  <div class="manifesto">
+    <div class="lead-line">Vegas is the <em>predator.</em></div>
+    <p>
+      <strong>Patient. Opportunistic. Lethal when an opening appears.</strong>
+    </p>
+  </div>
+
+  <!-- THE QUESTION -->
+  <div class="big-q">
+    <div class="bq-label">·  The Question  ·</div>
+    <h3>Both teams have <em>one thing</em> to figure out.</h3>
+    <div class="bq-row vgk">
+      <div class="bq-team">Vegas:</div>
+      <div class="bq-q">Can you keep exiting cleanly for seven games?</div>
+    </div>
+    <div class="bq-row car">
+      <div class="bq-team">Carolina:</div>
+      <div class="bq-q">Can you keep applying pressure without getting frustrated?</div>
+    </div>
+  </div>
+
+  <div class="prose">
+    <p>
+      If Vegas exits cleanly, <strong>Vegas can win.</strong>
+    </p>
+    <p>
+      If Carolina pressures without losing composure, <strong>Carolina can win.</strong>
+    </p>
+    <p>
+      Both teams can win. <em>That's why this Final is what it is.</em>
+    </p>
+  </div>
+
+  <!-- MAGIC 8 BALL -->
+  <div class="sect-head">
+    <div class="label">·  Magic 8 Ball  ·</div>
+    <h2>The <em>prediction.</em></h2>
+  </div>
+
+  <div class="magic">
+    <div class="m-label">·  How this plays out  ·</div>
+    <h3>The series will <em>fool you</em> at least twice.</h3>
+    <ul class="magic-arc">
+      <li>
+        <div class="ma-games">Games 1–2</div>
+        <div class="ma-text">Will make people think <strong>Vegas</strong> is winning the matchup.</div>
+      </li>
+      <li>
+        <div class="ma-games">Games 4–6</div>
+        <div class="ma-text">Will make people think <strong>Carolina</strong> is winning the war.</div>
+      </li>
+      <li>
+        <div class="ma-games">Game 7 (if it gets there)</div>
+        <div class="ma-text">Will make people think they were watching the <strong>two best teams all along.</strong></div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="prose">
+    <p>
+      This one isn't about offense or defense.
+    </p>
+    <p>
+      <strong>It's about whether relentless pressure eventually beats perfect execution.</strong>
+    </p>
+    <p>
+      <em>Historically, pressure usually wins.</em> But Vegas is one of the few teams in modern hockey built specifically to survive it.
+    </p>
+    <p>
+      That's why this Final feels so compelling. <strong>It's much closer to 50–50 than most people realize.</strong>
+    </p>
+  </div>
+
+  <!-- SIGN-OFF -->
+  <section class="signoff">
+    <div class="so-mid">
+      <strong>Carolina vs Vegas.</strong> Machine vs Predator. Pressure vs Execution. <em>You'll find out why it feels much closer to 50–50 than most people realize.</em>
+    </div>
+    <div class="so-line">Buckle up, <em>motherfuckers.</em></div>
+    <div class="so-tail">
+      <strong>Game 1 · Monday June 2 · Raleigh.</strong> <em>The Cup will be lifted by one of these two teams in approximately 17 days. Settle in.</em>
+    </div>
+    <div class="so-sig">— From the Desk · Cup Final Preview · Editor's Take · Filed before Game 1</div>
+  </section>
+
+  <footer>
+    <div>Rink Report · NHL Playoff Coverage</div>
+    <div>Cup Final · CAR (East champ) vs VGK (West champ) · Game 1 · June 2 · Raleigh</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
