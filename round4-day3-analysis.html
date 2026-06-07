@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cup Final Day 3 — The Outlast | NHL Playoffs Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0b0d12;
+    --ink-2: #13161f;
+    --ink-3: #1c1f2b;
+    --paper: #f2ebdc;
+    --paper-dim: #d6cdba;
+    --muted: #8a8374;
+    --ice: #7fb4d8;
+    --ice-deep: #3d6d93;
+    --goal: #d74e3a;
+    --gold: #d4a842;
+    --hairline: rgba(242, 235, 220, 0.14);
+    --hairline-strong: rgba(242, 235, 220, 0.28);
+    --car: #cc0000;
+    --vgk: #B4975A;
+    --mtl: #AF1E2D;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  ul.bullets { list-style: none; padding: 0; margin: 0; }
+  ul.bullets li {
+    position: relative;
+    padding-left: 26px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+  ul.bullets li:last-child { margin-bottom: 0; }
+  ul.bullets li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 11px;
+    width: 14px; height: 1px;
+    background: var(--vgk);
+  }
+  ul.bullets li strong { color: var(--paper); font-weight: 500; }
+
+  /* CUP FINAL BANNER - VGK gold leaning (Vegas won) */
+  .round-banner {
+    background: linear-gradient(90deg, rgba(204, 0, 0, 0.18) 0%, rgba(180, 151, 90, 0.36) 50%, rgba(180, 151, 90, 0.28) 100%);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    padding: 22px 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    text-align: center;
+  }
+  .round-banner span { color: var(--paper); }
+  .round-banner .round-id { color: var(--gold); font-weight: 700; }
+
+  .masthead {
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .masthead .brand { color: var(--paper); font-weight: 600; }
+  .masthead .brand span { color: var(--goal); }
+  .masthead .brand-link {
+    text-decoration: none;
+    transition: opacity 0.3s;
+    display: inline-block;
+  }
+  .masthead .brand-link:hover { opacity: 0.7; }
+  .masthead .nav-link {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    border-bottom: 1px solid transparent;
+  }
+  .masthead .nav-link:hover { color: var(--paper); border-bottom-color: var(--hairline-strong); }
+  .masthead .round-tag { color: var(--gold); font-weight: 600; letter-spacing: 0.22em; }
+
+  .hero {
+    padding: 80px 0 72px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .overline {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--vgk);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .overline::before {
+    content: "";
+    width: 32px; height: 1px;
+    background: var(--vgk);
+  }
+  h1.headline {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(56px, 9vw, 136px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    margin-bottom: 40px;
+  }
+  h1.headline em {
+    font-style: italic;
+    color: var(--vgk);
+    font-weight: 400;
+  }
+  .dek {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.5;
+    color: var(--paper);
+    max-width: 760px;
+    font-weight: 500;
+  }
+  .byline {
+    margin-top: 48px;
+    display: flex;
+    gap: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+  .byline strong { color: var(--paper); font-weight: 600; }
+
+  .scores {
+    border-bottom: 1px solid var(--hairline);
+  }
+  .score {
+    padding: 32px 28px;
+  }
+  .score .tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--vgk);
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .score .matchup {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: 32px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .score .winner { color: var(--paper); font-weight: 600; }
+  .score .loser { color: var(--muted); }
+  .score .final {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--paper-dim);
+    margin-top: 10px;
+  }
+
+  .lede { padding: 88px 0 64px; max-width: 820px; }
+  .lede p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 23px;
+    line-height: 1.58;
+    color: var(--paper);
+    font-weight: 400;
+  }
+  .lede p::first-letter {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 5.2em;
+    float: left;
+    line-height: 0.82;
+    padding: 10px 14px 0 0;
+    color: var(--vgk);
+  }
+
+  .section-head {
+    padding: 56px 0 40px;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 40px;
+    align-items: baseline;
+    border-top: 1px solid var(--hairline);
+    scroll-margin-top: 24px;
+  }
+  .section-head .num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--vgk);
+    letter-spacing: 0.1em;
+  }
+  .section-head-text { align-self: baseline; }
+  .section-lead {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.45;
+    color: var(--vgk);
+    margin-top: 20px;
+    max-width: 780px;
+  }
+  .section-head h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(38px, 5vw, 68px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+  }
+  .section-head h2 em {
+    font-style: italic;
+    color: var(--vgk);
+    font-weight: 400;
+  }
+
+  .game {
+    padding: 64px 0;
+    border-top: 1px solid var(--hairline-strong);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 56px;
+  }
+  .game-title { position: sticky; top: 40px; align-self: start; }
+  .game-title .series-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .game-title h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 54px;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .game-title .vs {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--muted);
+    display: block;
+    font-size: 0.6em;
+    margin: 4px 0;
+  }
+  .colorbar { height: 6px; width: 100%; display: flex; margin-top: 20px; }
+  .colorbar span { flex: 1; }
+  .series-stand {
+    margin-top: 24px;
+    padding: 18px 20px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--gold);
+  }
+  .series-stand .ss-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .series-stand .ss-score {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--paper);
+    letter-spacing: -0.01em;
+  }
+  .game-body { font-size: 17px; line-height: 1.65; }
+  .game-body > ul.bullets { margin-bottom: 8px; }
+  .game-body > ul.bullets li { font-size: 16px; }
+  .pullquote {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 1.4;
+    color: var(--paper);
+    padding: 28px 0 28px 28px;
+    border-left: 2px solid var(--vgk);
+    margin: 28px 0;
+  }
+  .pullquote .attribution {
+    display: block;
+    margin-top: 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .breakdown-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 24px;
+    padding: 18px 0;
+    border-top: 1px solid var(--hairline);
+    align-items: start;
+  }
+  .breakdown-row:last-child { border-bottom: 1px solid var(--hairline); }
+  .breakdown-row .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding-top: 4px;
+  }
+  .breakdown-row .content { color: var(--paper-dim); font-size: 16px; }
+  .breakdown-row .content strong { color: var(--paper); font-weight: 500; }
+  .outlook-box {
+    margin-top: 28px;
+    padding: 24px 28px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--ice);
+  }
+  .outlook-box .olabel {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ice);
+    margin-bottom: 10px;
+  }
+  .outlook-box .otext {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--paper);
+  }
+
+  .statblock {
+    margin: 32px 0;
+    background: var(--ink-2);
+    border: 1px solid var(--hairline);
+    padding: 28px 32px;
+  }
+  .statblock-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--vgk);
+    margin-bottom: 18px;
+  }
+  .statblock-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .stat .num {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 38px;
+    color: var(--vgk);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .stat .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+
+  /* THE MARNER HISTORIC PANEL */
+  .marner {
+    margin: 36px 0;
+    background: linear-gradient(135deg, rgba(180, 151, 90, 0.22) 0%, var(--ink-2) 60%, var(--ink) 100%);
+    border: 1px solid var(--gold);
+    padding: 40px 44px;
+    position: relative;
+  }
+  .marner::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--gold);
+  }
+  .marner .m-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+  .marner h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 18px;
+  }
+  .marner h4 em { color: var(--gold); font-style: italic; }
+  .marner-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+    margin: 22px 0;
+  }
+  .marner-cell {
+    background: var(--ink);
+    padding: 24px 22px;
+    border-top: 3px solid var(--gold);
+  }
+  .marner-cell .mc-num {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 32px;
+    color: var(--gold);
+    line-height: 1;
+    letter-spacing: -0.015em;
+    margin-bottom: 8px;
+  }
+  .marner-cell .mc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--paper);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .marner-cell .mc-context {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+  .marner .m-body {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+    margin-bottom: 12px;
+  }
+  .marner .m-body strong { color: var(--paper); font-weight: 500; }
+  .marner .m-body em { color: var(--paper); font-style: italic; }
+
+  /* THE 39-SECOND SEQUENCE */
+  .sequence {
+    margin: 36px 0;
+    background: linear-gradient(135deg, rgba(204, 0, 0, 0.18) 0%, var(--ink-2) 70%, var(--ink) 100%);
+    border: 1px solid var(--hairline-strong);
+    padding: 32px 36px;
+    position: relative;
+  }
+  .sequence::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 4px;
+    background: var(--car);
+  }
+  .sequence .s-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--car);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .sequence h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 18px;
+  }
+  .sequence h4 em { color: var(--car); font-style: italic; }
+  .sequence p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+    margin-bottom: 12px;
+  }
+  .sequence p strong { color: var(--paper); font-weight: 500; }
+  .sequence p em { color: var(--paper); font-style: italic; }
+  .sequence .s-stat {
+    margin-top: 18px;
+    padding: 18px 22px;
+    background: var(--ink);
+    border-left: 2px solid var(--car);
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--paper);
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .sequence .s-stat em { color: var(--car); font-style: italic; }
+
+  /* THE ANDERSEN CONCERN */
+  .andersen {
+    margin: 36px 0;
+    background: linear-gradient(135deg, rgba(204, 0, 0, 0.14) 0%, var(--ink-2) 70%, var(--ink) 100%);
+    border-left: 4px solid var(--car);
+    padding: 30px 36px;
+  }
+  .andersen .a-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--car);
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .andersen h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 16px;
+  }
+  .andersen h4 em { color: var(--car); font-style: italic; }
+  .andersen p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+    margin-bottom: 12px;
+  }
+  .andersen p strong { color: var(--paper); font-weight: 500; }
+  .andersen p em { color: var(--paper); font-style: italic; }
+  .a-compare {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .ac-cell {
+    background: var(--ink);
+    padding: 18px 22px;
+    border-left: 2px solid var(--car);
+  }
+  .ac-cell .ac-period {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .ac-cell .ac-stat {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--paper);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+  .ac-cell .ac-detail {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--paper-dim);
+  }
+
+  /* SECOND PERIOD PATTERN */
+  .pattern {
+    margin: 36px 0;
+    background: var(--ink-2);
+    border: 1px solid var(--hairline-strong);
+    padding: 32px 36px;
+  }
+  .pattern .p-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--vgk);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .pattern h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 16px;
+  }
+  .pattern h4 em { color: var(--vgk); font-style: italic; }
+  .pattern p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+    margin-bottom: 12px;
+  }
+  .pattern p strong { color: var(--paper); font-weight: 500; }
+  .pattern p em { color: var(--paper); font-style: italic; }
+  .pattern-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+    margin-top: 18px;
+  }
+  .pg-cell {
+    background: var(--ink);
+    padding: 20px 22px;
+    border-top: 3px solid var(--vgk);
+    text-align: center;
+  }
+  .pg-cell .pg-game {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--vgk);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .pg-cell .pg-stat {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--paper);
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  .pg-cell .pg-detail {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--paper-dim);
+    line-height: 1.4;
+  }
+
+  /* CONN SMYTHE WATCH */
+  .conn-smythe {
+    margin: 36px 0;
+    background: linear-gradient(135deg, rgba(212, 168, 66, 0.18) 0%, var(--ink-2) 100%);
+    border: 1px solid var(--hairline-strong);
+    padding: 32px 36px;
+  }
+  .conn-smythe .cs-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .conn-smythe h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 20px;
+  }
+  .conn-smythe h4 em { color: var(--gold); font-style: italic; }
+  .cs-list {
+    list-style: none;
+    padding: 0; margin: 0;
+  }
+  .cs-list li {
+    padding: 16px 0;
+    border-top: 1px solid var(--hairline);
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 18px;
+    align-items: baseline;
+  }
+  .cs-list li:first-child { border-top: none; padding-top: 4px; }
+  .cs-list .cs-rank {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--gold);
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .cs-list .cs-player {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+  .cs-list .cs-player .csp-name {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 19px;
+    color: var(--paper);
+    letter-spacing: -0.005em;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .cs-list .cs-player .csp-name em { font-style: italic; color: var(--gold); }
+  .cs-list .cs-player strong { color: var(--paper); font-weight: 500; }
+
+  /* SERIES STATE */
+  .series-state {
+    margin: 40px 0;
+    background: linear-gradient(135deg, rgba(180, 151, 90, 0.20) 0%, var(--ink-2) 50%, rgba(204, 0, 0, 0.10) 100%);
+    border: 1px solid var(--hairline-strong);
+    padding: 32px 40px;
+  }
+  .series-state .ss-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+  .series-state h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 16px;
+  }
+  .series-state h4 em { color: var(--gold); font-style: italic; }
+  .series-state .ss-body {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+    margin-bottom: 14px;
+  }
+  .series-state .ss-body strong { color: var(--paper); font-weight: 500; }
+  .series-state .ss-body em { color: var(--paper); font-style: italic; }
+  .series-history {
+    margin-top: 18px;
+    padding: 16px 20px;
+    background: var(--ink);
+    border-left: 2px solid var(--gold);
+  }
+  .series-history .sh-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .series-history .sh-stat {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--paper);
+    line-height: 1.3;
+  }
+
+  .closing { padding: 72px 0 48px; border-top: 1px solid var(--hairline-strong); }
+  .closing .overline { color: var(--gold); }
+  .closing .overline::before { background: var(--gold); }
+  .closing blockquote {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    max-width: 980px;
+  }
+  .closing blockquote em { font-style: italic; color: var(--vgk); font-weight: 400; }
+  .closing .sig {
+    margin-top: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .toc { padding: 40px 0 48px; border-bottom: 1px solid var(--hairline); }
+  .toc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .toc-label::before {
+    content: "";
+    width: 24px; height: 1px;
+    background: var(--muted);
+  }
+  .toc-list {
+    list-style: none;
+    padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .toc-list li { background: var(--ink); }
+  .toc-list a {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px 22px;
+    text-decoration: none;
+    color: var(--paper);
+    transition: background 0.3s;
+    height: 100%;
+  }
+  .toc-list a:hover { background: var(--ink-2); }
+  .toc-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--vgk);
+  }
+  .toc-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+    color: var(--paper);
+    transition: color 0.3s;
+  }
+  .toc-list a:hover .toc-title { color: var(--gold); }
+
+  footer {
+    padding: 36px 0;
+    border-top: 1px solid var(--hairline);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  @media (max-width: 820px) {
+    .wrap { padding: 0 20px; }
+    .section-head { grid-template-columns: 1fr; gap: 12px; padding: 44px 0 28px; }
+    .game { grid-template-columns: 1fr; gap: 28px; padding: 48px 0; }
+    .game-title { position: static; }
+    .game-title h3 { font-size: 42px; }
+    .breakdown-row { grid-template-columns: 1fr; gap: 8px; }
+    .statblock-grid { grid-template-columns: repeat(2, 1fr); }
+    .marner-grid, .pattern-grid { grid-template-columns: 1fr; }
+    .a-compare { grid-template-columns: 1fr; }
+    .lede { padding: 56px 0 40px; }
+    .lede p { font-size: 20px; }
+    .byline { flex-direction: column; gap: 12px; }
+    .toc-list { grid-template-columns: 1fr; }
+    .toc { padding: 28px 0 32px; }
+    .marner, .sequence, .andersen, .pattern, .conn-smythe, .series-state { padding: 24px 26px; }
+    .marner h4, .series-state h4 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="round-banner">
+    <span class="round-id">Round Four</span> &nbsp;·&nbsp; <span>Stanley Cup Final</span> &nbsp;·&nbsp; Vegas leads 2-1 · Marner historic · Andersen pulled
+  </div>
+
+  <div class="masthead">
+    <a href="index.html" class="brand-link"><div class="brand">Rink<span>&middot;</span>Report</div></a>
+    <div>
+      <a href="round4-day2-analysis.html" class="nav-link">← Day 2 · Avalanche</a>
+      &nbsp;&nbsp;Vol. I &nbsp;/&nbsp; <span class="round-tag">Round 04</span> &nbsp;/&nbsp; Day 3
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="overline">Cup Final · Game 3 · Vegas 5, Carolina 4 in 2OT · VGK leads 2–1</div>
+    <h1 class="headline">The <em>Outlast.</em></h1>
+    <p class="dek">
+      <strong>Marner natural hat trick — the fastest in Stanley Cup Final history (6:10, breaking
+      Maurice Richard's record from 69 years ago). First NHL player with 4 points in a period of
+      the Cup Final since Frank Foyston in 1919.</strong> <em>Vegas led 4-0 after 2. Andersen pulled
+      after 2 periods (12 saves on 16). Brandon Bussi playoff debut.</em> <strong>Then Carolina
+      scored 3 goals in 39 seconds in the 3rd. Svechnikov tied it to force OT. Theodore won it in
+      double overtime on a fortunate bounce.</strong> <em>Per the user's read: "The smartest team
+      survived the best team's comeback."</em> <strong>Vegas leads 2-1. Game 4 Tuesday in Vegas.</strong>
+    </p>
+    <div class="byline">
+      <div><strong>Round 4</strong> · Day 3 Analysis</div>
+      <div><strong>Filed</strong> · June 7, 2026</div>
+      <div><strong>Read</strong> · 17 minutes</div>
+      <div><strong>Series</strong> · VGK 2–1</div>
+    </div>
+  </header>
+
+  <section class="scores">
+    <div class="score">
+      <div class="tag">Cup Final · Game 3 · T-Mobile Arena, Las Vegas &nbsp;·&nbsp; VGK Leads 2–1</div>
+      <div class="matchup">
+        <span class="winner">Vegas</span> def. <span class="loser">Carolina</span>, 5–4 2OT
+      </div>
+      <div class="final">VGK leads 2–1 &nbsp;·&nbsp; Marner natural hat trick · Hertl PP G &nbsp;·&nbsp; CAR 3 G in 39 sec · Svechnikov tied OT &nbsp;·&nbsp; Theodore 2OT GWG &nbsp;·&nbsp; Andersen pulled · Bussi NHL debut &nbsp;·&nbsp; Game 4 Tuesday in Vegas</div>
+    </div>
+  </section>
+
+  <nav class="toc" aria-label="Table of contents">
+    <div class="toc-label">Contents</div>
+    <ol class="toc-list">
+      <li><a href="#section-01">
+        <span class="toc-num">§ 01</span>
+        <span class="toc-title">The outlast</span>
+      </a></li>
+      <li><a href="#section-02">
+        <span class="toc-num">§ 02</span>
+        <span class="toc-title">Marner · the historic period</span>
+      </a></li>
+      <li><a href="#section-03">
+        <span class="toc-num">§ 03</span>
+        <span class="toc-title">39 seconds · Andersen pulled</span>
+      </a></li>
+      <li><a href="#section-04">
+        <span class="toc-num">§ 04</span>
+        <span class="toc-title">Series state · 2nd-period pattern</span>
+      </a></li>
+    </ol>
+  </nav>
+
+  <section class="lede">
+    <p>
+      Mitch Marner just authored one of the most historic single-period performances in Stanley Cup
+      Final history. <strong>Natural hat trick. Fastest hat trick in SCF history (6:10) — breaking
+      Maurice Richard's record set 69 years ago. First NHL player with 4 points in a period of the
+      Cup Final since Frank Foyston in 1919 — 107 years.</strong> <em>27 playoff points now: the
+      Vegas franchise single-postseason record, passing Eichel's 26 from 2023.</em> <strong>Vegas
+      led 4-0 after a 2nd period the analyst called "the best single period Vegas has played all
+      postseason."</strong> <em>Andersen pulled after 2 periods — 12 saves on 16 shots, 4 goals on
+      his last 6½ minutes. Brandon Bussi made his playoff debut.</em> <strong>And then Carolina
+      did what championship teams do — refused to die. Three goals in 39 seconds in the 3rd
+      period. Svechnikov tied the game to force overtime. The Lenovo Center became T-Mobile Arena
+      and nervous reigned for one period of hockey.</strong> <em>The teams pushed to double
+      overtime. Shea Theodore scored on a fortunate bounce. Per the user's read: "The smartest team
+      survived the best team's comeback." Per the Athletic: "How the Golden Knights outlasted the
+      Hurricanes in double overtime." Vegas leads the Stanley Cup Final 2-1. Game 4 Tuesday at
+      T-Mobile Arena.</em>
+    </p>
+  </section>
+
+  <!-- § 01 GAME -->
+  <div class="section-head" id="section-01">
+    <div class="num">§ 01</div>
+    <div class="section-head-text">
+      <h2>The dominant period <em>and the comeback it nearly produced.</em></h2>
+      <p class="section-lead">Vegas played its best single period of the playoffs. Then Carolina played its best 39 seconds of the playoffs. Then both teams played 22+ minutes of double overtime. Vegas outlasted Carolina because Theodore got a fortunate bounce — but the structural truths underneath the chaos are now the most important storylines of the Cup Final.</p>
+    </div>
+  </div>
+
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Round 4 · Cup Final · Game 3 &nbsp;·&nbsp; <span style="color: var(--gold); font-weight: 600;">VGK Leads 2–1</span></div>
+      <h3>Carolina <span class="vs">at</span> Vegas</h3>
+      <div class="colorbar">
+        <span style="background: var(--car)"></span>
+        <span style="background: var(--vgk)"></span>
+      </div>
+      <div class="series-stand">
+        <div class="ss-label">Series Standing</div>
+        <div class="ss-score">Golden Knights 2 — Hurricanes 1</div>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Vegas 5, Carolina 4 in double overtime. <strong>VGK scorers: Hertl (PP, opening goal on Marner + Eichel assists), Marner (3 — natural hat trick at 6:10 of 2nd), Theodore (2OT GWG fortunate bounce).</strong> <em>CAR scorers: 3 goals in 39 seconds in the 3rd period (the rally that closed it 4-3), Svechnikov (tied it 4-4 to force OT).</em> <strong>Two Vegas goals were waved off in the 2nd period before Marner's explosion — the 2nd period could have been 6-0 instead of 4-0.</strong></li>
+        <li>The 1st period was a chess match. <strong>Both teams cautious. Both structured. Few mistakes. Little space. Vegas generated only 2 shots in the entire opening period.</strong> <em>Per the analyst: "Honestly, it looked exactly like the Final we expected." That's the structural baseline — the kind of period that confirms why this is the closest Cup Final matchup in recent memory.</em></li>
+        <li>The 2nd period was Vegas's best of the playoffs. <strong>Hertl opened scoring on the PP (assists Marner + Eichel) to break the 1st-period scoreless deadlock.</strong> <em>Then Marner exploded. Two disallowed Vegas goals via review.</em> <strong>4 actual goals. 6 in total before review erased two.</strong> <em>Per LeBrun: "Other than the Game 1 rust game against Montreal, this is as disorganized defensively the Hurricanes have looked in a period probably all playoffs."</em></li>
+        <li>The Marner historic explosion is the editorial centerpiece. <strong>Natural hat trick at 6:10 of the 2nd period — the FASTEST hat trick in Stanley Cup Final history.</strong> <em>Breaking Maurice Richard's mark (6:21) set 69 years ago.</em> <strong>4 points in the period — first NHL player with 4 points in a period during the Cup Final since Frank Foyston of the PCHA's Seattle Metropolitans in Game 3 of the 1919 Final (107 years).</strong> <em>Per Marner postgame on ABC: "I can't do it by myself, that's for sure. All five guys are on the same page."</em></li>
+        <li>Andersen pulled after 2 periods. <strong>12 saves on 16 shots. 4 goals on his last 6½ minutes of play.</strong> <em>Brandon Bussi made his NHL playoff debut to start the 3rd.</em> <strong>Per Russo: "Freddie Andersen allowed 20 goals in 13 games in the first three rounds. He has allowed 12 goals in 8 periods this series. He allowed 3+ goals once in the first 13 games and 3+ in all three games this series."</strong> <em>That's a dramatic structural shift. Andersen is no longer the Conn Smythe candidate he was through 2 rounds.</em></li>
+        <li>Carolina's 3-goals-in-39-seconds 3rd-period comeback is statistically absurd. <strong>From 4-0 with 20 minutes left to 4-3 in 39 seconds of game action.</strong> <em>Per the analyst: "Three goals. Thirty-nine seconds. In the Stanley Cup Final. That's absurd."</em> <strong>Andrei Svechnikov tied the game to force overtime. The first time Svechnikov has scored in the Cup Final.</strong></li>
+        <li>Double overtime. <strong>Theodore scored on a fortunate bounce for the GWG.</strong> <em>Per the Athletic: "The teams progressed to double overtime before Theodore scored on a fortunate bounce." Vegas got Marner's historic explosion AND a fortunate-bounce 2OT GWG in the same game.</em></li>
+        <li>Noah Hanifin returned for Vegas. <strong>His return solidified the Vegas defensive group, particularly important with McNabb's status uncertain after the Game 2 slap shot to the face.</strong> <em>The Knights are now functionally healthy on the back end. That structural fact matters as the series shifts to the back half.</em></li>
+        <li>The structural truth of the series after 3 games: Vegas's 2nd-period dominance is now a trend, not a coincidence. <strong>Vegas leads Carolina 7-1 in 2nd-period scoring across the 3 games of the Cup Final.</strong> <em>That's not random. That's the structural pattern Brind'Amour will be obsessing over before Tuesday.</em></li>
+        <li>The Carolina top line broke through. <strong>Svechnikov scored his first goal of the Cup Final to tie Game 3 and force OT.</strong> <em>Aho has yet to score in the series. But the top line is now contributing in real moments — Jarvis OT GWG in Game 2, Svechnikov tying goal in Game 3.</em></li>
+        <li>Per the analyst's structural read: <strong>"Vegas didn't lose control. Carolina took it. There's a difference."</strong> <em>Game 2: Vegas stopped playing direct (their words). Game 3: Carolina forced Vegas into survival mode. Both teams are now showing they can play the other team's identity — but Vegas is showing it can survive the chaos better than Carolina can sustain the takeover.</em></li>
+      </ul>
+
+      <div class="statblock">
+        <div class="statblock-label">The Outlast · By the Numbers</div>
+        <div class="statblock-grid">
+          <div class="stat">
+            <div class="num">6:10</div>
+            <div class="label">Marner natural hat<br/>fastest in SCF history</div>
+          </div>
+          <div class="stat">
+            <div class="num">39 sec</div>
+            <div class="label">CAR 3 G in 39 sec<br/>3rd period rally</div>
+          </div>
+          <div class="stat">
+            <div class="num">7–1</div>
+            <div class="label">VGK 2nd-period<br/>scoring this series</div>
+          </div>
+          <div class="stat">
+            <div class="num">2OT</div>
+            <div class="label">Theodore GWG<br/>fortunate bounce</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pullquote">
+        Other than the Game 1 rust game against Montreal, this is as disorganized defensively the Hurricanes have looked in a period probably all playoffs.
+        <span class="attribution">— Pierre LeBrun · 2nd period · in real time</span>
+      </div>
+
+      <div class="breakdown-row">
+        <div class="label">What This Was</div>
+        <div class="content"><strong>Vegas surviving a Carolina comeback the publication didn't believe was possible from down 4-0 in the Stanley Cup Final.</strong> <em>Most teams at 4-0 mentally quit and start thinking about Game 4. Carolina refused. Three goals in 39 seconds. Svechnikov tying goal. Two complete overtime periods. And Vegas still outlasted them. The Knights are not only playing well — they're winning the games where their structural identity gets pushed past its tested limits.</em></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">The Editorial Truth</div>
+        <div class="content"><strong>The series has shifted. Vegas leads 2-1 with one more home game (Game 4 Tuesday) before the series potentially heads back to Raleigh.</strong> <em>If Vegas wins Game 4, the series is functionally over — only 4 teams in NHL history have come back from 3-1 down in a Cup Final and won. If Carolina wins Game 4, they're back in Raleigh with home ice for Game 5 in a best-of-3 with their identity intact. Tuesday is the most important game of the 2026 postseason.</em></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">The Hidden Story</div>
+        <div class="content"><strong>Two unanswered Vegas goals in the 2nd period were waved off via review.</strong> <em>If those stood, the score after 2 was 6-0 Vegas. Per LeBrun in real time: "I mean, it could be 5-0 if not for two disallowed goals." The structural disparity between the two teams in the middle period was even larger than the scoreboard. That's the most concerning structural fact for Carolina heading into Game 4 — not the loss but the magnitude of the gap when Vegas's offense fires.</em></div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Game 4 Outlook · Tuesday June 9 · T-Mobile Arena</div>
+        <div class="otext"><strong>The Knights have a chance to take a 3-1 stranglehold on the Cup Final in their building.</strong> <em>Andersen has to bounce back or Carolina has to consider Bussi for an extended look. The Hall-Stankoven-Blake line needs to overwhelm Vegas's structural matchup the way it did in the ECF. Vegas just has to keep doing what it's done — let Marner cook, kill 2nd periods, force Carolina to play perfect hockey to take leverage. The publication's pre-series Cup Final read of a "genuinely 50-50 matchup" is still holding — but Tuesday tilts everything.</em></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- § 02 MARNER HISTORIC -->
+  <div class="section-head" id="section-02">
+    <div class="num">§ 02</div>
+    <div class="section-head-text">
+      <h2>Marner · the historic <em>period.</em></h2>
+      <p class="section-lead">The 4-point 2nd period that Marner authored is now in the same paragraph as Maurice Richard, Frank Foyston, and the all-time greatest single-period performances in Stanley Cup Final history. The Toronto-to-Vegas redemption arc the publication has been tracking since Round 2 just had its most extraordinary chapter.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="marner">
+      <div class="m-label">·  Mitch Marner · Game 3 · 2nd Period  ·</div>
+      <h4>Three records. <em>One period. 107 years of company.</em></h4>
+      <p class="m-body">
+        <strong>The Toronto-to-Vegas redemption arc the publication first named in Round 2 Day 8 ("The Standard") just had its most extraordinary single moment.</strong> <em>Marner's natural hat trick at 6:10 of the 2nd period broke Maurice Richard's record (set 69 years ago, in 1957). His 4 points in the period match Frank Foyston of the PCHA's Seattle Metropolitans in Game 3 of the 1919 Cup Final. He passed Jack Eichel's 2023 single-postseason VGK franchise record (26 points → 27 points).</em>
+      </p>
+      <div class="marner-grid">
+        <div class="marner-cell">
+          <div class="mc-num">6:10</div>
+          <div class="mc-label">Fastest SCF Hat Trick</div>
+          <div class="mc-context">Broke Maurice Richard's 6:21 from 69 years ago.</div>
+        </div>
+        <div class="marner-cell">
+          <div class="mc-num">4 pts</div>
+          <div class="mc-label">In One Period</div>
+          <div class="mc-context">First since Frank Foyston, Seattle Metropolitans, 1919 Cup Final Game 3 — 107 years.</div>
+        </div>
+        <div class="marner-cell">
+          <div class="mc-num">27</div>
+          <div class="mc-label">VGK Single-Postseason Record</div>
+          <div class="mc-context">Passed Jack Eichel's 26 from VGK's 2023 Cup run.</div>
+        </div>
+      </div>
+      <p class="m-body">
+        <strong>Per Marner postgame on ABC:</strong> <em>"I can't do it by myself, that's for sure. All five guys are on the same page."</em>
+      </p>
+      <p class="m-body">
+        <em>That deflection is the Marner identity that Toronto could never quite trust — and Vegas has weaponized. Per the analyst: "The hallmark of elite playoff players isn't just skill. It's showing up when games tilt. And Marner tilted the game completely."</em>
+      </p>
+      <p class="m-body">
+        <strong>The Toronto-Maple-Leafs-fan response on The Athletic's discussion thread was the editorial gold:</strong> <em>"Where was this in Toronto, Mitch??" 👨🏼‍🍳</em> <strong>That sound was every Leafs fan watching the player they spent 8 years questioning author a Cup Final hat trick faster than any player in 107 years.</strong>
+      </p>
+    </div>
+
+    <p style="font-family: 'Source Serif 4', Georgia, serif; font-size: 19px; line-height: 1.6; color: var(--paper-dim); margin-top: 24px; max-width: 820px;">
+      <strong style="color: var(--paper); font-weight: 500;">The structural significance:</strong> <em>Marner has now scored more goals in the 2026 playoffs (10) than he scored across his last 3 Toronto playoff appearances combined. He leads the NHL in playoff points (27). His career renaissance — the editorial through-line the publication has tracked since Round 2 — is now structurally a Conn Smythe coronation in waiting. If Vegas wins the Cup, Marner is the Conn Smythe. If Vegas loses, the publication will have to write the most fascinating "best playoff run in NHL history that didn't win a Cup" piece since Pavel Datsyuk.</em>
+    </p>
+
+  </section>
+
+  <!-- § 03 39 SECONDS + ANDERSEN -->
+  <div class="section-head" id="section-03">
+    <div class="num">§ 03</div>
+    <div class="section-head-text">
+      <h2>39 seconds · <em>Andersen pulled.</em></h2>
+      <p class="section-lead">Two structural truths emerged from Game 3 underneath the Marner story. Carolina scored 3 goals in 39 seconds to make a 4-0 deficit a 4-3 game in less than a minute of clock time — championship-team resilience. And Andersen was pulled after 2 periods having allowed 12 goals across 8 periods of the Cup Final. The first is encouragement. The second is concern.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="sequence">
+      <div class="s-label">·  Carolina · 3rd Period · The 39-Second Rally  ·</div>
+      <h4>The kind of comeback <em>championship teams produce.</em></h4>
+      <p>
+        <strong>Down 4-0 to start the 3rd period. Andersen pulled. The Vegas crowd in a frenzy. Carolina disorganized for an entire period.</strong> <em>Per the analyst: "Most teams at 4-0 mentally quit and start thinking about Game 4. Carolina didn't."</em>
+      </p>
+      <p>
+        <strong>3 goals in 39 seconds of game time.</strong> <em>That's not a typo. Three Carolina goals separated by 39 total seconds in the 3rd period of the Stanley Cup Final. The kind of statistical absurdity that only happens when a championship team refuses to accept the situation it's been put in.</em>
+      </p>
+      <p>
+        <strong>Then Andrei Svechnikov tied the game.</strong> <em>His first goal of the Cup Final — exactly the kind of moment the publication has been tracking the top line's struggle through. Carolina forced overtime.</em>
+      </p>
+      <div class="s-stat">
+        4–0 to 4–4 in 14 minutes. <em>Including 3 goals in 39 seconds.</em>
+      </div>
+    </div>
+
+    <div class="andersen">
+      <div class="a-label">·  Frederik Andersen · The Structural Concern  ·</div>
+      <h4>The Conn Smythe candidate is now <em>the Cup Final's most worrying story.</em></h4>
+      <p>
+        <strong>Andersen was pulled after 2 periods of Game 3 — 12 saves on 16 shots, 4 goals on his last 6½ minutes of action.</strong> <em>Brandon Bussi made his NHL playoff debut to start the 3rd period.</em>
+      </p>
+      <p>
+        <strong>Per Russo:</strong> <em>"Freddie Andersen allowed 20 goals in 13 games in the first three rounds. He has allowed 12 goals in 8 periods this series. He allowed 3+ goals once in the first 13 games and 3+ in all three games this series."</em>
+      </p>
+      <p>
+        <strong>That's the kind of structural shift that doesn't get explained by Lemieux's death or layoff rust alone.</strong> <em>The Andersen the publication tracked through R1-R3 (a Conn Smythe candidate with a .950 SV% through 2 rounds) has now allowed more goals across 3 Cup Final games than he did across most of the previous 3 rounds combined. Brind'Amour has a decision to make before Game 4 — keep faith in his veteran goalie carrying personal grief, or give Bussi an extended look.</em>
+      </p>
+      <div class="a-compare">
+        <div class="ac-cell">
+          <div class="ac-period">R1-R3 · 13 games</div>
+          <div class="ac-stat">20 goals allowed</div>
+          <div class="ac-detail">.950 SV% R1-R2 · Conn Smythe favorite through 2 rounds</div>
+        </div>
+        <div class="ac-cell">
+          <div class="ac-period">Cup Final · 8 periods</div>
+          <div class="ac-stat">12 goals allowed</div>
+          <div class="ac-detail">3+ goals in all 3 SCF games · Pulled in G3</div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- § 04 SERIES STATE + 2ND PERIOD PATTERN -->
+  <div class="section-head" id="section-04">
+    <div class="num">§ 04</div>
+    <div class="section-head-text">
+      <h2>Series state · <em>2nd-period pattern.</em></h2>
+      <p class="section-lead">Vegas leads the Cup Final 2-1. Through 3 games, Vegas has outscored Carolina 7-1 in 2nd periods. That's not random anymore — it's a structural pattern Brind'Amour will be obsessing over before Game 4. The series is shifting toward Vegas, but the publication's pre-series read of "the closest Cup Final in recent memory" is still holding.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="pattern">
+      <div class="p-label">·  The 2nd-Period Pattern · Now Structural  ·</div>
+      <h4>Vegas owns the middle. <em>The Cup Final's most overlooked storyline.</em></h4>
+      <p>
+        <strong>Vegas leads Carolina 7-1 in 2nd-period scoring across the 3 games of the Cup Final.</strong> <em>That's a structural trend, not a coincidence. Vegas's structural identity (composure, leverage execution, mistake punishment) compounds across periods. Carolina's structural identity (relentless pressure, decision fatigue) compounds across games. The 2nd period is where Vegas's identity has the most time to work and Carolina's has the least.</em>
+      </p>
+      <div class="pattern-grid">
+        <div class="pg-cell">
+          <div class="pg-game">Game 1 · 2nd Period</div>
+          <div class="pg-stat">VGK 3 · CAR 1</div>
+          <div class="pg-detail">Barbashev (0:30 in), Karlsson</div>
+        </div>
+        <div class="pg-cell">
+          <div class="pg-game">Game 2 · 2nd Period</div>
+          <div class="pg-stat">Even 0 · 0</div>
+          <div class="pg-detail">Both teams scoreless 2nd</div>
+        </div>
+        <div class="pg-cell">
+          <div class="pg-game">Game 3 · 2nd Period</div>
+          <div class="pg-stat">VGK 4 · CAR 0</div>
+          <div class="pg-detail">+ 2 waved off (could've been 6-0)</div>
+        </div>
+      </div>
+      <p>
+        <strong>Per Brind'Amour pre-Game 4: this pattern is the biggest structural problem to solve.</strong> <em>Carolina's identity requires sustained pressure across periods. If Vegas can keep producing 2nd-period collapses, Carolina's 3rd-period comebacks have to be progressively more heroic to win. Three goals in 39 seconds isn't repeatable; eventually Carolina has to play 60 minutes of stable hockey to take a Cup Final game.</em>
+      </p>
+    </div>
+
+    <div class="conn-smythe">
+      <div class="cs-label">·  Conn Smythe Watch · After Game 3  ·</div>
+      <h4>The trophy <em>is now Marner's to lose.</em></h4>
+      <ol class="cs-list">
+        <li>
+          <div class="cs-rank">1</div>
+          <div class="cs-player">
+            <span class="csp-name">Mitch Marner · <em>VGK</em></span>
+            <strong>Clearly leading.</strong> 27 playoff points (NHL lead), VGK franchise single-postseason record. Game 3 historic hat trick. 4 points in a period. The Toronto-to-Vegas redemption arc the publication has been tracking is now structurally a Conn Smythe coronation.
+          </div>
+        </li>
+        <li>
+          <div class="cs-rank">2</div>
+          <div class="cs-player">
+            <span class="csp-name">Logan Stankoven · <em>CAR</em></span>
+            <strong>Carolina's most impactful forward.</strong> The Game 2 defibrillator goal. 9 playoff goals (team lead). The "body blows" framing that defined Carolina's ECF win. If Carolina wins the Cup, Stankoven is in the conversation despite Marner's stats.
+          </div>
+        </li>
+        <li>
+          <div class="cs-rank">3</div>
+          <div class="cs-player">
+            <span class="csp-name">Carter Hart · <em>VGK</em></span>
+            <strong>Quietly keeping Vegas alive repeatedly.</strong> WCF G3 22-of-22 in 3-goal comeback. Game 1 Cup Final Hertl-setup save on Jarvis. The Game 3 work that allowed Vegas to absorb Carolina's comeback without giving up the lead in OT.
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="series-state">
+      <div class="ss-label">·  Cup Final Series State · After Game 3  ·</div>
+      <h4>Vegas leads 2-1. <em>The series momentum is now Vegas's.</em></h4>
+      <p class="ss-body">
+        <strong>The series momentum has shifted. Vegas got home ice back. Won the home game (despite Carolina's comeback). And now plays Game 4 in Vegas with a chance to take a 3-1 stranglehold on the Cup Final.</strong> <em>Per the analyst: "This game felt like a turning point. Vegas showed they can survive chaos. Carolina showed they are never out of a game. But when the dust settled, the biggest takeaway was this: the smartest team survived the best team's comeback."</em>
+      </p>
+      <p class="ss-body">
+        <strong>The publication's pre-series read of "the closest Cup Final in recent memory" still holds — but the publication owes editorial honesty on the leans:</strong> <em>Before Game 3, the publication leaned Vegas slightly on adversity-thesis grounds. The analyst leaned Carolina in 7. After Game 3, the publication's lean strengthens to Vegas in 5 or 6. The analyst's Carolina-in-7 framework remains structurally valid if Carolina takes Game 4 and the series returns to Raleigh tied or favoring Carolina — but the path requires Carolina playing a complete 60-minute game, which they have not done in this Cup Final.</em>
+      </p>
+      <div class="series-history">
+        <div class="sh-label">Cup Final 3-1 history</div>
+        <div class="sh-stat">Only 4 teams in NHL history have come back from 3-1 down in a Cup Final and won. If Vegas takes Game 4 Tuesday, the series is functionally over.</div>
+      </div>
+    </div>
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 48px 0 20px; letter-spacing: -0.01em;">What to watch in Game 4</h3>
+
+    <ul class="bullets" style="max-width: 820px;">
+      <li><strong>The Andersen decision.</strong> <em>Brind'Amour has 48 hours to decide whether to start Andersen or give Bussi a real look. Sticking with Andersen requires structural faith that the personal context plus Cup Final pressure will resolve. Going with Bussi is a Hail Mary that worked for Detroit (Howard 2009) and Tampa (Vasilevskiy mid-series 2020) but is much riskier than the conventional veteran-stays move.</em></li>
+      <li><strong>The 2nd-period adjustment.</strong> <em>If Brind'Amour can't solve the 2nd-period pattern, the structural advantage compounds. Look for an opening line shuffle, more aggressive forecheck schemes, and faster goalie hooks to disrupt Vegas's middle-period rhythm before it establishes.</em></li>
+      <li><strong>Carolina's top line.</strong> <em>Svechnikov scored his first SCF goal in Game 3. Jarvis got the Game 2 OT GWG. Aho still hasn't scored. The full top-line breakout has not yet happened. Game 4 is when it has to.</em></li>
+      <li><strong>Vegas's killer instinct.</strong> <em>The Knights are 2-1 in this Cup Final. They're one game from a stranglehold. They have rest, health (Hanifin back, possibly McNabb returning), and home ice. The question is whether they can close out the most important playoff game of their season without the Marner historic explosion repeating.</em></li>
+      <li><strong>The Magic 8 Ball reality check.</strong> <em>The editor's preview predicted "Games 4-6 will make people think Carolina is winning the war." Through 3 games that hasn't materialized — Vegas has gotten the headline-making moments in both wins. Game 4 is either the start of the Carolina phase (the prediction validates) or the moment the prediction's framework breaks.</em></li>
+    </ul>
+
+  </section>
+
+  <section class="closing">
+    <div class="overline">The Take</div>
+    <blockquote>
+      <em>For 40 minutes Vegas looked like it was about to deliver a statement win. Marner authored
+      the fastest hat trick in Stanley Cup Final history and matched the only 4-point Cup Final
+      period since 1919. Andersen got pulled. Carolina looked broken.</em> <strong>Then Carolina
+      scored 3 goals in 39 seconds — the kind of comeback championship teams produce. Svechnikov
+      tied it to force overtime. Two periods of OT later, Theodore got a fortunate bounce.</strong>
+      <em>Vegas survived. Per the user's read: "The smartest team survived the best team's
+      comeback." Per the Athletic: "How the Golden Knights outlasted the Hurricanes in double
+      overtime."</em> <strong>The structural truths underneath: Marner is now the Conn Smythe favorite
+      and possibly the best playoff performance the publication has ever tracked. Andersen has gone
+      from Conn Smythe candidate to Cup Final's biggest concern (12 goals in 8 periods after 20 in
+      13 prior games). And Vegas owns the 2nd period (7-1 across 3 games) — the structural pattern
+      Brind'Amour has to solve before Tuesday.</strong> <em>Vegas leads 2-1. Only 4 teams in NHL
+      history have come back from 3-1 in a Cup Final. Game 4 Tuesday in Vegas is the most important
+      game of the 2026 postseason. The publication's pre-series "closest Cup Final in recent memory"
+      read still holds — but the closest Cup Final in recent memory just tilted toward Vegas.</em>
+    </blockquote>
+    <div class="sig">— Round 4 · Day 3 · Cup Final Game 3 · Vegas 5, Carolina 4 (2OT) · VGK leads 2-1 · Game 4 Tuesday June 9 at T-Mobile Arena</div>
+  </section>
+
+  <footer>
+    <div>Rink Report · NHL Playoff Coverage</div>
+    <div>Round 4 · Cup Final · VGK leads CAR 2-1 · Game 4 · Tuesday June 9 · T-Mobile Arena, Las Vegas</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
