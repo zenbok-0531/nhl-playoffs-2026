@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cup Final Day 5 — The Tilt | NHL Playoffs Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0b0d12;
+    --ink-2: #13161f;
+    --ink-3: #1c1f2b;
+    --paper: #f2ebdc;
+    --paper-dim: #d6cdba;
+    --muted: #8a8374;
+    --ice: #7fb4d8;
+    --ice-deep: #3d6d93;
+    --goal: #d74e3a;
+    --gold: #d4a842;
+    --hairline: rgba(242, 235, 220, 0.14);
+    --hairline-strong: rgba(242, 235, 220, 0.28);
+    --car: #cc0000;
+    --vgk: #B4975A;
+    --mtl: #AF1E2D;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  ul.bullets { list-style: none; padding: 0; margin: 0; }
+  ul.bullets li {
+    position: relative;
+    padding-left: 26px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+  ul.bullets li:last-child { margin-bottom: 0; }
+  ul.bullets li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 11px;
+    width: 14px; height: 1px;
+    background: var(--car);
+  }
+  ul.bullets li strong { color: var(--paper); font-weight: 500; }
+
+  /* CUP FINAL BANNER - CAR red strong */
+  .round-banner {
+    background: linear-gradient(90deg, rgba(180, 151, 90, 0.16) 0%, rgba(204, 0, 0, 0.38) 50%, rgba(204, 0, 0, 0.28) 100%);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    padding: 22px 0;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    text-align: center;
+  }
+  .round-banner span { color: var(--paper); }
+  .round-banner .round-id { color: var(--gold); font-weight: 700; }
+
+  .masthead {
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--hairline);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .masthead .brand { color: var(--paper); font-weight: 600; }
+  .masthead .brand span { color: var(--goal); }
+  .masthead .brand-link {
+    text-decoration: none;
+    transition: opacity 0.3s;
+    display: inline-block;
+  }
+  .masthead .brand-link:hover { opacity: 0.7; }
+  .masthead .nav-link {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    border-bottom: 1px solid transparent;
+  }
+  .masthead .nav-link:hover { color: var(--paper); border-bottom-color: var(--hairline-strong); }
+  .masthead .round-tag { color: var(--gold); font-weight: 600; letter-spacing: 0.22em; }
+
+  .hero {
+    padding: 80px 0 72px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .overline {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--car);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .overline::before {
+    content: "";
+    width: 32px; height: 1px;
+    background: var(--car);
+  }
+  h1.headline {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(56px, 9vw, 136px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    margin-bottom: 40px;
+  }
+  h1.headline em {
+    font-style: italic;
+    color: var(--car);
+    font-weight: 400;
+  }
+  .dek {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.5;
+    color: var(--paper);
+    max-width: 760px;
+    font-weight: 500;
+  }
+  .byline {
+    margin-top: 48px;
+    display: flex;
+    gap: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+  .byline strong { color: var(--paper); font-weight: 600; }
+
+  .scores {
+    border-bottom: 1px solid var(--hairline);
+  }
+  .score {
+    padding: 32px 28px;
+  }
+  .score .tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--car);
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .score .matchup {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: 32px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .score .winner { color: var(--paper); font-weight: 600; }
+  .score .loser { color: var(--muted); }
+  .score .final {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--paper-dim);
+    margin-top: 10px;
+  }
+
+  .lede { padding: 88px 0 64px; max-width: 820px; }
+  .lede p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 23px;
+    line-height: 1.58;
+    color: var(--paper);
+    font-weight: 400;
+  }
+  .lede p::first-letter {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 5.2em;
+    float: left;
+    line-height: 0.82;
+    padding: 10px 14px 0 0;
+    color: var(--car);
+  }
+
+  .section-head {
+    padding: 56px 0 40px;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 40px;
+    align-items: baseline;
+    border-top: 1px solid var(--hairline);
+    scroll-margin-top: 24px;
+  }
+  .section-head .num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--car);
+    letter-spacing: 0.1em;
+  }
+  .section-head-text { align-self: baseline; }
+  .section-lead {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(19px, 2vw, 24px);
+    line-height: 1.45;
+    color: var(--car);
+    margin-top: 20px;
+    max-width: 780px;
+  }
+  .section-head h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(38px, 5vw, 68px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+  }
+  .section-head h2 em {
+    font-style: italic;
+    color: var(--car);
+    font-weight: 400;
+  }
+
+  .game {
+    padding: 64px 0;
+    border-top: 1px solid var(--hairline-strong);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 56px;
+  }
+  .game-title { position: sticky; top: 40px; align-self: start; }
+  .game-title .series-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .game-title h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 54px;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .game-title .vs {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--muted);
+    display: block;
+    font-size: 0.6em;
+    margin: 4px 0;
+  }
+  .colorbar { height: 6px; width: 100%; display: flex; margin-top: 20px; }
+  .colorbar span { flex: 1; }
+  .series-stand {
+    margin-top: 24px;
+    padding: 18px 20px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--gold);
+  }
+  .series-stand .ss-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .series-stand .ss-score {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--paper);
+    letter-spacing: -0.01em;
+  }
+  .game-body { font-size: 17px; line-height: 1.65; }
+  .game-body > ul.bullets { margin-bottom: 8px; }
+  .game-body > ul.bullets li { font-size: 16px; }
+  .pullquote {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 1.4;
+    color: var(--paper);
+    padding: 28px 0 28px 28px;
+    border-left: 2px solid var(--car);
+    margin: 28px 0;
+  }
+  .pullquote .attribution {
+    display: block;
+    margin-top: 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .breakdown-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 24px;
+    padding: 18px 0;
+    border-top: 1px solid var(--hairline);
+    align-items: start;
+  }
+  .breakdown-row:last-child { border-bottom: 1px solid var(--hairline); }
+  .breakdown-row .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding-top: 4px;
+  }
+  .breakdown-row .content { color: var(--paper-dim); font-size: 16px; }
+  .breakdown-row .content strong { color: var(--paper); font-weight: 500; }
+  .outlook-box {
+    margin-top: 28px;
+    padding: 24px 28px;
+    background: var(--ink-2);
+    border-left: 2px solid var(--ice);
+  }
+  .outlook-box .olabel {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ice);
+    margin-bottom: 10px;
+  }
+  .outlook-box .otext {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--paper);
+  }
+
+  .statblock {
+    margin: 32px 0;
+    background: var(--ink-2);
+    border: 1px solid var(--hairline);
+    padding: 28px 32px;
+  }
+  .statblock-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--car);
+    margin-bottom: 18px;
+  }
+  .statblock-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .stat .num {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 38px;
+    color: var(--car);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .stat .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+
+  /* STAAL HISTORIC STREAK PANEL */
+  .staal-streak {
+    margin: 36px 0;
+    background: linear-gradient(135deg, rgba(204, 0, 0, 0.22) 0%, var(--ink-2) 60%, var(--ink) 100%);
+    border: 1px solid var(--car);
+    padding: 40px 44px;
+    position: relative;
+  }
+  .staal-streak::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--car);
+  }
+  .staal-streak .ss-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--car);
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+  .staal-streak h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 18px;
+  }
+  .staal-streak h4 em { color: var(--car); font-style: italic; }
+  .staal-streak .ss-body {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+    margin-bottom: 14px;
+  }
+  .staal-streak .ss-body strong { color: var(--paper); font-weight: 500; }
+  .staal-streak .ss-body em { color: var(--paper); font-style: italic; }
+  .streak-list {
+    list-style: none;
+    padding: 0; margin: 22px 0 0;
+  }
+  .streak-list li {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 22px;
+    padding: 12px 0;
+    border-top: 1px solid var(--hairline);
+    align-items: baseline;
+  }
+  .streak-list li:first-child { border-top: none; padding-top: 4px; }
+  .streak-list .sl-year {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 14px;
+    color: var(--gold);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+  .streak-list .sl-name {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 19px;
+    color: var(--paper);
+    letter-spacing: -0.005em;
+  }
+  .streak-list .sl-name em { color: var(--car); font-style: italic; }
+  .streak-list .sl-name span {
+    display: block;
+    font-family: "Source Serif 4", Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 14px;
+    color: var(--paper-dim);
+    margin-top: 4px;
+  }
+
+  /* BUSSI HISTORY PANEL */
+  .bussi {
+    margin: 36px 0;
+    background: linear-gradient(135deg, rgba(180, 151, 90, 0.18) 0%, var(--ink-2) 70%, var(--ink) 100%);
+    border-left: 4px solid var(--gold);
+    padding: 32px 36px;
+  }
+  .bussi .b-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .bussi h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 16px;
+  }
+  .bussi h4 em { color: var(--gold); font-style: italic; }
+  .bussi p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+    margin-bottom: 12px;
+  }
+  .bussi p strong { color: var(--paper); font-weight: 500; }
+  .bussi p em { color: var(--paper); font-style: italic; }
+
+  /* PP FLIP PANEL */
+  .pp-flip {
+    margin: 36px 0;
+    background: var(--ink-2);
+    border: 1px solid var(--hairline-strong);
+    padding: 32px 36px;
+  }
+  .pp-flip .pf-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--car);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .pp-flip h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 20px;
+  }
+  .pp-flip h4 em { color: var(--car); font-style: italic; }
+  .pp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+    margin: 18px 0;
+  }
+  .pp-cell {
+    background: var(--ink);
+    padding: 22px 24px;
+  }
+  .pp-cell.vgk { border-top: 3px solid var(--vgk); }
+  .pp-cell.car { border-top: 3px solid var(--car); }
+  .pp-cell .pp-team {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+  .pp-cell.vgk .pp-team { color: var(--vgk); }
+  .pp-cell.car .pp-team { color: var(--car); }
+  .pp-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 18px;
+    padding: 10px 0;
+    border-top: 1px solid var(--hairline);
+    align-items: baseline;
+  }
+  .pp-row:first-of-type { border-top: 1px solid var(--hairline); padding-top: 10px; }
+  .pp-row .pp-period {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--paper-dim);
+  }
+  .pp-row .pp-pct {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--paper);
+    letter-spacing: -0.01em;
+  }
+  .pp-flip p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+    margin-top: 10px;
+  }
+  .pp-flip p strong { color: var(--paper); font-weight: 500; }
+  .pp-flip p em { color: var(--paper); font-style: italic; }
+
+  /* EICHEL MATCHUP PANEL */
+  .eichel {
+    margin: 36px 0;
+    background: var(--ink-2);
+    border-left: 3px solid var(--car);
+    padding: 28px 32px;
+  }
+  .eichel .e-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--car);
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .eichel h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 16px;
+  }
+  .eichel h4 em { color: var(--car); font-style: italic; }
+  .eichel p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+    margin-bottom: 12px;
+  }
+  .eichel p strong { color: var(--paper); font-weight: 500; }
+  .eichel p em { color: var(--paper); font-style: italic; }
+
+  /* KARLSSON INJURY PANEL */
+  .karlsson {
+    margin: 36px 0;
+    background: linear-gradient(135deg, rgba(180, 151, 90, 0.16) 0%, var(--ink-2) 70%, var(--ink) 100%);
+    border-left: 4px solid var(--vgk);
+    padding: 28px 32px;
+  }
+  .karlsson .k-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--vgk);
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .karlsson h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 16px;
+  }
+  .karlsson h4 em { color: var(--vgk); font-style: italic; }
+  .karlsson p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+    margin-bottom: 12px;
+  }
+  .karlsson p strong { color: var(--paper); font-weight: 500; }
+  .karlsson p em { color: var(--paper); font-style: italic; }
+
+  /* CONN SMYTHE WATCH */
+  .conn-smythe {
+    margin: 36px 0;
+    background: linear-gradient(135deg, rgba(212, 168, 66, 0.18) 0%, var(--ink-2) 100%);
+    border: 1px solid var(--hairline-strong);
+    padding: 32px 36px;
+  }
+  .conn-smythe .cs-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .conn-smythe h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 20px;
+  }
+  .conn-smythe h4 em { color: var(--gold); font-style: italic; }
+  .cs-list {
+    list-style: none;
+    padding: 0; margin: 0;
+  }
+  .cs-list li {
+    padding: 16px 0;
+    border-top: 1px solid var(--hairline);
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 18px;
+    align-items: baseline;
+  }
+  .cs-list li:first-child { border-top: none; padding-top: 4px; }
+  .cs-list .cs-rank {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--gold);
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .cs-list .cs-player {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--paper-dim);
+  }
+  .cs-list .cs-player .csp-name {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 19px;
+    color: var(--paper);
+    letter-spacing: -0.005em;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .cs-list .cs-player .csp-name em { font-style: italic; color: var(--gold); }
+  .cs-list .cs-player strong { color: var(--paper); font-weight: 500; }
+
+  /* SERIES STATE */
+  .series-state {
+    margin: 40px 0;
+    background: linear-gradient(135deg, rgba(204, 0, 0, 0.18) 0%, var(--ink-2) 50%, rgba(180, 151, 90, 0.12) 100%);
+    border: 1px solid var(--hairline-strong);
+    padding: 32px 40px;
+  }
+  .series-state .ss-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+  .series-state h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin-bottom: 16px;
+  }
+  .series-state h4 em { color: var(--car); font-style: italic; }
+  .series-state .ss-body {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--paper-dim);
+    margin-bottom: 14px;
+  }
+  .series-state .ss-body strong { color: var(--paper); font-weight: 500; }
+  .series-state .ss-body em { color: var(--paper); font-style: italic; }
+  .scenarios {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .scen-cell {
+    background: var(--ink);
+    padding: 20px 22px;
+    border: 1px solid var(--hairline);
+  }
+  .scen-cell.car { border-left: 3px solid var(--car); }
+  .scen-cell.vgk { border-left: 3px solid var(--vgk); }
+  .scen-cell .sc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  .scen-cell.car .sc-label { color: var(--car); }
+  .scen-cell.vgk .sc-label { color: var(--vgk); }
+  .scen-cell h5 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--paper);
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .scen-cell h5 em { font-style: italic; }
+  .scen-cell.car h5 em { color: var(--car); }
+  .scen-cell.vgk h5 em { color: var(--vgk); }
+  .scen-cell p {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--paper-dim);
+  }
+  .scen-cell p strong { color: var(--paper); font-weight: 500; }
+
+  .closing { padding: 72px 0 48px; border-top: 1px solid var(--hairline-strong); }
+  .closing .overline { color: var(--car); }
+  .closing .overline::before { background: var(--car); }
+  .closing blockquote {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+    max-width: 980px;
+  }
+  .closing blockquote em { font-style: italic; color: var(--car); font-weight: 400; }
+  .closing .sig {
+    margin-top: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .toc { padding: 40px 0 48px; border-bottom: 1px solid var(--hairline); }
+  .toc-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .toc-label::before {
+    content: "";
+    width: 24px; height: 1px;
+    background: var(--muted);
+  }
+  .toc-list {
+    list-style: none;
+    padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--hairline-strong);
+    border: 1px solid var(--hairline-strong);
+  }
+  .toc-list li { background: var(--ink); }
+  .toc-list a {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px 22px;
+    text-decoration: none;
+    color: var(--paper);
+    transition: background 0.3s;
+    height: 100%;
+  }
+  .toc-list a:hover { background: var(--ink-2); }
+  .toc-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--car);
+  }
+  .toc-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+    color: var(--paper);
+    transition: color 0.3s;
+  }
+  .toc-list a:hover .toc-title { color: var(--car); }
+
+  footer {
+    padding: 36px 0;
+    border-top: 1px solid var(--hairline);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  @media (max-width: 820px) {
+    .wrap { padding: 0 20px; }
+    .section-head { grid-template-columns: 1fr; gap: 12px; padding: 44px 0 28px; }
+    .game { grid-template-columns: 1fr; gap: 28px; padding: 48px 0; }
+    .game-title { position: static; }
+    .game-title h3 { font-size: 42px; }
+    .breakdown-row { grid-template-columns: 1fr; gap: 8px; }
+    .statblock-grid { grid-template-columns: repeat(2, 1fr); }
+    .pp-grid { grid-template-columns: 1fr; }
+    .streak-list li { grid-template-columns: 1fr; gap: 4px; }
+    .scenarios { grid-template-columns: 1fr; }
+    .lede { padding: 56px 0 40px; }
+    .lede p { font-size: 20px; }
+    .byline { flex-direction: column; gap: 12px; }
+    .toc-list { grid-template-columns: 1fr; }
+    .toc { padding: 28px 0 32px; }
+    .staal-streak, .bussi, .pp-flip, .eichel, .karlsson, .conn-smythe, .series-state { padding: 24px 26px; }
+    .staal-streak h4, .series-state h4 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="round-banner">
+    <span class="round-id">Round Four</span> &nbsp;·&nbsp; <span>Stanley Cup Final</span> &nbsp;·&nbsp; Carolina takes 3-2 series lead · one win from the Cup
+  </div>
+
+  <div class="masthead">
+    <a href="index.html" class="brand-link"><div class="brand">Rink<span>&middot;</span>Report</div></a>
+    <div>
+      <a href="round4-day4-analysis.html" class="nav-link">← Day 4 · Gamble</a>
+      &nbsp;&nbsp;Vol. I &nbsp;/&nbsp; <span class="round-tag">Round 04</span> &nbsp;/&nbsp; Day 5
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="overline">Cup Final · Game 5 · Carolina 4, Vegas 2 · CAR leads 3–2 · one win from Cup</div>
+    <h1 class="headline">The <em>Tilt.</em></h1>
+    <p class="dek">
+      <strong>Carolina won the first "normal" game of the Cup Final and looked like the better
+      team for most of the night.</strong> <em>Svechnikov 2 PP goals. Aho first goal of the series.
+      Staal his 6th goal in 5 games — tying the all-time Cup Final scoring streak record (Cournoyer
+      '73, Béliveau '56, Richard '51, Cyclone Taylor '18).</em> <strong>Bussi 23 saves, becoming the
+      first goalie in NHL history to win his first two career playoff starts in a Stanley Cup
+      Final.</strong> <em>Andersen scratched again. Karlsson injured and unlikely to return. The
+      power play has fully flipped. The Eichel matchup is decisively Carolina's. Per Shayna Goldman:
+      "By far the most normal game after a completely unhinged series."</em> <strong>One win from
+      the first Carolina Stanley Cup in 20 years. Game 6 Sunday in Vegas.</strong>
+    </p>
+    <div class="byline">
+      <div><strong>Round 4</strong> · Day 5 Analysis</div>
+      <div><strong>Filed</strong> · June 12, 2026</div>
+      <div><strong>Read</strong> · 17 minutes</div>
+      <div><strong>Series</strong> · CAR 3–2 · one from Cup</div>
+    </div>
+  </header>
+
+  <section class="scores">
+    <div class="score">
+      <div class="tag">Cup Final · Game 5 · Lenovo Center, Raleigh &nbsp;·&nbsp; CAR Leads 3–2 · One Win from Cup</div>
+      <div class="matchup">
+        <span class="winner">Carolina</span> def. <span class="loser">Vegas</span>, 4–2
+      </div>
+      <div class="final">CAR leads 3–2 &nbsp;·&nbsp; Staal (6 in 5 · ties NHL record) &nbsp;·&nbsp; Svechnikov 2 PPG &nbsp;·&nbsp; Aho first SCF G &nbsp;·&nbsp; Bussi 23 sv · 2-0 in SCF starts &nbsp;·&nbsp; Karlsson injured · likely out &nbsp;·&nbsp; Game 6 Sunday June 14 in Vegas</div>
+    </div>
+  </section>
+
+  <nav class="toc" aria-label="Table of contents">
+    <div class="toc-label">Contents</div>
+    <ol class="toc-list">
+      <li><a href="#section-01">
+        <span class="toc-num">§ 01</span>
+        <span class="toc-title">The tilt</span>
+      </a></li>
+      <li><a href="#section-02">
+        <span class="toc-num">§ 02</span>
+        <span class="toc-title">Staal · the 5-game streak</span>
+      </a></li>
+      <li><a href="#section-03">
+        <span class="toc-num">§ 03</span>
+        <span class="toc-title">Bussi · PP flip · Eichel</span>
+      </a></li>
+      <li><a href="#section-04">
+        <span class="toc-num">§ 04</span>
+        <span class="toc-title">One win · Game 6 in Vegas</span>
+      </a></li>
+    </ol>
+  </nav>
+
+  <section class="lede">
+    <p>
+      Carolina won the first "normal" game of the most unhinged Cup Final in recent memory.
+      <strong>No 9-minute avalanche. No 39-second comeback. No 6-minute hat trick. No 200-foot
+      empty-netter. No GWG from a captain's stomach.</strong> <em>Just Vegas getting a Dorofeyev PP
+      goal early, Staal answering 5 minutes later, Svechnikov authoring a 2-PP-goal night,
+      Aho finally getting his first goal of the series, and Bussi making 23 saves to slam the door
+      down the stretch.</em> <strong>4-2 Carolina. Series 3-2 Carolina. One win from the Hurricanes'
+      first Stanley Cup in 20 years.</strong> <em>The structural truths underneath the normal game
+      are extraordinary: Staal scored for the 5th straight Cup Final game (tying an all-time record
+      held by Cournoyer, Béliveau, Richard, and Cyclone Taylor). Bussi became the first goalie in
+      NHL history to win his first two career playoff starts in a Cup Final. Andersen was scratched
+      again — the second straight game. The power play has completely flipped (CAR 37.5% in the
+      Final vs Vegas's 13.3%). The Eichel matchup is decisively Carolina's. And William Karlsson
+      injured his arm and isn't likely to return to the series.</em> <strong>Per the user's read:
+      "This series is something." Per Shayna Goldman: "By far the most normal game after a
+      completely unhinged series."</strong> <em>Game 6 Sunday in Vegas. Carolina just has to win
+      one more.</em>
+    </p>
+  </section>
+
+  <!-- § 01 GAME -->
+  <div class="section-head" id="section-01">
+    <div class="num">§ 01</div>
+    <div class="section-head-text">
+      <h2>The first <em>"normal" game</em> Carolina just dominated.</h2>
+      <p class="section-lead">No comeback heroics. No 2OT marathon. No historic Marner explosion. Just Carolina being the better team for most of the night, getting the right contributions from the right players, and closing out a 4-2 win to take a 3-2 series lead. The structural drift toward Carolina that started in Game 4 became a full tilt in Game 5.</p>
+    </div>
+  </div>
+
+  <article class="game">
+    <div class="game-title">
+      <div class="series-tag">Round 4 · Cup Final · Game 5 &nbsp;·&nbsp; <span style="color: var(--gold); font-weight: 600;">CAR Leads 3–2</span></div>
+      <h3>Vegas <span class="vs">at</span> Carolina</h3>
+      <div class="colorbar">
+        <span style="background: var(--vgk)"></span>
+        <span style="background: var(--car)"></span>
+      </div>
+      <div class="series-stand">
+        <div class="ss-label">Series Standing</div>
+        <div class="ss-score">Hurricanes 3 — Golden Knights 2</div>
+      </div>
+    </div>
+    <div class="game-body">
+      <ul class="bullets">
+        <li>Carolina 4, Vegas 2. <strong>CAR scorers: Staal (12 min of 1st, tipped Ehlers feed past Hart for his 6th goal in 5 games), Svechnikov (PP, 2nd period — back-to-back PP slap shot), Aho (2nd period, Sean Walker long-pass finish — first SCF goal), Svechnikov (PP, 3rd period off Ehlers feed).</strong> <em>VGK scorers: Dorofeyev (PP, ~7 min of 1st, Eichel cross-crease feed — league-leading 5th PP goal of the playoffs, VGK franchise single-postseason PP record), Dorofeyev (late 3rd, rebound over Bussi's glove to cut deficit to 2).</em> <strong>Series 3-2 Carolina. Game 6 Sunday June 14 in Vegas.</strong></li>
+        <li>Vegas got the early lead. <strong>Dorofeyev PP goal ~7 minutes into the 1st period, off a cross-crease Eichel feed.</strong> <em>This was Dorofeyev's first goal of the Cup Final after a 7-game scoring drought going back to the WCF against Colorado. He had only 18 shot attempts and 7 SOG through the first 4 games of the Final. Tonight he had 3 SOG in the 1st period alone and 7 shot attempts total — a different player.</em></li>
+        <li>Staal answered 5 minutes later. <strong>Finished his check on Brayden McNabb, skated alone to the front of the net, chipped Ehlers's pass past Hart.</strong> <em>His 6th goal in 5 SCF games. His 5-game scoring streak ties the all-time Cup Final record (held by Cournoyer 1973, Béliveau 1956, Richard 1951, Cyclone Taylor 1918). First player in 70 years to score in the first 5 games of a Cup Final. 2nd captain in last 100 years with 6+ goals in a single SCF (after Gretzky's 7 in 1985).</em></li>
+        <li>The 2nd period broke the series pattern. <strong>Carolina won the 2nd period 2-0 — Svechnikov PP slap shot to take the lead, Aho long-pass finish from Sean Walker shortly after.</strong> <em>The publication has tracked the 2nd-period pattern across the series (Vegas 9-1 entering Game 5). Tonight Carolina broke it.</em> <strong>The structural significance: Carolina has now won the games where they took the 2nd period (G2, G4 partial, G5) and lost the games where Vegas dominated it (G1, G3).</strong></li>
+        <li>The Svechnikov eruption was overdue. <strong>2 PP goals in Game 5 (one in the 2nd, one in the 3rd off Ehlers).</strong> <em>Per the post-G4 file: Carolina's top line still had only 1 G across 4 games (Jarvis OT GWG). Tonight Svechnikov delivered the breakout the line had been threatening — heavy shots, direct attacks, Cup-clinching offense. Plus Aho's first SCF goal. The Carolina top line finally arrived in the series that needed them most.</em></li>
+        <li>Bussi made history again. <strong>23 saves on 25 shots. First goalie in NHL history to win his first two career playoff starts in a Cup Final.</strong> <em>Per Brind'Amour: "Bussi had a lot of poise. He played a great game for us." Per Bussi: "We like our game right now. We care about the guy next to each other. When we're able to roll four lines, six D, we are successful."</em></li>
+        <li>Andersen scratched AGAIN. <strong>Second straight game as healthy scratch. Skated on his own Thursday morning. Did not dress.</strong> <em>Per Russo: "Coach Rod Brind'Amour and GM Eric Tulsky claimed that Andersen was at least available to play Thursday, yet they recalled Amir Miftakhov from AHL Chicago despite the Wolves beginning the Calder Cup Final on Friday."</em> <strong>That's the publication's editorial flag: if Andersen was genuinely "available," Carolina wouldn't have pulled Miftakhov from an AHL team about to start their own Cup Final. Layers continue.</strong></li>
+        <li>The PP has fully flipped. <strong>Carolina's PP through Game 5: 37.5% in the Cup Final (vs 12.5% in R1-R3).</strong> Vegas's PP: 13.3% in the Cup Final (vs 23.9% in R1-R3). <em>Per Gostisbehere: "Simplifying. We started maybe taking a little bit of what they're giving us. You see a lot of our goals are just shots to the net and the big man's (Staal) in front putting them away."</em></li>
+        <li>Karlsson injured. <strong>Hit hard by Sean Walker in the 2nd period. Left arm in clear discomfort on the bench. Athletic trainer whispered in Tortorella's ear. Tortorella clearly not happy.</strong> <em>Per Tortorella postgame: Karlsson "isn't likely to return to the Stanley Cup Final."</em> <strong>That's the biggest VGK news of the night. Karlsson was a major part of Vegas's turnaround after Tortorella took over — two-way play, defensive detail, center depth. If he's out, Vegas can move Hertl to center and insert Reilly Smith or Brandon Saad.</strong></li>
+        <li>The Eichel matchup is now decisively Carolina's. <strong>Tortorella moved Marner to Eichel's line with Stone — loaded up his top line trying to generate offense. It didn't work.</strong> <em>Per Slavin: "Jordan's a huge part of that. He could be up for the Selke every single year. Jordan helps out big time and I think he frustrates other teams' centers. When Eichel is out there, you got to take away that time and space. He doesn't need much to make a lot of it."</em> <strong>Carolina is now controlling Eichel for the second straight game.</strong></li>
+        <li>The Tortorella postgame quotes are editorial gold. <strong>Asked if he considered replacing Hart with Adin Hill: "Oh for Christ — that could be the stupidest question I've heard."</strong> <em>On Game 6: "We'll be back here. I'm going to leave my clothes here, that's for sure. They're going to be in the hotel."</em> <strong>That's a guarantee of Game 7. Vintage Tortorella confidence — refusing to acknowledge the possibility of being eliminated Sunday in Vegas.</strong></li>
+      </ul>
+
+      <div class="statblock">
+        <div class="statblock-label">The Tilt · By the Numbers</div>
+        <div class="statblock-grid">
+          <div class="stat">
+            <div class="num">5</div>
+            <div class="label">Staal SCF games<br/>scored in · ties record</div>
+          </div>
+          <div class="stat">
+            <div class="num">2-0</div>
+            <div class="label">Bussi SCF starts<br/>NHL first ever</div>
+          </div>
+          <div class="stat">
+            <div class="num">37.5%</div>
+            <div class="label">CAR PP in Cup Final<br/>(12.5% R1-R3)</div>
+          </div>
+          <div class="stat">
+            <div class="num">1 win</div>
+            <div class="label">from Stanley Cup<br/>first in 20 years</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pullquote">
+        By far the most normal game after a completely unhinged series.
+        <span class="attribution">— Shayna Goldman · The Athletic · postgame</span>
+      </div>
+
+      <div class="breakdown-row">
+        <div class="label">What This Was</div>
+        <div class="content"><strong>Carolina's most complete Cup Final performance — and the first game where they looked like the better team for most of the night, not just stretches.</strong> <em>The Game 4 file framed Carolina's identity as "restored." Game 5 was Carolina executing that identity at championship level. No magic moments needed. Just a 2nd-period domination, two Svechnikov PP goals, Staal continuing his historic streak, Aho finally arriving, and Bussi closing.</em></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">The Editorial Truth</div>
+        <div class="content"><strong>The series has tilted. Carolina holds a 3-2 lead with the Cup-clinching opportunity in Game 6. The publication's pre-series read of "two complete teams" has resolved structurally in Carolina's favor.</strong> <em>The factors are now all in Carolina's column: Bussi has stabilized goaltending. Staal is having a historic captain's Cup Final. The PP has flipped. Eichel is neutralized. Karlsson is hurt. And Carolina just won a "normal" game where their structural identity overwhelmed Vegas's situational execution.</em></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="label">The Hidden Story</div>
+        <div class="content"><strong>The Andersen-Miftakhov-Bussi situation suggests there may be a real medical issue Carolina is keeping quiet.</strong> <em>Recalling an AHL goalie from a team starting its OWN Cup Final the next day is not the action of a team whose veteran starter is "just resting." The publication won't speculate further. But the editorial honesty is that "available to play" + "recalling AHL emergency goalie" don't normally co-exist. Whatever the actual situation, Carolina is clearly committed to Bussi for the rest of this Cup Final.</em></div>
+      </div>
+      <div class="outlook-box">
+        <div class="olabel">Game 6 Outlook · Sunday June 14 · T-Mobile Arena · Vegas</div>
+        <div class="otext"><strong>Carolina needs ONE win. Vegas needs TWO (Game 6 home + Game 7 in Raleigh).</strong> <em>Per Tortorella's guarantee: "We'll be back here." That's the Vegas confidence — refusing to acknowledge elimination is possible. Carolina has to play the road closeout game, in T-Mobile Arena, against a team that may be without Karlsson and is publicly betting on its identity. The publication's read: Carolina has the structural advantage but the closeout game is historically the hardest. Vegas in Game 6 → Game 7 in Raleigh is the path that keeps the series alive. Carolina in Game 6 = first Cup in 20 years on the road.</em></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- § 02 STAAL STREAK -->
+  <div class="section-head" id="section-02">
+    <div class="num">§ 02</div>
+    <div class="section-head-text">
+      <h2>Staal · the <em>5-game streak.</em></h2>
+      <p class="section-lead">Jordan Staal just tied an NHL record held by names like Maurice "Rocket" Richard, Jean Béliveau, Yvan Cournoyer, and Cyclone Taylor. The Carolina captain has now scored in all 5 Cup Final games — the first player in 70 years to do it. And he's done it at age 37, against Vegas's best players, while handling the most important defensive assignment in the series.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="staal-streak">
+      <div class="ss-label">·  All-Time Stanley Cup Final Goal Streak · 5 Games  ·</div>
+      <h4>Staal joins <em>Cournoyer. Béliveau. Richard. Taylor.</em></h4>
+      <p class="ss-body">
+        <strong>Jordan Staal scored his 6th goal in 5 Cup Final games — tying the all-time NHL record for longest goal streak in a Stanley Cup Final.</strong> <em>Per Russo: "Staal tied the NHL record for longest goal streak in the Stanley Cup Final at five games."</em>
+      </p>
+      <p class="ss-body">
+        <strong>The names he's now alongside:</strong>
+      </p>
+      <ol class="streak-list">
+        <li>
+          <div class="sl-year">1918</div>
+          <div class="sl-name">Cyclone Taylor <span>· Vancouver Millionaires · PCHA</span></div>
+        </li>
+        <li>
+          <div class="sl-year">1951</div>
+          <div class="sl-name">Maurice "Rocket" Richard <span>· Montreal Canadiens</span></div>
+        </li>
+        <li>
+          <div class="sl-year">1956</div>
+          <div class="sl-name">Jean Béliveau <span>· Montreal Canadiens</span></div>
+        </li>
+        <li>
+          <div class="sl-year">1973</div>
+          <div class="sl-name">Yvan Cournoyer <span>· Montreal Canadiens</span></div>
+        </li>
+        <li>
+          <div class="sl-year">2026</div>
+          <div class="sl-name">Jordan Staal <em>· Carolina Hurricanes · CAPTAIN</em><span>First in 70 years. Active. Series 3-2. One win from the Cup.</span></div>
+        </li>
+      </ol>
+      <p class="ss-body">
+        <strong>Per Russo: "Staal is the first player in 70 years to score in the first five games of a Stanley Cup Final."</strong> <em>And: "Staal is just the second captain to record six or more goals in a single Stanley Cup Final in the last 100 years, joining Edmonton Oilers legend Wayne Gretzky, who had seven in 1985."</em>
+      </p>
+      <p class="ss-body">
+        <strong>The structural detail that matters more than the stat:</strong> <em>Staal scored his 6th goal AFTER finishing a check on Brayden McNabb. That's the captain's identity — not skill-based scoring, not flash, but pure work-rate persistence converted into goals. He scores at the net-front because he's there. He's there because he refuses not to be. That's Conn Smythe-tier leadership rendered as box-score production.</em>
+      </p>
+      <p class="ss-body">
+        <em>Per Staal's pre-game quote (via Hall) that the publication has cited multiple times: "He doesn't get anxious about things. The pressure is there, everyone can feel it and see it. He doesn't feel it. He doesn't get rattled."</em> <strong>That's the captain who just tied a 108-year-old NHL Cup Final record at age 37.</strong>
+      </p>
+    </div>
+
+  </section>
+
+  <!-- § 03 BUSSI + PP + EICHEL -->
+  <div class="section-head" id="section-03">
+    <div class="num">§ 03</div>
+    <div class="section-head-text">
+      <h2>Bussi historic · PP flip · <em>Eichel neutralized.</em></h2>
+      <p class="section-lead">Three structural shifts underneath the Game 5 box score: Brandon Bussi became the first goalie in NHL history to win his first two career playoff starts in a Cup Final. Carolina's power play has gone from worst in the playoffs through 3 rounds to the league's best in the Final. And Carolina's hard-match on Jack Eichel has now decisively contained Vegas's most important offensive engine.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="bussi">
+      <div class="b-label">·  Brandon Bussi · NHL History · 2-0 in SCF Starts  ·</div>
+      <h4>The rookie is now <em>in the NHL history book.</em></h4>
+      <p>
+        <strong>Brandon Bussi became the first goaltender in NHL history to make his first two career playoff starts in the Stanley Cup Final and win both games.</strong> <em>23 saves Thursday. 18 of 21 in Game 4. 41 of 44 across his two Cup Final starts. Andersen has not dressed since being pulled in Game 3.</em>
+      </p>
+      <p>
+        <strong>The publication's read on the Andersen situation:</strong> <em>Brind'Amour and GM Eric Tulsky said Andersen was "at least available to play Thursday." Then they recalled Amir Miftakhov from AHL Chicago — even though the Wolves are starting their own Calder Cup Final on Friday. Recalling an emergency goalie from a team about to play their own championship is not the action of a club whose veteran is "available."</em>
+      </p>
+      <p>
+        <strong>Per Bussi:</strong> <em>"We like our game right now. We care about the guy next to each other. When we're able to roll four lines, six D, we are successful. I would've liked to have kept the second one out to keep everyone calmer. The sacrifice in the last six minutes — we never give up."</em>
+      </p>
+      <p>
+        <em>Whatever is actually happening with Andersen, Brind'Amour is now structurally committed to Bussi for the rest of the Cup Final. The Game 4 gamble has become the Game 5 institution.</em>
+      </p>
+    </div>
+
+    <div class="pp-flip">
+      <div class="pf-label">·  The Power Play Flip · A Structural Series Story  ·</div>
+      <h4>Carolina's PP went from <em>12.5% to 37.5%.</em> Vegas went the opposite way.</h4>
+      <p style="margin-bottom: 14px;">
+        <strong>Coming into the Cup Final, this matchup looked like one Vegas would dominate.</strong> <em>Vegas's PP through 3 rounds: 23.9%. Carolina's PP through 3 rounds: 12.5% — dismal, by any metric.</em>
+      </p>
+      <div class="pp-grid">
+        <div class="pp-cell vgk">
+          <div class="pp-team">Vegas PP</div>
+          <div class="pp-row">
+            <div class="pp-period">R1-R3 · 3 rounds</div>
+            <div class="pp-pct">23.9%</div>
+          </div>
+          <div class="pp-row">
+            <div class="pp-period">Cup Final · 5 games</div>
+            <div class="pp-pct">13.3%</div>
+          </div>
+        </div>
+        <div class="pp-cell car">
+          <div class="pp-team">Carolina PP</div>
+          <div class="pp-row">
+            <div class="pp-period">R1-R3 · 3 rounds</div>
+            <div class="pp-pct">12.5%</div>
+          </div>
+          <div class="pp-row">
+            <div class="pp-period">Cup Final · 5 games</div>
+            <div class="pp-pct">37.5%</div>
+          </div>
+        </div>
+      </div>
+      <p>
+        <strong>Per Gostisbehere:</strong> <em>"I think just simplifying. We started maybe taking a little bit of what they're giving us. And simplifying. You see a lot of our goals are just shots to the net and the big man's (Staal) in front putting them away."</em>
+      </p>
+      <p>
+        <strong>The structural truth:</strong> <em>Carolina's PP simplification (point shots + Staal net-front presence) is exactly Carolina's identity rendered as a power-play structure. Carolina solved their PP by doing more of what they already do at 5v5. Vegas's PP collapsed because their setup-heavy passing approach gets disrupted by Carolina's PK pressure. Both teams are now playing in their structural lanes — and Carolina's lane is wider.</em>
+      </p>
+    </div>
+
+    <div class="eichel">
+      <div class="e-label">·  The Staal/Slavin vs Eichel Matchup · Decisively Carolina  ·</div>
+      <h4>Tortorella moved Marner to Eichel's line. <em>Still no 5v5 breakthrough.</em></h4>
+      <p>
+        <strong>Eichel set up Dorofeyev's PP goal with a "perfect pass" early in Game 5. But at 5v5 he was once again contained.</strong> <em>Tortorella loaded up his top line by moving leading Vegas scorer Mitch Marner to Eichel's line with Mark Stone. It still didn't lead to an offensive breakthrough for Eichel.</em>
+      </p>
+      <p>
+        <strong>Per Slavin:</strong> <em>"Jordan's a huge part of that. He could be up for the Selke every single year. Jordan helps out big time and I think he frustrates other teams' centers. We need him to continue to do that. But when Eichel is out there, you got to take away that time and space. He doesn't need much to make a lot of it."</em>
+      </p>
+      <p>
+        <em>The structural read: Carolina's hard-match identity from the ECF (which crushed Suzuki) is now crushing Eichel — Vegas's most important offensive engine. Tortorella has tried adjustments (moving Marner up). None have worked. With Karlsson likely out for Game 6, Vegas's depth at center thins further. The matchup will be Eichel-vs-Staal again Sunday, with Carolina holding home-ice's-most-important-tool (last line change) for one more game first.</em>
+      </p>
+    </div>
+
+  </section>
+
+  <!-- § 04 ONE WIN -->
+  <div class="section-head" id="section-04">
+    <div class="num">§ 04</div>
+    <div class="section-head-text">
+      <h2>One win · <em>Game 6 in Vegas.</em></h2>
+      <p class="section-lead">Carolina is one win from its first Stanley Cup in 20 years. Vegas is one loss from elimination but needs to win two — Game 6 at home, then Game 7 in Raleigh — to lift the Cup. The Karlsson injury could be enormous. The Tortorella guarantee was vintage. The publication's pre-series 50-50 read has resolved structurally in Carolina's favor.</p>
+    </div>
+  </div>
+
+  <section style="padding: 0 0 56px;">
+
+    <div class="karlsson">
+      <div class="k-label">·  William Karlsson · Injury · Likely Out of Series  ·</div>
+      <h4>Vegas may have to play Games 6 and 7 <em>without Karlsson.</em></h4>
+      <p>
+        <strong>Karlsson hit hard by Sean Walker in the 2nd period. Left arm in clear discomfort. Athletic trainer whispered in Tortorella's ear; the coach was "clearly not happy."</strong> <em>Per Tortorella postgame: Karlsson "isn't likely to return to the Stanley Cup Final."</em>
+      </p>
+      <p>
+        <strong>The structural significance:</strong> <em>Karlsson was a major reason Vegas's turnaround happened after Tortorella took over. Two-way play. Defensive detail. Center depth. He was the structural answer Vegas had against Colorado's offense — and against Carolina's puck-possession game.</em>
+      </p>
+      <p>
+        <strong>Tortorella's options if Karlsson can't go:</strong> <em>Move Hertl from wing to center. Insert Reilly Smith or Brandon Saad into the lineup. Both moves reduce Vegas's center depth in a series where Carolina's 4-line center group (Aho, Staal, Stankoven if shifted, Jankowski) is already winning structural matchups.</em>
+      </p>
+    </div>
+
+    <div class="conn-smythe">
+      <div class="cs-label">·  Conn Smythe Watch · After Game 5  ·</div>
+      <h4>The race <em>has changed.</em></h4>
+      <ol class="cs-list">
+        <li>
+          <div class="cs-rank">1</div>
+          <div class="cs-player">
+            <span class="csp-name">Jordan Staal · <em>CAR</em></span>
+            <strong>Has shifted into the lead.</strong> 5-game all-time SCF scoring streak. 6 goals in 5 games. 2nd captain with 6+ G in a SCF in last 100 years (after Gretzky 1985). Plus elite defensive work neutralizing Eichel. If Carolina wins the Cup, Staal is the conventional pick.
+          </div>
+        </li>
+        <li>
+          <div class="cs-rank">2</div>
+          <div class="cs-player">
+            <span class="csp-name">Brandon Bussi · <em>CAR</em></span>
+            <strong>If Carolina wins, the Bussi narrative is irresistible.</strong> First goalie in NHL history to win first two career playoff starts in a Cup Final. 2-0 in SCF starts. Stabilized the crease when Andersen couldn't. The rookie who saved the Cup run could win the trophy on the most-fairytale narrative in the league.
+          </div>
+        </li>
+        <li>
+          <div class="cs-rank">3</div>
+          <div class="cs-player">
+            <span class="csp-name">Mitch Marner · <em>VGK</em></span>
+            <strong>Still leads in playoff points (NHL).</strong> The historic Game 3 hat trick remains the single most impressive performance of the postseason. If Vegas wins the Cup he's still the favorite. If Carolina wins, his "best playoff run that didn't win a Cup" piece will be the publication's biggest off-season write.
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="series-state">
+      <div class="ss-label">·  Cup Final Series State · After Game 5  ·</div>
+      <h4>Carolina <em>one win</em> from the first Cup in 20 years.</h4>
+      <p class="ss-body">
+        <strong>The publication's pre-series Cup Final Preview ("The Final") framed this as "the closest Cup Final in recent memory." Through 5 games that framing has held — the series has been close in moment-to-moment chaos but is now structurally resolving toward Carolina.</strong> <em>Carolina has won 3 games. Vegas has won 2. The factors that have shifted: Bussi has stabilized goaltending. Staal has authored historic captaincy. The PP has flipped completely. The Eichel matchup is neutralized. Karlsson is hurt. And the Game 5 "normal" hockey showed Carolina is just structurally better when the chaos settles.</em>
+      </p>
+      <p class="ss-body">
+        <strong>The publication's series read shifts again:</strong> <em>Pre-series: 50-50 with Vegas slight lean (adversity-thesis). Post-G3: Vegas in 5 or 6 with the Marner explosion. Post-G4: back to 50-50. Post-G5: Carolina in 6, possibly Carolina in 7. The structural drift has been one-way since Game 4 — toward Carolina's identity, toward Carolina's matchups, toward Carolina's roster health.</em>
+      </p>
+      <p class="ss-body">
+        <strong>The editor's preview from June 2 said:</strong> <em>"Games 4-6 will make people think Carolina is winning the war." After Game 5, the framework is validated. Carolina has won 2 of the 3 "Games 4-6" so far. They need one more to lift the Cup.</em>
+      </p>
+      <div class="scenarios">
+        <div class="scen-cell car">
+          <div class="sc-label">·  CAR wins Game 6  ·</div>
+          <h5>First Cup <em>in 20 years.</em></h5>
+          <p>Sunday in Vegas. Win on the road. <strong>Lift the Stanley Cup on enemy ice.</strong> Per the user: "this series is something."</p>
+        </div>
+        <div class="scen-cell vgk">
+          <div class="sc-label">·  VGK wins Game 6  ·</div>
+          <h5>Series back <em>to Raleigh.</em></h5>
+          <p>Per Tortorella: <strong>"We'll be back here. I'm going to leave my clothes here."</strong> Game 7 Tuesday in Raleigh. <em>The two greatest words in sports.</em></p>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; font-size: 28px; color: var(--paper); margin: 48px 0 20px; letter-spacing: -0.01em;">What to watch in Game 6</h3>
+
+    <ul class="bullets" style="max-width: 820px;">
+      <li><strong>The Karlsson factor.</strong> <em>If he plays, Vegas has its full identity. If he doesn't, Tortorella's lineup gets reshuffled and Vegas's center depth takes a structural hit just as elimination arrives.</em></li>
+      <li><strong>Bussi on the road.</strong> <em>His first two SCF starts were home games (Game 4 in Vegas was technically a road start since Carolina was the away team, but the Lenovo Center pressure was off him for Game 5). Game 6 is a true road closeout against T-Mobile Arena's hostility. The rookie's first true road test in a Cup-clinching scenario.</em></li>
+      <li><strong>The closeout difficulty.</strong> <em>Per the post-Game 4 file: the closeout game is historically the hardest. Carolina has not been in a Cup-clinching road game before. The 2006 Cup was clinched at home. The structural pressure is real even if Carolina has the better team.</em></li>
+      <li><strong>Tortorella's adjustments.</strong> <em>Vegas has tried moving Marner to Eichel's line. They've challenged 4 disallowed goals across the series. They've ridden Hart through his issues without considering Hill (per the "stupidest question" quote). Their last adjustment card might be lineup-driven if Karlsson can't go — Smith/Saad/Hertl-to-center configurations.</em></li>
+      <li><strong>The Andersen question.</strong> <em>If Carolina hits adversity and Bussi falters, does Brind'Amour bring back Andersen? The Miftakhov AHL recall suggests the publication's read is correct that there's more to the Andersen story than rest. If Andersen genuinely isn't available, Carolina has no real backup. That's the structural vulnerability the publication will be watching most closely on Sunday.</em></li>
+    </ul>
+
+  </section>
+
+  <section class="closing">
+    <div class="overline">The Take</div>
+    <blockquote>
+      <em>Carolina just won the first "normal" game of the most unhinged Cup Final in recent memory.
+      No 9-minute avalanche. No 39-second comeback. No 6-minute hat trick. No 200-foot empty-netter.
+      No GWG from a captain's stomach. Just Carolina being the better team for most of the night,
+      getting the right contributions from the right players, and closing out a 4-2 win to take a
+      3-2 series lead.</em> <strong>Svechnikov 2 PP goals. Aho first SCF goal. Staal scored for the
+      5th straight game — tying the all-time NHL Cup Final goal-streak record held by Cournoyer,
+      Béliveau, Richard, and Cyclone Taylor. Bussi made history again as the first goalie ever to
+      win his first two career playoff starts in a Cup Final.</strong> <em>The structural truths
+      underneath: the PP has fully flipped (CAR 37.5% Final · 12.5% R1-R3). The Eichel matchup is
+      decisively Carolina's even after Tortorella moved Marner to that line. Karlsson is injured
+      and likely out of the series. Andersen has been scratched two straight games (and Carolina
+      recalled an AHL emergency goalie despite his Calder Cup Final start tomorrow — layers Carolina
+      is wisely keeping private).</em> <strong>Carolina is one win from its first Stanley Cup in 20
+      years. Per Tortorella: "We'll be back here." Per the editor's preview from June 2: "Games 4-6
+      will make people think Carolina is winning the war." The framework holds. The series has
+      tilted.</strong> <em>Game 6 Sunday in Vegas. The Cup-clinching road game. The first time in
+      this Cup Final the publication has named Carolina as the structural favorite — and the first
+      time Carolina has been one win from the trophy.</em>
+    </blockquote>
+    <div class="sig">— Round 4 · Day 5 · Cup Final Game 5 · Carolina 4, Vegas 2 · CAR leads 3-2 · Game 6 Sunday June 14 in Vegas · ONE WIN from Stanley Cup</div>
+  </section>
+
+  <footer>
+    <div>Rink Report · NHL Playoff Coverage</div>
+    <div>Round 4 · Cup Final · CAR leads 3-2 · Game 6 · Sunday June 14 · T-Mobile Arena, Las Vegas · CAR one win from Stanley Cup</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
